@@ -9,6 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
+use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 
 class UserProvider implements UserProviderInterface
 {
@@ -30,7 +31,8 @@ class UserProvider implements UserProviderInterface
         $user = $this->em->getRepository(Patient::class)->findOneBy(['email' => $identifier]);
         if ($user) return $user;
 
-        throw new \Exception('Utilisateur introuvable.');
+        // <-- utilise la bonne exception Symfony
+        throw new UserNotFoundException('Utilisateur introuvable');
     }
 
     public function refreshUser(UserInterface $user): UserInterface

@@ -448,6 +448,7 @@ class ComposerStaticInit8201ee3e7ef0d800a8c33ed776337655
     );
 
     public static $classMap = array (
+        'App\\Command\\HashPasswordsCommand' => __DIR__ . '/../..' . '/src/Command/HashPasswordsCommand.php',
         'App\\Controller\\HealthNorthController' => __DIR__ . '/../..' . '/src/Controller/HealthNorthController.php',
         'App\\Controller\\LoginController' => __DIR__ . '/../..' . '/src/Controller/LoginController.php',
         'App\\Entity\\AdminStaff' => __DIR__ . '/../..' . '/src/Entity/AdminStaff.php',
@@ -464,6 +465,7 @@ class ComposerStaticInit8201ee3e7ef0d800a8c33ed776337655
         'App\\Kernel' => __DIR__ . '/../..' . '/src/Kernel.php',
         'App\\Repository\\PatientRepository' => __DIR__ . '/../..' . '/src/Repository/PatientRepository.php',
         'App\\Repository\\PaymentRepository' => __DIR__ . '/../..' . '/src/Repository/PaymentRepository.php',
+        'App\\Security\\LoginFailureHandler' => __DIR__ . '/../..' . '/src/Security/LoginFailureHandler.php',
         'App\\Security\\UserProvider' => __DIR__ . '/../..' . '/src/Security/UserProvider.php',
         'CURLStringFile' => __DIR__ . '/..' . '/symfony/polyfill-php81/Resources/stubs/CURLStringFile.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',

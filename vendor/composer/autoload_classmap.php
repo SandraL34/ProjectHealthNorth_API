@@ -6,6 +6,7 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'App\\Command\\HashPasswordsCommand' => $baseDir . '/src/Command/HashPasswordsCommand.php',
     'App\\Controller\\HealthNorthController' => $baseDir . '/src/Controller/HealthNorthController.php',
     'App\\Controller\\LoginController' => $baseDir . '/src/Controller/LoginController.php',
     'App\\Entity\\AdminStaff' => $baseDir . '/src/Entity/AdminStaff.php',
@@ -22,6 +23,7 @@ return array(
     'App\\Kernel' => $baseDir . '/src/Kernel.php',
     'App\\Repository\\PatientRepository' => $baseDir . '/src/Repository/PatientRepository.php',
     'App\\Repository\\PaymentRepository' => $baseDir . '/src/Repository/PaymentRepository.php',
+    'App\\Security\\LoginFailureHandler' => $baseDir . '/src/Security/LoginFailureHandler.php',
     'App\\Security\\UserProvider' => $baseDir . '/src/Security/UserProvider.php',
     'CURLStringFile' => $vendorDir . '/symfony/polyfill-php81/Resources/stubs/CURLStringFile.php',
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
