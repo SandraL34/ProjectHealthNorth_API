@@ -4,57 +4,29 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * Option
- *
- * @ORM\Table(name="option")
- * @ORM\Entity
- */
+#[ORM\Entity]
+#[ORM\Table(name: "option")]
 class Option
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer")]
+    private ?int $id = null;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="communication_form", type="string", length=256, nullable=true)
-     */
-    private $communicationForm;
+    #[ORM\Column(name: "communication_form", length: 256, nullable: true)]
+    private ?string $communicationForm = null;
 
-    /**
-     * @var bool|null
-     *
-     * @ORM\Column(name="private_room", type="boolean", nullable=true)
-     */
-    private $privateRoom;
+    #[ORM\Column(name: "private_room", type: "boolean", nullable: true)]
+    private ?bool $privateRoom = null;
 
-    /**
-     * @var bool|null
-     *
-     * @ORM\Column(name="television", type="boolean", nullable=true)
-     */
-    private $television;
+    #[ORM\Column(name: "television", type: "boolean", nullable: true)]
+    private ?bool $television = null;
 
-    /**
-     * @var bool|null
-     *
-     * @ORM\Column(name="wifi", type="boolean", nullable=true)
-     */
-    private $wifi;
+    #[ORM\Column(name: "wifi", type: "boolean", nullable: true)]
+    private ?bool $wifi = null;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="diet", type="string", length=256, nullable=true)
-     */
-    private $diet;
+    #[ORM\Column(name: "diet", length: 256, nullable: true)]
+    private ?string $diet = null;
 
     public function getId(): ?int
     {
@@ -69,7 +41,6 @@ class Option
     public function setCommunicationForm(?string $communicationForm): static
     {
         $this->communicationForm = $communicationForm;
-
         return $this;
     }
 
@@ -81,7 +52,6 @@ class Option
     public function setPrivateRoom(?bool $privateRoom): static
     {
         $this->privateRoom = $privateRoom;
-
         return $this;
     }
 
@@ -93,7 +63,6 @@ class Option
     public function setTelevision(?bool $television): static
     {
         $this->television = $television;
-
         return $this;
     }
 
@@ -105,7 +74,6 @@ class Option
     public function setWifi(?bool $wifi): static
     {
         $this->wifi = $wifi;
-
         return $this;
     }
 
@@ -117,9 +85,6 @@ class Option
     public function setDiet(?string $diet): static
     {
         $this->diet = $diet;
-
         return $this;
     }
-
-
 }

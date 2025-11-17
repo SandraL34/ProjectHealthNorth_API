@@ -12,4 +12,6 @@ return [
     'createPayment' => [[], ['_controller' => 'App\\Controller\\HealthNorthController::createPayment'], [], [['text', '/healthnorth/api/payments']], [], [], []],
     'updatePayment' => [['id'], ['_controller' => 'App\\Controller\\HealthNorthController::updatePayment'], [], [['variable', '/', '[^/]++', 'id', true], ['text', '/healthnorth/api/payments']], [], [], []],
     'api_login' => [[], ['_controller' => 'App\\Controller\\LoginController::login'], [], [['text', '/api/login']], [], [], []],
+    'api_patient_me' => [[], ['_controller' => 'App\\Controller\\PatientController::me'], [], [['text', '/api/patient/me']], [], [], []],
+    'api_patient_update' => [[], ['_controller' => 'App\\Controller\\PatientController::update'], [], [['text', '/api/patient/me']], [], [], []],
 ];

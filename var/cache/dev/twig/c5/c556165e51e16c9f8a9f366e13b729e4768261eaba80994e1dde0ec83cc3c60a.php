@@ -79,6 +79,6 @@ class __TwigTemplate_32c541dc1d0dbd03d3f0ceb63e13d4a90bd7b3f867a75de42f02241c295
     <line x1=\"7\" y1=\"7\" x2=\"7\" y2=\"17\"></line>
     <line x1=\"4\" y1=\"8\" x2=\"4\" y2=\"16\"></line>
 </svg>
-", "@DoctrineMigrations/Collector/icon-v3.svg", "D:\\Logiciel\\XAMPP\\htdocs\\HealthNorth_API\\vendor\\doctrine\\doctrine-migrations-bundle\\templates\\Collector\\icon-v3.svg");
+", "@DoctrineMigrations/Collector/icon-v3.svg", "D:\\Logiciel\\XAMPP\\htdocs\\ProjectHealthNorth_API\\vendor\\doctrine\\doctrine-migrations-bundle\\templates\\Collector\\icon-v3.svg");
     }
 }

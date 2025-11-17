@@ -79,6 +79,6 @@ class __TwigTemplate_0967b14cd9e9e2d14004583d680c874941db0c249e2841e4bc1e6a35781
     <path d=\"M4 6v6a8 3 0 0 0 16 0v-6\"></path>
     <path d=\"M4 12v6a8 3 0 0 0 16 0v-6\"></path>
 </svg>
-", "@Doctrine/Collector/database.svg", "D:\\Logiciel\\XAMPP\\htdocs\\HealthNorth_API\\vendor\\doctrine\\doctrine-bundle\\templates\\Collector\\database.svg");
+", "@Doctrine/Collector/database.svg", "D:\\Logiciel\\XAMPP\\htdocs\\ProjectHealthNorth_API\\vendor\\doctrine\\doctrine-bundle\\templates\\Collector\\database.svg");
     }
 }

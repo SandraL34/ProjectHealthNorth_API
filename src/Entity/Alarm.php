@@ -5,64 +5,32 @@ namespace App\Entity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * Alarm
- *
- * @ORM\Table(name="alarm")
- * @ORM\Entity
- */
+#[ORM\Entity]
+#[ORM\Table(name: "alarm")]
 class Alarm
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer")]
+    private ?int $id = null;
 
-    /**
-     * @var \DateTime|null
-     *
-     * @ORM\Column(name="date_time", type="datetime", nullable=true)
-     */
-    private $dateTime;
+    #[ORM\Column(name: "date_time", type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $dateTime = null;
 
-    /**
-     * @var int|null
-     *
-     * @ORM\Column(name="medicine_id", type="integer", nullable=true)
-     */
-    private $medicineId;
+    #[ORM\Column(name: "medicine_id", type: "integer", nullable: true)]
+    private ?int $medicineId = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="frequency", type="string", length=256, nullable=false)
-     */
-    private $frequency;
+    #[ORM\Column(length: 256)]
+    private string $frequency;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="type", type="string", length=256, nullable=false)
-     */
-    private $type;
+    #[ORM\Column(length: 256)]
+    private string $type;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="title", type="string", length=256, nullable=false)
-     */
-    private $title;
+    #[ORM\Column(length: 256)]
+    private string $title;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="notification", type="string", length=256, nullable=false)
-     */
-    private $notification;
+    #[ORM\Column(length: 256)]
+    private string $notification;
 
     public function getId(): ?int
     {
@@ -77,7 +45,6 @@ class Alarm
     public function setDateTime(?\DateTimeInterface $dateTime): static
     {
         $this->dateTime = $dateTime;
-
         return $this;
     }
 
@@ -89,11 +56,10 @@ class Alarm
     public function setMedicineId(?int $medicineId): static
     {
         $this->medicineId = $medicineId;
-
         return $this;
     }
 
-    public function getFrequency(): ?string
+    public function getFrequency(): string
     {
         return $this->frequency;
     }
@@ -101,11 +67,10 @@ class Alarm
     public function setFrequency(string $frequency): static
     {
         $this->frequency = $frequency;
-
         return $this;
     }
 
-    public function getType(): ?string
+    public function getType(): string
     {
         return $this->type;
     }
@@ -113,11 +78,10 @@ class Alarm
     public function setType(string $type): static
     {
         $this->type = $type;
-
         return $this;
     }
 
-    public function getTitle(): ?string
+    public function getTitle(): string
     {
         return $this->title;
     }
@@ -125,11 +89,10 @@ class Alarm
     public function setTitle(string $title): static
     {
         $this->title = $title;
-
         return $this;
     }
 
-    public function getNotification(): ?string
+    public function getNotification(): string
     {
         return $this->notification;
     }
@@ -137,9 +100,6 @@ class Alarm
     public function setNotification(string $notification): static
     {
         $this->notification = $notification;
-
         return $this;
     }
-
-
 }

@@ -11,6 +11,10 @@ return [
         '/healthnorth/api/patients' => [[['_route' => 'patients', '_controller' => 'App\\Controller\\HealthNorthController::getPatientList'], null, ['GET' => 0], null, false, false, null]],
         '/healthnorth/api/payments' => [[['_route' => 'createPayment', '_controller' => 'App\\Controller\\HealthNorthController::createPayment'], null, ['POST' => 0], null, false, false, null]],
         '/api/login' => [[['_route' => 'api_login', '_controller' => 'App\\Controller\\LoginController::login'], null, ['POST' => 0], null, false, false, null]],
+        '/api/patient/me' => [
+            [['_route' => 'api_patient_me', '_controller' => 'App\\Controller\\PatientController::me'], null, ['GET' => 0], null, false, false, null],
+            [['_route' => 'api_patient_update', '_controller' => 'App\\Controller\\PatientController::update'], null, ['PUT' => 0], null, false, false, null],
+        ],
     ],
     [ // $regexpList
         0 => '{^(?'

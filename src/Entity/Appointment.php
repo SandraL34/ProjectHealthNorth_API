@@ -5,64 +5,32 @@ namespace App\Entity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * Appointment
- *
- * @ORM\Table(name="appointment")
- * @ORM\Entity
- */
+#[ORM\Entity]
+#[ORM\Table(name: "appointment")]
 class Appointment
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer")]
+    private ?int $id = null;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="title", type="string", length=256, nullable=true)
-     */
-    private $title;
+    #[ORM\Column(length: 256, nullable: true)]
+    private ?string $title = null;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="description", type="string", length=256, nullable=true)
-     */
-    private $description;
+    #[ORM\Column(length: 256, nullable: true)]
+    private ?string $description = null;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="institution_type", type="string", length=256, nullable=true)
-     */
-    private $institutionType;
+    #[ORM\Column(name: "institution_type", length: 256, nullable: true)]
+    private ?string $institutionType = null;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="specialty_type", type="string", length=256, nullable=true)
-     */
-    private $specialtyType;
+    #[ORM\Column(name: "specialty_type", length: 256, nullable: true)]
+    private ?string $specialtyType = null;
 
-    /**
-     * @var \DateTime|null
-     *
-     * @ORM\Column(name="date_time", type="datetime", nullable=true)
-     */
-    private $dateTime;
+    #[ORM\Column(name: "date_time", type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $dateTime = null;
 
-    /**
-     * @var int|null
-     *
-     * @ORM\Column(name="option_id", type="integer", nullable=true)
-     */
-    private $optionId;
+    #[ORM\Column(name: "option_id", type: "integer", nullable: true)]
+    private ?int $optionId = null;
 
     public function getId(): ?int
     {
@@ -77,7 +45,6 @@ class Appointment
     public function setTitle(?string $title): static
     {
         $this->title = $title;
-
         return $this;
     }
 
@@ -89,7 +56,6 @@ class Appointment
     public function setDescription(?string $description): static
     {
         $this->description = $description;
-
         return $this;
     }
 
@@ -101,7 +67,6 @@ class Appointment
     public function setInstitutionType(?string $institutionType): static
     {
         $this->institutionType = $institutionType;
-
         return $this;
     }
 
@@ -113,7 +78,6 @@ class Appointment
     public function setSpecialtyType(?string $specialtyType): static
     {
         $this->specialtyType = $specialtyType;
-
         return $this;
     }
 
@@ -125,7 +89,6 @@ class Appointment
     public function setDateTime(?\DateTimeInterface $dateTime): static
     {
         $this->dateTime = $dateTime;
-
         return $this;
     }
 
@@ -137,9 +100,6 @@ class Appointment
     public function setOptionId(?int $optionId): static
     {
         $this->optionId = $optionId;
-
         return $this;
     }
-
-
 }

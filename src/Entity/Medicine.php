@@ -3,51 +3,34 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Doctor;
 
-/**
- * Medicine
- *
- * @ORM\Table(name="medicine")
- * @ORM\Entity
- */
+#[ORM\Entity]
+#[ORM\Table(name: "medicine")]
 class Medicine
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer")]
+    private ?int $id = null;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="name", type="string", length=256, nullable=true)
-     */
-    private $name;
+    #[ORM\Column(length: 256, nullable: true)]
+    private ?string $name = null;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="frequency", type="string", length=256, nullable=true)
-     */
-    private $frequency;
+    #[ORM\Column(length: 256, nullable: true)]
+    private ?string $frequency = null;
 
-    /**
-     * @var int|null
-     *
-     * @ORM\Column(name="physician_id", type="integer", nullable=true)
-     */
-    private $physicianId;
+    #[ORM\ManyToOne(targetEntity: Doctor::class)]
+    #[ORM\JoinColumn(
+        name: "attending_physician_id",
+        referencedColumnName: "id",
+        nullable: true,
+        onDelete: "SET NULL"
+    )]
+    private ?Doctor $attendingPhysician = null;
 
-    /**
-     * @var int|null
-     *
-     * @ORM\Column(name="patient_id", type="integer", nullable=true)
-     */
-    private $patientId;
+    #[ORM\Column(name: "patient_id", type: "integer", nullable: true)]
+    private ?int $patientId = null;
 
     public function getId(): ?int
     {
@@ -62,7 +45,6 @@ class Medicine
     public function setName(?string $name): static
     {
         $this->name = $name;
-
         return $this;
     }
 
@@ -74,19 +56,17 @@ class Medicine
     public function setFrequency(?string $frequency): static
     {
         $this->frequency = $frequency;
-
         return $this;
     }
 
-    public function getPhysicianId(): ?int
+    public function getAttendingPhysician(): ?Doctor
     {
-        return $this->physicianId;
+        return $this->attendingPhysician;
     }
 
-    public function setPhysicianId(?int $physicianId): static
+    public function setAttendingPhysician(?Doctor $doctor): static
     {
-        $this->physicianId = $physicianId;
-
+        $this->attendingPhysician = $doctor;
         return $this;
     }
 
@@ -98,9 +78,6 @@ class Medicine
     public function setPatientId(?int $patientId): static
     {
         $this->patientId = $patientId;
-
         return $this;
     }
-
-
 }

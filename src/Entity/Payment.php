@@ -4,57 +4,29 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * Payment
- *
- * @ORM\Table(name="payment")
- * @ORM\Entity
- */
+#[ORM\Entity]
+#[ORM\Table(name: "payment")]
 class Payment
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer")]
+    private ?int $id = null;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="card_number", type="string", length=16, nullable=true)
-     */
-    private $cardNumber;
+    #[ORM\Column(name: "card_number", length: 16, nullable: true)]
+    private ?string $cardNumber = null;
 
-    /**
-     * @var int|null
-     *
-     * @ORM\Column(name="expiration_date_month", type="integer", nullable=true)
-     */
-    private $expirationDateMonth;
+    #[ORM\Column(name: "expiration_date_month", type: "integer", nullable: true)]
+    private ?int $expirationDateMonth = null;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="secret_code", type="string", length=3, nullable=true)
-     */
-    private $secretCode;
+    #[ORM\Column(name: "secret_code", length: 3, nullable: true)]
+    private ?string $secretCode = null;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="owner_name", type="string", length=512, nullable=true)
-     */
-    private $ownerName;
+    #[ORM\Column(name: "owner_name", length: 512, nullable: true)]
+    private ?string $ownerName = null;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="expiration_date_year", type="integer", nullable=false)
-     */
-    private $expirationDateYear;
+    #[ORM\Column(name: "expiration_date_year", type: "integer")]
+    private int $expirationDateYear;
 
     public function getId(): ?int
     {
@@ -69,7 +41,6 @@ class Payment
     public function setCardNumber(?string $cardNumber): static
     {
         $this->cardNumber = $cardNumber;
-
         return $this;
     }
 
@@ -81,7 +52,6 @@ class Payment
     public function setExpirationDateMonth(?int $expirationDateMonth): static
     {
         $this->expirationDateMonth = $expirationDateMonth;
-
         return $this;
     }
 
@@ -93,7 +63,6 @@ class Payment
     public function setSecretCode(?string $secretCode): static
     {
         $this->secretCode = $secretCode;
-
         return $this;
     }
 
@@ -105,11 +74,10 @@ class Payment
     public function setOwnerName(?string $ownerName): static
     {
         $this->ownerName = $ownerName;
-
         return $this;
     }
 
-    public function getExpirationDateYear(): ?int
+    public function getExpirationDateYear(): int
     {
         return $this->expirationDateYear;
     }
@@ -117,7 +85,6 @@ class Payment
     public function setExpirationDateYear(int $expirationDateYear): static
     {
         $this->expirationDateYear = $expirationDateYear;
-
         return $this;
     }
 }

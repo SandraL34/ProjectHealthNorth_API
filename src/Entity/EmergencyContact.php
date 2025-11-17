@@ -4,43 +4,23 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * EmergencyContact
- *
- * @ORM\Table(name="emergency_contact")
- * @ORM\Entity
- */
+#[ORM\Entity]
+#[ORM\Table(name: "emergency_contact")]
 class EmergencyContact
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer")]
+    private ?int $id = null;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="firstname", type="string", length=256, nullable=true)
-     */
-    private $firstname;
+    #[ORM\Column(length: 256, nullable: true)]
+    private ?string $firstname = null;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="lastname", type="string", length=256, nullable=true)
-     */
-    private $lastname;
+    #[ORM\Column(length: 256, nullable: true)]
+    private ?string $lastname = null;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="phone_number", type="string", length=10, nullable=true)
-     */
-    private $phoneNumber;
+    #[ORM\Column(name: "phone_number", length: 10, nullable: true)]
+    private ?string $phoneNumber = null;
 
     public function getId(): ?int
     {
@@ -55,7 +35,6 @@ class EmergencyContact
     public function setFirstname(?string $firstname): static
     {
         $this->firstname = $firstname;
-
         return $this;
     }
 
@@ -67,7 +46,6 @@ class EmergencyContact
     public function setLastname(?string $lastname): static
     {
         $this->lastname = $lastname;
-
         return $this;
     }
 
@@ -79,9 +57,6 @@ class EmergencyContact
     public function setPhoneNumber(?string $phoneNumber): static
     {
         $this->phoneNumber = $phoneNumber;
-
         return $this;
     }
-
-
 }

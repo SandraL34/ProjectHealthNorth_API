@@ -947,6 +947,6 @@ class __TwigTemplate_4870114dd6595d115c7c32c4b0542f661a0d6972fefd58e41dd568ff773
         </td>
     </tr>
 {% endmacro %}
-", "@DoctrineMigrations/Collector/migrations.html.twig", "D:\\Logiciel\\XAMPP\\htdocs\\HealthNorth_API\\vendor\\doctrine\\doctrine-migrations-bundle\\templates\\Collector\\migrations.html.twig");
+", "@DoctrineMigrations/Collector/migrations.html.twig", "D:\\Logiciel\\XAMPP\\htdocs\\ProjectHealthNorth_API\\vendor\\doctrine\\doctrine-migrations-bundle\\templates\\Collector\\migrations.html.twig");
     }
 }

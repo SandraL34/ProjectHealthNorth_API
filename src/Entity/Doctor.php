@@ -5,65 +5,43 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
-/**
- * Doctor
- *
- * @ORM\Table(name="doctor")
- * @ORM\Entity
- */
+#[ORM\Entity]
+#[ORM\Table(name: "doctor")]
 class Doctor implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer")]
+    private ?int $id = null;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="firstname", type="string", length=256, nullable=true)
-     */
-    private $firstname;
+    #[ORM\Column(type: "string", length: 256, nullable: true)]
+    private ?string $firstname = null;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="lastname", type="string", length=256, nullable=true)
-     */
-    private $lastname;
+    #[ORM\Column(type: "string", length: 256, nullable: true)]
+    private ?string $lastname = null;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="specialty", type="string", length=256, nullable=true)
-     */
-    private $specialty;
+    #[ORM\Column(type: "string", length: 256, nullable: true)]
+    private ?string $specialty = null;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="phone_number", type="string", length=10, nullable=true)
-     */
-    private $phoneNumber;
+    #[ORM\Column(type: "string", length: 10, nullable: true)]
+    private ?string $phoneNumber = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="email", type="string", length=256, nullable=false)
-     */
-    private $email;
+    #[ORM\Column(type: "string", length: 256)]
+    private string $email;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="password", type="string", length=256, nullable=false)
-     */
-    private $password;
+    #[ORM\Column(type: "string", length: 256)]
+    private string $password;
+
+    #[ORM\OneToMany(mappedBy: "attendingPhysician", targetEntity: Patient::class)]
+    private Collection $patients;
+
+    public function __construct()
+    {
+        $this->patients = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -78,7 +56,6 @@ class Doctor implements UserInterface, PasswordAuthenticatedUserInterface
     public function setFirstname(?string $firstname): static
     {
         $this->firstname = $firstname;
-
         return $this;
     }
 
@@ -90,7 +67,6 @@ class Doctor implements UserInterface, PasswordAuthenticatedUserInterface
     public function setLastname(?string $lastname): static
     {
         $this->lastname = $lastname;
-
         return $this;
     }
 
@@ -102,7 +78,6 @@ class Doctor implements UserInterface, PasswordAuthenticatedUserInterface
     public function setSpecialty(?string $specialty): static
     {
         $this->specialty = $specialty;
-
         return $this;
     }
 
@@ -114,7 +89,6 @@ class Doctor implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPhoneNumber(?string $phoneNumber): static
     {
         $this->phoneNumber = $phoneNumber;
-
         return $this;
     }
 
@@ -126,7 +100,6 @@ class Doctor implements UserInterface, PasswordAuthenticatedUserInterface
     public function setEmail(string $email): static
     {
         $this->email = $email;
-
         return $this;
     }
 
@@ -138,15 +111,12 @@ class Doctor implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPassword(string $password): static
     {
         $this->password = $password;
-
         return $this;
     }
 
     public function getRoles(): array
     {
-        if ($this instanceof AdminStaff) return ['ROLE_ADMIN'];
-        if ($this instanceof Doctor) return ['ROLE_DOCTOR'];
-        return ['ROLE_PATIENT'];
+        return ['ROLE_DOCTOR'];
     }
 
     public function getUserIdentifier(): string
@@ -154,5 +124,10 @@ class Doctor implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->email;
     }
 
-    public function eraseCredentials() {}
+    public function eraseCredentials(): void {}
+
+    public function getPatients(): Collection
+    {
+        return $this->patients;
+    }
 }

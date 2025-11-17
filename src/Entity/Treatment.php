@@ -3,72 +3,43 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Doctor;
 
-/**
- * Treatment
- *
- * @ORM\Table(name="treatment")
- * @ORM\Entity
- */
+#[ORM\Entity]
+#[ORM\Table(name: "treatment")]
 class Treatment
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer")]
+    private ?int $id = null;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="name", type="string", length=256, nullable=true)
-     */
-    private $name;
+    #[ORM\Column(length: 256, nullable: true)]
+    private ?string $name = null;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="description", type="string", length=512, nullable=true)
-     */
-    private $description;
+    #[ORM\Column(length: 512, nullable: true)]
+    private ?string $description = null;
 
-    /**
-     * @var int|null
-     *
-     * @ORM\Column(name="price", type="integer", nullable=true)
-     */
-    private $price;
+    #[ORM\Column(type: "integer", nullable: true)]
+    private ?int $price = null;
 
-    /**
-     * @var bool|null
-     *
-     * @ORM\Column(name="paid", type="boolean", nullable=true)
-     */
-    private $paid;
+    #[ORM\Column(type: "boolean", nullable: true)]
+    private ?bool $paid = null;
 
-    /**
-     * @var int|null
-     *
-     * @ORM\Column(name="physician_id", type="integer", nullable=true)
-     */
-    private $physicianId;
+    #[ORM\ManyToOne(targetEntity: Doctor::class)]
+    #[ORM\JoinColumn(
+        name: "attending_physician_id",
+        referencedColumnName: "id",
+        nullable: true,
+        onDelete: "SET NULL"
+    )]
+    private ?Doctor $attendingPhysician = null;
 
-    /**
-     * @var int|null
-     *
-     * @ORM\Column(name="patient_id", type="integer", nullable=true)
-     */
-    private $patientId;
+    #[ORM\Column(type: "integer", nullable: true)]
+    private ?int $patientId = null;
 
-    /**
-     * @var int|null
-     *
-     * @ORM\Column(name="medicine_id", type="integer", nullable=true)
-     */
-    private $medicineId;
+    #[ORM\Column(type: "integer", nullable: true)]
+    private ?int $medicineId = null;
 
     public function getId(): ?int
     {
@@ -83,7 +54,6 @@ class Treatment
     public function setName(?string $name): static
     {
         $this->name = $name;
-
         return $this;
     }
 
@@ -95,7 +65,6 @@ class Treatment
     public function setDescription(?string $description): static
     {
         $this->description = $description;
-
         return $this;
     }
 
@@ -107,7 +76,6 @@ class Treatment
     public function setPrice(?int $price): static
     {
         $this->price = $price;
-
         return $this;
     }
 
@@ -119,19 +87,17 @@ class Treatment
     public function setPaid(?bool $paid): static
     {
         $this->paid = $paid;
-
         return $this;
     }
 
-    public function getPhysicianId(): ?int
+    public function getAttendingPhysician(): ?Doctor
     {
-        return $this->physicianId;
+        return $this->attendingPhysician;
     }
 
-    public function setPhysicianId(?int $physicianId): static
+    public function setAttendingPhysician(?Doctor $doctor): static
     {
-        $this->physicianId = $physicianId;
-
+        $this->attendingPhysician = $doctor;
         return $this;
     }
 
@@ -143,7 +109,6 @@ class Treatment
     public function setPatientId(?int $patientId): static
     {
         $this->patientId = $patientId;
-
         return $this;
     }
 
@@ -155,9 +120,6 @@ class Treatment
     public function setMedicineId(?int $medicineId): static
     {
         $this->medicineId = $medicineId;
-
         return $this;
     }
-
-
 }
