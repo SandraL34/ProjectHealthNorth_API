@@ -28,6 +28,9 @@ class Payment
     #[ORM\Column(name: "expiration_date_year", type: "integer")]
     private int $expirationDateYear;
 
+    #[ORM\OneToOne(mappedBy: "payment", targetEntity: Patient::class)]
+    private ?Patient $patient = null;
+
     public function getId(): ?int
     {
         return $this->id;

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity]
 #[ORM\Table(name: "option")]
@@ -27,6 +29,14 @@ class Option
 
     #[ORM\Column(name: "diet", length: 256, nullable: true)]
     private ?string $diet = null;
+
+    #[ORM\OneToMany(mappedBy: "option", targetEntity: Patient::class)]
+    private Collection $patients;
+
+    public function __construct()
+    {
+        $this->patients = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -86,5 +96,10 @@ class Option
     {
         $this->diet = $diet;
         return $this;
+    }
+
+    public function getPatients(): Collection
+    {
+        return $this->patients;
     }
 }

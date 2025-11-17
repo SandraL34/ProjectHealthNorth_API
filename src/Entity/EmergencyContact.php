@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity]
 #[ORM\Table(name: "emergency_contact")]
@@ -21,6 +23,15 @@ class EmergencyContact
 
     #[ORM\Column(name: "phone_number", length: 10, nullable: true)]
     private ?string $phoneNumber = null;
+
+    #[ORM\OneToMany(mappedBy: "emergencyContact", targetEntity: Patient::class)]
+    private Collection $patients;
+
+    public function __construct()
+    {
+        $this->patients = new ArrayCollection();
+    }
+
 
     public function getId(): ?int
     {
@@ -58,5 +69,10 @@ class EmergencyContact
     {
         $this->phoneNumber = $phoneNumber;
         return $this;
+    }
+
+        public function getPatients(): Collection
+    {
+        return $this->patients;
     }
 }

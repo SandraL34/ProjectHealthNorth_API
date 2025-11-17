@@ -54,8 +54,9 @@ class Patient implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: "string", length: 1024, nullable: true)]
     private ?string $medicalHistory = null;
 
-    #[ORM\Column(type: "integer", nullable: true)]
-    private ?int $emergencyContactId = null;
+    #[ORM\ManyToOne(targetEntity: EmergencyContact::class, inversedBy: "patients")]
+    #[ORM\JoinColumn(name: "emergency_contact_id", referencedColumnName: "id", nullable: true)]
+    private ?EmergencyContact $emergencyContact = null;
 
     #[ORM\ManyToOne(targetEntity: Doctor::class, inversedBy: "patients")]
     #[ORM\JoinColumn(name: "attending_physician_id", referencedColumnName: "id", nullable: true)]
@@ -64,14 +65,16 @@ class Patient implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: "integer", nullable: true)]
     private ?int $appointmentId = null;
 
-    #[ORM\Column(type: "integer", nullable: true)]
-    private ?int $optionId = null;
+    #[ORM\ManyToOne(targetEntity: Option::class, inversedBy: "patients")]
+    #[ORM\JoinColumn(name: "option_id", referencedColumnName: "id", nullable: true)]
+    private ?Option $option = null;
 
     #[ORM\Column(type: "integer", nullable: true)]
     private ?int $alarmId = null;
 
-    #[ORM\Column(type: "integer", nullable: true)]
-    private ?int $paymentId = null;
+    #[ORM\OneToOne(targetEntity: Payment::class, cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(name: "payment_id", referencedColumnName: "id", nullable: true)]
+    private ?Payment $payment = null;
 
     public function getId(): ?int { return $this->id; }
 
@@ -114,8 +117,8 @@ class Patient implements UserInterface, PasswordAuthenticatedUserInterface
     public function getMedicalHistory(): ?string { return $this->medicalHistory; }
     public function setMedicalHistory(?string $his): static { $this->medicalHistory = $his; return $this; }
 
-    public function getEmergencyContactId(): ?int { return $this->emergencyContactId; }
-    public function setEmergencyContactId(?int $id): static { $this->emergencyContactId = $id; return $this; }
+    public function getEmergencyContact(): ?EmergencyContact { return $this->emergencyContact; }
+    public function setEmergencyContact(?EmergencyContact $emergencyContact): static { $this->emergencyContact = $emergencyContact; return $this; }
 
     public function getAttendingPhysician(): ?Doctor { return $this->attendingPhysician; }
     public function setAttendingPhysician(?Doctor $doctor): static { $this->attendingPhysician = $doctor; return $this; }
@@ -123,14 +126,14 @@ class Patient implements UserInterface, PasswordAuthenticatedUserInterface
     public function getAppointmentId(): ?int { return $this->appointmentId; }
     public function setAppointmentId(?int $id): static { $this->appointmentId = $id; return $this; }
 
-    public function getOptionId(): ?int { return $this->optionId; }
-    public function setOptionId(?int $id): static { $this->optionId = $id; return $this; }
+    public function getOption(): ?Option { return $this->option; }
+    public function setOption(?Option $option): static { $this->option = $option; return $this; }
 
     public function getAlarmId(): ?int { return $this->alarmId; }
     public function setAlarmId(?int $id): static { $this->alarmId = $id; return $this; }
 
-    public function getPaymentId(): ?int { return $this->paymentId; }
-    public function setPaymentId(?int $id): static { $this->paymentId = $id; return $this; }
+    public function getPayment(): ?Payment { return $this->payment; }
+    public function setPayment(?Payment $payment): static { $this->payment = $payment; return $this; }
 
     public function getRoles(): array { return ['ROLE_PATIENT']; }
 

@@ -4,6 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Patient;
 use App\Entity\Doctor;
+use App\Entity\EmergencyContact;
+use App\Entity\Option;
+use App\Entity\Payment;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,12 +31,16 @@ class PatientController extends AbstractController
         $patient = $doctrine->getRepository(Patient::class)->find($user->getId());
 
         $doctor = $patient->getAttendingPhysician();
+        $emergencyContact = $patient->getEmergencyContact();
+        $option = $patient->getOption();
+        $payment = $patient->getPayment();
 
         return $this->json([
             'id' => $patient->getId(),
             'firstname' => $patient->getFirstname(),
             'lastname' => $patient->getLastname(),
             'email' => $patient->getEmail(),
+            'password' => $patient->getPassword(),
             'phoneNumber' => $patient->getPhoneNumber(),
             'postalAddress' => $patient->getPostalAddress(),
             'allergy' => $patient->getAllergy(),
@@ -43,15 +50,31 @@ class PatientController extends AbstractController
             'socialsecurityNumber' => $patient->getSocialsecurityNumber(),
             'socialsecurityRegime' => $patient->getSocialsecurityRegime(),
             'healthcareInsurance' => $patient->getHealthcareInsurance(),
-            'emergencyContactId' => $patient->getEmergencyContactId(),
+            'emergencyContact' => $emergencyContact ? [
+            'firstname' => $emergencyContact->getFirstname(),
+            'lastname' => $emergencyContact->getLastname(),
+            'phoneNumber' => $emergencyContact->getPhoneNumber()
+            ] : null,
             'attendingPhysician' => $doctor ? [
             'firstname' => $doctor->getFirstname(),
             'lastname' => $doctor->getLastname()
             ] : null,
             'appointmentId' => $patient->getAppointmentId(),
-            'optionId' => $patient->getOptionId(),
+            'option' => $option ? [
+            'communicationForm' => $option->getCommunicationForm(),
+            'privateRoom' => $option->isPrivateRoom(),
+            'television' => $option->isTelevision(),
+            'wifi' => $option->isWifi(),
+            'diet' => $option->getDiet()
+            ] : null,
             'alarmId' => $patient->getAlarmId(),
-            'paymentId' => $patient->getPaymentId(),
+            'payment' => $payment ? [
+            'card_number' => $payment->getCardNumber(),
+            'expiration_date_month' => $payment->getExpirationDateMonth(),
+            'secret_code' => $payment->getSecretCode(),
+            'owner_name' => $payment->getOwnerName(),
+            'expiration_date_year' => $payment->getExpirationDateYear()
+            ] : null,
         ]);
     }
 
@@ -82,11 +105,11 @@ class PatientController extends AbstractController
         $user->setSocialsecurityNumber($data['socialsecurityNumber'] ?? $user->getSocialsecurityNumber());
         $user->setSocialsecurityRegime($data['socialsecurityRegime'] ?? $user->getSocialsecurityRegime());
         $user->setHealthcareInsurance($data['healthcareInsurance'] ?? $user->getHealthcareInsurance());
-        $user->setEmergencyContactId($data['emergencyContactId'] ?? $user->getEmergencyContactId());
+        $user->setEmergencyContact($data['emergencyContact'] ?? $user->getEmergencyContact());
         $user->setAppointmentId($data['appointmentId'] ?? $user->getAppointmentId());
-        $user->setOptionId($data['optionId'] ?? $user->getOptionId());
+        $user->setOption($data['option'] ?? $user->getOption());
         $user->setAlarmId($data['alarmId'] ?? $user->getAlarmId());
-        $user->setPaymentId($data['paymentId'] ?? $user->getPaymentId());
+        $user->setPayment($data['payment'] ?? $user->getPayment());
 
         if (isset($data['attendingPhysicianId'])) {
             $doctor = $doctrine->getRepository(Doctor::class)->find($data['attendingPhysicianId']);
@@ -113,12 +136,12 @@ class PatientController extends AbstractController
                 'socialsecurityNumber' => $user->getSocialsecurityNumber(),
                 'socialsecurityRegime' => $user->getSocialsecurityRegime(),
                 'healthcareInsurance' => $user->getHealthcareInsurance(),
-                'emergencyContactId' => $user->getEmergencyContactId(),
+                'emergencyContact' => $user->getEmergencyContact(),
                 'attendingPhysicianId' => $user->getAttendingPhysician(),
                 'appointmentId' => $user->getAppointmentId(),
-                'optionId' => $user->getOptionId(),
+                'option' => $user->getOption(),
                 'alarmId' => $user->getAlarmId(),
-                'paymentId' => $user->getPaymentId(),
+                'payment' => $user->getPayment(),
             ]
         ]);
     }
