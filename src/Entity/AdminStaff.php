@@ -27,9 +27,6 @@ class AdminStaff implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: "string", length: 256)]
     private string $lastname;
 
-    #[ORM\Column(type: "string", length: 256)]
-    private string $specialty;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -76,17 +73,6 @@ class AdminStaff implements UserInterface, PasswordAuthenticatedUserInterface
     public function setLastname(string $lastname): static
     {
         $this->lastname = $lastname;
-        return $this;
-    }
-
-    public function getSpecialty(): string
-    {
-        return $this->specialty;
-    }
-
-    public function setSpecialty(string $specialty): static
-    {
-        $this->specialty = $specialty;
         return $this;
     }
 

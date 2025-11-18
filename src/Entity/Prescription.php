@@ -19,6 +19,15 @@ class Prescription
     #[ORM\Column(name: "prescription_details", length: 1024, nullable: true)]
     private ?string $prescriptionDetails = null;
 
+    #[ORM\ManyToOne(targetEntity: Doctor::class, inversedBy: "prescriptions")]
+    #[ORM\JoinColumn(name: "attending_physician_id", referencedColumnName: "id", nullable: true)]
+    private ?Doctor $attendingPhysician = null;
+
+    #[ORM\ManyToOne(targetEntity: Treatment::class, inversedBy: "prescriptions")]
+    #[ORM\JoinColumn(name: "treatment_id", referencedColumnName: "id", nullable: true)]
+    private ?Treatment $treatment = null;
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -43,6 +52,28 @@ class Prescription
     public function setPrescriptionDetails(?string $prescriptionDetails): static
     {
         $this->prescriptionDetails = $prescriptionDetails;
+        return $this;
+    }
+
+    public function getAttendingPhysician(): ?Doctor
+    {
+        return $this->attendingPhysician;
+    }
+
+    public function setAttendingPhysician(?Doctor $doctor): static
+    {
+        $this->attendingPhysician = $doctor;
+        return $this;
+    }
+
+        public function getTreatment(): ?Treatment
+    {
+        return $this->treatment;
+    }
+
+    public function setTreatment(?Treatment $treatment): static
+    {
+        $this->treatment = $treatment;
         return $this;
     }
 }

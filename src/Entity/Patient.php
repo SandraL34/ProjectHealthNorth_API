@@ -5,6 +5,8 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity]
 #[ORM\Table(name: "patient")]
@@ -62,19 +64,34 @@ class Patient implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\JoinColumn(name: "attending_physician_id", referencedColumnName: "id", nullable: true)]
     private ?Doctor $attendingPhysician = null;
 
-    #[ORM\Column(type: "integer", nullable: true)]
-    private ?int $appointmentId = null;
-
     #[ORM\ManyToOne(targetEntity: Option::class, inversedBy: "patients")]
     #[ORM\JoinColumn(name: "option_id", referencedColumnName: "id", nullable: true)]
     private ?Option $option = null;
 
-    #[ORM\Column(type: "integer", nullable: true)]
-    private ?int $alarmId = null;
+    #[ORM\OneToMany(mappedBy: "patient", targetEntity: Payment::class)]
+    private Collection $payments;
 
-    #[ORM\OneToOne(targetEntity: Payment::class, cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(name: "payment_id", referencedColumnName: "id", nullable: true)]
-    private ?Payment $payment = null;
+    #[ORM\OneToMany(mappedBy: "patient", targetEntity: Alarm::class)]
+    private Collection $alarms;
+
+    #[ORM\OneToMany(mappedBy: "patient", targetEntity: Appointment::class)]
+    private Collection $appointments;
+
+    #[ORM\OneToMany(mappedBy: "patient", targetEntity: Medicine::class)]
+    private Collection $medicines;
+
+    #[ORM\OneToMany(mappedBy: "patient", targetEntity: Treatment::class)]
+    private Collection $treatments;
+
+
+    public function __construct()
+    {
+        $this->payments = new ArrayCollection();
+        $this->alarms = new ArrayCollection();
+        $this->appointments = new ArrayCollection();
+        $this->medicines = new ArrayCollection();
+        $this->treatments = new ArrayCollection();
+    }
 
     public function getId(): ?int { return $this->id; }
 
@@ -123,21 +140,37 @@ class Patient implements UserInterface, PasswordAuthenticatedUserInterface
     public function getAttendingPhysician(): ?Doctor { return $this->attendingPhysician; }
     public function setAttendingPhysician(?Doctor $doctor): static { $this->attendingPhysician = $doctor; return $this; }
 
-    public function getAppointmentId(): ?int { return $this->appointmentId; }
-    public function setAppointmentId(?int $id): static { $this->appointmentId = $id; return $this; }
-
     public function getOption(): ?Option { return $this->option; }
     public function setOption(?Option $option): static { $this->option = $option; return $this; }
-
-    public function getAlarmId(): ?int { return $this->alarmId; }
-    public function setAlarmId(?int $id): static { $this->alarmId = $id; return $this; }
-
-    public function getPayment(): ?Payment { return $this->payment; }
-    public function setPayment(?Payment $payment): static { $this->payment = $payment; return $this; }
 
     public function getRoles(): array { return ['ROLE_PATIENT']; }
 
     public function getUserIdentifier(): string { return $this->email; }
 
     public function eraseCredentials(): void {}
+
+    public function getPayments(): Collection
+    {
+        return $this->payments;
+    }
+
+    public function getAlarms(): Collection
+    {
+        return $this->alarms;
+    }
+
+    public function getAppointments(): Collection
+    {
+        return $this->appointments;
+    }
+
+        public function getMedicines(): Collection
+    {
+        return $this->medicines;
+    }
+
+            public function getTreatments(): Collection
+    {
+        return $this->treatments;
+    }
 }

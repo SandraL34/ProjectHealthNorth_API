@@ -67,10 +67,10 @@ class Option extends \App\Entity\Option implements \Doctrine\ORM\Proxy\Proxy
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Option' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Option' . "\0" . 'communicationForm', '' . "\0" . 'App\\Entity\\Option' . "\0" . 'privateRoom', '' . "\0" . 'App\\Entity\\Option' . "\0" . 'television', '' . "\0" . 'App\\Entity\\Option' . "\0" . 'wifi', '' . "\0" . 'App\\Entity\\Option' . "\0" . 'diet', '' . "\0" . 'App\\Entity\\Option' . "\0" . 'patients'];
+            return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Option' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Option' . "\0" . 'communicationForm', '' . "\0" . 'App\\Entity\\Option' . "\0" . 'privateRoom', '' . "\0" . 'App\\Entity\\Option' . "\0" . 'television', '' . "\0" . 'App\\Entity\\Option' . "\0" . 'wifi', '' . "\0" . 'App\\Entity\\Option' . "\0" . 'diet', '' . "\0" . 'App\\Entity\\Option' . "\0" . 'patients', '' . "\0" . 'App\\Entity\\Option' . "\0" . 'appointments'];
         }
 
-        return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Option' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Option' . "\0" . 'communicationForm', '' . "\0" . 'App\\Entity\\Option' . "\0" . 'privateRoom', '' . "\0" . 'App\\Entity\\Option' . "\0" . 'television', '' . "\0" . 'App\\Entity\\Option' . "\0" . 'wifi', '' . "\0" . 'App\\Entity\\Option' . "\0" . 'diet', '' . "\0" . 'App\\Entity\\Option' . "\0" . 'patients'];
+        return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Option' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Option' . "\0" . 'communicationForm', '' . "\0" . 'App\\Entity\\Option' . "\0" . 'privateRoom', '' . "\0" . 'App\\Entity\\Option' . "\0" . 'television', '' . "\0" . 'App\\Entity\\Option' . "\0" . 'wifi', '' . "\0" . 'App\\Entity\\Option' . "\0" . 'diet', '' . "\0" . 'App\\Entity\\Option' . "\0" . 'patients', '' . "\0" . 'App\\Entity\\Option' . "\0" . 'appointments'];
     }
 
     /**
@@ -311,6 +311,17 @@ class Option extends \App\Entity\Option implements \Doctrine\ORM\Proxy\Proxy
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPatients', []);
 
         return parent::getPatients();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getAppointments(): \Doctrine\Common\Collections\Collection
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getAppointments', []);
+
+        return parent::getAppointments();
     }
 
 }

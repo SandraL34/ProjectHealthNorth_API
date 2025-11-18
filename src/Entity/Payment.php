@@ -28,7 +28,8 @@ class Payment
     #[ORM\Column(name: "expiration_date_year", type: "integer")]
     private int $expirationDateYear;
 
-    #[ORM\OneToOne(mappedBy: "payment", targetEntity: Patient::class)]
+    #[ORM\ManyToOne(targetEntity: Patient::class, inversedBy: "payments")]
+    #[ORM\JoinColumn(name: "patient_id", referencedColumnName: "id", nullable: true)]
     private ?Patient $patient = null;
 
     public function getId(): ?int
@@ -90,4 +91,7 @@ class Payment
         $this->expirationDateYear = $expirationDateYear;
         return $this;
     }
+
+    public function getPatient(): ?Patient { return $this->patient; }
+    public function setPatient(?Patient $patient): static { $this->patient = $patient; return $this; }
 }

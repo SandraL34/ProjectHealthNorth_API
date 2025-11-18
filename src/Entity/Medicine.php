@@ -20,17 +20,21 @@ class Medicine
     #[ORM\Column(length: 256, nullable: true)]
     private ?string $frequency = null;
 
-    #[ORM\ManyToOne(targetEntity: Doctor::class)]
-    #[ORM\JoinColumn(
-        name: "attending_physician_id",
-        referencedColumnName: "id",
-        nullable: true,
-        onDelete: "SET NULL"
-    )]
+    #[ORM\ManyToOne(targetEntity: Doctor::class, inversedBy: "medicines")]
+    #[ORM\JoinColumn(name: "attending_physician_id", referencedColumnName: "id", nullable: true)]
     private ?Doctor $attendingPhysician = null;
 
-    #[ORM\Column(name: "patient_id", type: "integer", nullable: true)]
-    private ?int $patientId = null;
+    #[ORM\ManyToOne(targetEntity: Patient::class, inversedBy: "medicines")]
+    #[ORM\JoinColumn(name: "patient_id", referencedColumnName: "id", nullable: true)]
+    private ?Patient $patient = null;
+
+    #[ORM\ManyToOne(targetEntity: Treatment::class, inversedBy: "medicines")]
+    #[ORM\JoinColumn(name: "treatment_id", referencedColumnName: "id", nullable: true)]
+    private ?Treatment $treatment = null;
+
+    #[ORM\ManyToOne(targetEntity: Alarm::class, inversedBy: "medicines")]
+    #[ORM\JoinColumn(name: "alarm_id", referencedColumnName: "id", nullable: true)]
+    private ?Alarm $alarm = null;
 
     public function getId(): ?int
     {
@@ -70,14 +74,12 @@ class Medicine
         return $this;
     }
 
-    public function getPatientId(): ?int
-    {
-        return $this->patientId;
-    }
+    public function getPatient(): ?Patient { return $this->patient; }
+    public function setPatient(?Patient $patient): static { $this->patient = $patient; return $this; }
 
-    public function setPatientId(?int $patientId): static
-    {
-        $this->patientId = $patientId;
-        return $this;
-    }
+    public function getTreatment(): ?Treatment { return $this->treatment; }
+    public function setTreatment(?Treatment $treatment): static { $this->treatment = $treatment; return $this; }
+
+    public function getAlarm(): ?Alarm { return $this->alarm; }
+    public function setAlarm(?Alarm $alarm): static { $this->alarm = $alarm; return $this; }
 }

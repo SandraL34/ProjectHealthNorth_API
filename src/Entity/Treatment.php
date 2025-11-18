@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Doctor;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity]
 #[ORM\Table(name: "treatment")]
@@ -26,20 +28,25 @@ class Treatment
     #[ORM\Column(type: "boolean", nullable: true)]
     private ?bool $paid = null;
 
-    #[ORM\ManyToOne(targetEntity: Doctor::class)]
-    #[ORM\JoinColumn(
-        name: "attending_physician_id",
-        referencedColumnName: "id",
-        nullable: true,
-        onDelete: "SET NULL"
-    )]
+    #[ORM\ManyToOne(targetEntity: Doctor::class, inversedBy: "treatments")]
+    #[ORM\JoinColumn(name: "attending_physician_id", referencedColumnName: "id", nullable: true)]
     private ?Doctor $attendingPhysician = null;
 
-    #[ORM\Column(type: "integer", nullable: true)]
-    private ?int $patientId = null;
+    #[ORM\ManyToOne(targetEntity: Patient::class, inversedBy: "treatments")]
+    #[ORM\JoinColumn(name: "patient_id", referencedColumnName: "id", nullable: true)]
+    private ?Patient $patient = null;
 
-    #[ORM\Column(type: "integer", nullable: true)]
-    private ?int $medicineId = null;
+    #[ORM\OneToMany(mappedBy: "treatment_id", targetEntity: Medicine::class)]
+    private Collection $medicines;
+
+    #[ORM\OneToMany(mappedBy: "treatment_id", targetEntity: Prescription::class)]
+    private Collection $prescriptions;
+
+        public function __construct()
+    {
+        $this->medicines = new ArrayCollection();
+        $this->prescriptions = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -101,25 +108,16 @@ class Treatment
         return $this;
     }
 
-    public function getPatientId(): ?int
+    public function getPatient(): ?Patient { return $this->patient; }
+    public function setPatient(?Patient $patient): static { $this->patient = $patient; return $this; }
+
+    public function getMedicine(): Collection
     {
-        return $this->patientId;
+        return $this->medicines;
     }
 
-    public function setPatientId(?int $patientId): static
+        public function getPrescriptions(): Collection
     {
-        $this->patientId = $patientId;
-        return $this;
-    }
-
-    public function getMedicineId(): ?int
-    {
-        return $this->medicineId;
-    }
-
-    public function setMedicineId(?int $medicineId): static
-    {
-        $this->medicineId = $medicineId;
-        return $this;
+        return $this->prescriptions;
     }
 }

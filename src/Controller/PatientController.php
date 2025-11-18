@@ -18,7 +18,7 @@ class PatientController extends AbstractController
     /**
      * Récupère le dossier médical du patient connecté
      */
-    #[Route('/api/patient/me', name: 'api_patient_me', methods: ['GET'])]
+    #[Route('/api/patient/medicalRecord', name: 'api_patient_medicalRecord', methods: ['GET'])]
     public function me(ManagerRegistry $doctrine): JsonResponse
     {
         $user = $this->getUser();
@@ -33,7 +33,7 @@ class PatientController extends AbstractController
         $doctor = $patient->getAttendingPhysician();
         $emergencyContact = $patient->getEmergencyContact();
         $option = $patient->getOption();
-        $payment = $patient->getPayment();
+        $payment = $patient->getPayments()->last();
 
         return $this->json([
             'id' => $patient->getId(),
@@ -59,7 +59,6 @@ class PatientController extends AbstractController
             'firstname' => $doctor->getFirstname(),
             'lastname' => $doctor->getLastname()
             ] : null,
-            'appointmentId' => $patient->getAppointmentId(),
             'option' => $option ? [
             'communicationForm' => $option->getCommunicationForm(),
             'privateRoom' => $option->isPrivateRoom(),
@@ -67,13 +66,12 @@ class PatientController extends AbstractController
             'wifi' => $option->isWifi(),
             'diet' => $option->getDiet()
             ] : null,
-            'alarmId' => $patient->getAlarmId(),
             'payment' => $payment ? [
-            'card_number' => $payment->getCardNumber(),
-            'expiration_date_month' => $payment->getExpirationDateMonth(),
-            'secret_code' => $payment->getSecretCode(),
-            'owner_name' => $payment->getOwnerName(),
-            'expiration_date_year' => $payment->getExpirationDateYear()
+            'cardNumber' => $payment->getCardNumber(),
+            'expirationDateMonth' => $payment->getExpirationDateMonth(),
+            'secretCode' => $payment->getSecretCode(),
+            'ownerName' => $payment->getOwnerName(),
+            'expirationDateYear' => $payment->getExpirationDateYear()
             ] : null,
         ]);
     }
@@ -106,10 +104,7 @@ class PatientController extends AbstractController
         $user->setSocialsecurityRegime($data['socialsecurityRegime'] ?? $user->getSocialsecurityRegime());
         $user->setHealthcareInsurance($data['healthcareInsurance'] ?? $user->getHealthcareInsurance());
         $user->setEmergencyContact($data['emergencyContact'] ?? $user->getEmergencyContact());
-        $user->setAppointmentId($data['appointmentId'] ?? $user->getAppointmentId());
         $user->setOption($data['option'] ?? $user->getOption());
-        $user->setAlarmId($data['alarmId'] ?? $user->getAlarmId());
-        $user->setPayment($data['payment'] ?? $user->getPayment());
 
         if (isset($data['attendingPhysicianId'])) {
             $doctor = $doctrine->getRepository(Doctor::class)->find($data['attendingPhysicianId']);
@@ -138,10 +133,7 @@ class PatientController extends AbstractController
                 'healthcareInsurance' => $user->getHealthcareInsurance(),
                 'emergencyContact' => $user->getEmergencyContact(),
                 'attendingPhysicianId' => $user->getAttendingPhysician(),
-                'appointmentId' => $user->getAppointmentId(),
                 'option' => $user->getOption(),
-                'alarmId' => $user->getAlarmId(),
-                'payment' => $user->getPayment(),
             ]
         ]);
     }

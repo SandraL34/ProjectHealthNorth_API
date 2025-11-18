@@ -29,8 +29,13 @@ class Appointment
     #[ORM\Column(name: "date_time", type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateTime = null;
 
-    #[ORM\Column(name: "option_id", type: "integer", nullable: true)]
-    private ?int $optionId = null;
+    #[ORM\ManyToOne(targetEntity: Option::class, inversedBy: "apppointments")]
+    #[ORM\JoinColumn(name: "option_id", referencedColumnName: "id", nullable: true)]
+    private ?Option $option = null;
+
+    #[ORM\ManyToOne(targetEntity: Patient::class, inversedBy: "appointments")]
+    #[ORM\JoinColumn(name: "patient_id", referencedColumnName: "id", nullable: true)]
+    private ?Patient $patient = null;
 
     public function getId(): ?int
     {
@@ -92,14 +97,9 @@ class Appointment
         return $this;
     }
 
-    public function getOptionId(): ?int
-    {
-        return $this->optionId;
-    }
+    public function getOption(): ?Option { return $this->option; }
+    public function setOption(?Option $option): static { $this->option = $option; return $this; }
 
-    public function setOptionId(?int $optionId): static
-    {
-        $this->optionId = $optionId;
-        return $this;
-    }
+    public function getPatient(): ?Patient { return $this->patient; }
+    public function setPatient(?Patient $patient): static { $this->patient = $patient; return $this; }
 }

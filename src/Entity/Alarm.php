@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity]
 #[ORM\Table(name: "alarm")]
@@ -17,9 +19,6 @@ class Alarm
     #[ORM\Column(name: "date_time", type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateTime = null;
 
-    #[ORM\Column(name: "medicine_id", type: "integer", nullable: true)]
-    private ?int $medicineId = null;
-
     #[ORM\Column(length: 256)]
     private string $frequency;
 
@@ -31,6 +30,18 @@ class Alarm
 
     #[ORM\Column(length: 256)]
     private string $notification;
+
+    #[ORM\ManyToOne(targetEntity: Patient::class, inversedBy: "alarms")]
+    #[ORM\JoinColumn(name: "patient_id", referencedColumnName: "id", nullable: true)]
+    private ?Patient $patient = null;
+
+    #[ORM\OneToMany(mappedBy: "alarm", targetEntity: Medicine::class)]
+    private Collection $medicines;
+
+    public function __construct()
+    {
+        $this->medicines = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -45,17 +56,6 @@ class Alarm
     public function setDateTime(?\DateTimeInterface $dateTime): static
     {
         $this->dateTime = $dateTime;
-        return $this;
-    }
-
-    public function getMedicineId(): ?int
-    {
-        return $this->medicineId;
-    }
-
-    public function setMedicineId(?int $medicineId): static
-    {
-        $this->medicineId = $medicineId;
         return $this;
     }
 
@@ -101,5 +101,13 @@ class Alarm
     {
         $this->notification = $notification;
         return $this;
+    }
+
+    public function getPatient(): ?Patient { return $this->patient; }
+    public function setPatient(?Patient $patient): static { $this->patient = $patient; return $this; }
+
+    public function getMedicines(): Collection
+    {
+        return $this->medicines;
     }
 }
