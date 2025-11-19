@@ -4416,10 +4416,11 @@
         <argument key="serializer" type="service_closure" id="serializer"/>
       </argument>
     </service>
-    <service id=".service_locator.TV1z9hQ" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.Njv9Unk" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="App\Controller\AppointmentController::comingAppointment" type="service_closure" id=".service_locator.T7xmfzk"/>
+        <argument key="App\Controller\AppointmentController::pastAppointment" type="service_closure" id=".service_locator.T7xmfzk"/>
         <argument key="App\Controller\HealthNorthController::createPayment" type="service_closure" id=".service_locator.H2jV.2L"/>
         <argument key="App\Controller\HealthNorthController::deletePayment" type="service_closure" id=".service_locator.CJtuRdo"/>
         <argument key="App\Controller\HealthNorthController::getPatient" type="service_closure" id=".service_locator.8tq73hJ"/>
@@ -4434,6 +4435,7 @@
         <argument key="kernel::loadRoutes" type="service_closure" id=".service_locator.KfbR3DY"/>
         <argument key="kernel::registerContainerConfiguration" type="service_closure" id=".service_locator.KfbR3DY"/>
         <argument key="App\Controller\AppointmentController:comingAppointment" type="service_closure" id=".service_locator.T7xmfzk"/>
+        <argument key="App\Controller\AppointmentController:pastAppointment" type="service_closure" id=".service_locator.T7xmfzk"/>
         <argument key="App\Controller\HealthNorthController:createPayment" type="service_closure" id=".service_locator.H2jV.2L"/>
         <argument key="App\Controller\HealthNorthController:deletePayment" type="service_closure" id=".service_locator.CJtuRdo"/>
         <argument key="App\Controller\HealthNorthController:getPatient" type="service_closure" id=".service_locator.8tq73hJ"/>
@@ -4723,12 +4725,12 @@
       <argument type="service" id="security.token_storage"/>
     </service>
     <service id="debug.argument_resolver.service.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">
-      <argument type="service" id=".service_locator.TV1z9hQ"/>
+      <argument type="service" id=".service_locator.Njv9Unk"/>
     </service>
     <service id="debug.argument_resolver.default.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver"/>
     <service id="debug.argument_resolver.variadic.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\VariadicValueResolver"/>
     <service id="debug.argument_resolver.not_tagged_controller.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\NotTaggedControllerValueResolver">
-      <argument type="service" id=".service_locator.TV1z9hQ"/>
+      <argument type="service" id=".service_locator.Njv9Unk"/>
     </service>
     <service id=".doctrine.orm.default_metadata_driver.inner" class="Doctrine\Persistence\Mapping\Driver\MappingDriverChain">
       <call method="addDriver">
@@ -5439,7 +5441,7 @@
     <service id="lexik_jwt_authentication.key_loader" alias="lexik_jwt_authentication.key_loader.raw" public="true"/>
     <service id="container.env_var_processors_locator" alias=".service_locator.gSv9zYw" public="true"/>
     <service id="twig.loader.filesystem" alias="twig.loader.native_filesystem"/>
-    <service id="argument_resolver.controller_locator" alias=".service_locator.TV1z9hQ"/>
+    <service id="argument_resolver.controller_locator" alias=".service_locator.Njv9Unk"/>
     <service id="doctrine.id_generator_locator" alias=".service_locator.KLVvNIq"/>
     <service id="twig.loader" alias="twig.loader.native_filesystem"/>
     <service id="Psr\Log\LoggerInterface" alias="logger"/>
@@ -5448,7 +5450,7 @@
     <service id=".service_locator.65VReFp" alias=".service_locator.CJtuRdo"/>
     <service id=".service_locator.IwVTio5" alias=".service_locator.H2jV.2L"/>
     <service id=".service_locator.ieMpv.4" alias=".service_locator..9EDVyX"/>
-    <service id=".service_locator.cUcuXDD" alias=".service_locator.TV1z9hQ"/>
+    <service id=".service_locator.QkjnXRE" alias=".service_locator.Njv9Unk"/>
     <service id=".service_locator.qBCHs1a" alias=".service_locator.QXcJQkF"/>
     <service id=".service_locator.jkb6XQV" alias=".service_locator.l1ae.Qz"/>
     <service id="event_dispatcher" alias="debug.event_dispatcher" public="true"/>

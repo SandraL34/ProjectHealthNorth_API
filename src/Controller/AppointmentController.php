@@ -12,7 +12,6 @@ use App\Entity\Appointment;
 class AppointmentController extends AbstractController
 {
     #[Route('/api/appointment/coming', name: 'api_appointment_coming', methods: ['GET'])]
-
     public function comingAppointment(ManagerRegistry $doctrine): JsonResponse
     {
         $user = $this->getUser();
@@ -30,12 +29,11 @@ class AppointmentController extends AbstractController
             if ($appointment->getDateTime() > $now) {
                 $upcoming[] = [
                     'title' => $appointment->getTitle(),
-                    'dateTime' => $appointment->getDateTime()->format('Y-m-d H:i'),
+                    'dateTime' => $appointment->getDateTime()->format('d/m/Y \à H\hi'),
                     'institutionType' => $appointment->getInstitutionType(),
                     'specialtyType' => $appointment->getSpecialtyType(),
                     'attendingPhysician' => $appointment->getAttendingPhysician()
                         ? [
-                            'firstname' => $appointment->getAttendingPhysician()->getFirstname(),
                             'lastname' => $appointment->getAttendingPhysician()->getLastname()
                         ]
                         : null,
@@ -44,6 +42,40 @@ class AppointmentController extends AbstractController
         }
 
     return $this->json($upcoming);
+
+    }
+
+    #[Route('/api/appointment/past', name: 'api_appointment_past', methods: ['GET'])]
+    public function pastAppointment(ManagerRegistry $doctrine): JsonResponse
+    {
+        $user = $this->getUser();
+
+        if (!$user) {
+            return $this->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $appointments = $doctrine->getRepository(Appointment::class)->findBy(['patient' => $user]);
+
+        $now = new \DateTimeImmutable();
+        $upcoming = [];
+
+        foreach ($appointments as $appointment) {
+            if ($appointment->getDateTime() < $now) {
+                $past[] = [
+                    'title' => $appointment->getTitle(),
+                    'dateTime' => $appointment->getDateTime()->format('d/m/Y \à H\hi'),
+                    'institutionType' => $appointment->getInstitutionType(),
+                    'specialtyType' => $appointment->getSpecialtyType(),
+                    'attendingPhysician' => $appointment->getAttendingPhysician()
+                        ? [
+                            'lastname' => $appointment->getAttendingPhysician()->getLastname()
+                        ]
+                        : null,
+                ];
+            }
+        }
+
+    return $this->json($past);
 
     }
 }
