@@ -36,10 +36,14 @@ class Treatment
     #[ORM\JoinColumn(name: "patient_id", referencedColumnName: "id", nullable: true)]
     private ?Patient $patient = null;
 
-    #[ORM\OneToMany(mappedBy: "treatment_id", targetEntity: Medicine::class)]
+    #[ORM\ManyToOne(targetEntity: Appointment::class, inversedBy: "treatments")]
+    #[ORM\JoinColumn(name: "appointment_id", referencedColumnName: "id", nullable: true)]
+    private ?Appointment $appointment = null;
+
+    #[ORM\OneToMany(mappedBy: "treatment", targetEntity: Medicine::class)]
     private Collection $medicines;
 
-    #[ORM\OneToMany(mappedBy: "treatment_id", targetEntity: Prescription::class)]
+    #[ORM\OneToMany(mappedBy: "treatment", targetEntity: Prescription::class)]
     private Collection $prescriptions;
 
         public function __construct()
@@ -120,4 +124,7 @@ class Treatment
     {
         return $this->prescriptions;
     }
+
+    public function getAppointment(): ?Appointment { return $this->appointment; }
+    public function setAppointment(?Appointment $appointment): static { $this->appointment = $appointment; return $this; }
 }

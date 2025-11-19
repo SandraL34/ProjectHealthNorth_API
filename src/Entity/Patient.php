@@ -83,6 +83,9 @@ class Patient implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: "patient", targetEntity: Treatment::class)]
     private Collection $treatments;
 
+    #[ORM\OneToMany(mappedBy: "patient", targetEntity: Prescription::class)]
+    private Collection $prescriptions;
+
 
     public function __construct()
     {
@@ -91,6 +94,7 @@ class Patient implements UserInterface, PasswordAuthenticatedUserInterface
         $this->appointments = new ArrayCollection();
         $this->medicines = new ArrayCollection();
         $this->treatments = new ArrayCollection();
+        $this->prescriptions = new ArrayCollection();
     }
 
     public function getId(): ?int { return $this->id; }
@@ -164,13 +168,18 @@ class Patient implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->appointments;
     }
 
-        public function getMedicines(): Collection
+    public function getMedicines(): Collection
     {
         return $this->medicines;
     }
 
-            public function getTreatments(): Collection
+    public function getTreatments(): Collection
     {
         return $this->treatments;
+    }
+
+    public function getPrescriptions(): Collection
+    {
+        return $this->prescriptions;
     }
 }

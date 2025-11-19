@@ -27,6 +27,9 @@ class Prescription
     #[ORM\JoinColumn(name: "treatment_id", referencedColumnName: "id", nullable: true)]
     private ?Treatment $treatment = null;
 
+    #[ORM\ManyToOne(targetEntity: Patient::class, inversedBy: "prescriptions")]
+    #[ORM\JoinColumn(name: "patient_id", referencedColumnName: "id", nullable: true)]
+    private ?Patient $patient = null;
 
     public function getId(): ?int
     {
@@ -76,4 +79,7 @@ class Prescription
         $this->treatment = $treatment;
         return $this;
     }
+
+    public function getPatient(): ?Patient { return $this->patient; }
+    public function setPatient(?Patient $patient): static { $this->patient = $patient; return $this; }
 }

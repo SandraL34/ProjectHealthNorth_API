@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity]
 #[ORM\Table(name: "appointment")]
@@ -40,6 +42,14 @@ class Appointment
     #[ORM\ManyToOne(targetEntity: Doctor::class, inversedBy: "appointments")]
     #[ORM\JoinColumn(name: "attending_physician_id", referencedColumnName: "id", nullable: true)]
     private ?Doctor $attendingPhysician = null;
+
+    #[ORM\OneToMany(mappedBy: "appointment", targetEntity: Treatment::class)]
+    private Collection $treatments;
+
+        public function __construct()
+    {
+        $this->treatments = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -116,5 +126,10 @@ class Appointment
     {
         $this->attendingPhysician = $doctor;
         return $this;
+    }
+
+    public function getTreatments(): Collection
+    {
+        return $this->treatments;
     }
 }
