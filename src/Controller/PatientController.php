@@ -15,15 +15,11 @@ use Doctrine\Persistence\ManagerRegistry;
 
 class PatientController extends AbstractController
 {
-    /**
-     * Récupère le dossier médical du patient connecté
-     */
     #[Route('/api/patient/medicalRecord', name: 'api_patient_medicalRecord', methods: ['GET'])]
     public function me(ManagerRegistry $doctrine): JsonResponse
     {
         $user = $this->getUser();
 
-        // Vérification : l'utilisateur est bien un Patient
         if (!$user instanceof Patient) {
             throw $this->createAccessDeniedException('Seul un patient peut accéder à ce endpoint.');
         }
@@ -76,15 +72,11 @@ class PatientController extends AbstractController
         ]);
     }
 
-    /**
-     * Met à jour le dossier médical du patient connecté
-     */
     #[Route('/api/patient/me', name: 'api_patient_update', methods: ['PUT'])]
     public function update(Request $request, ManagerRegistry $doctrine): JsonResponse
     {
         $user = $this->getUser();
 
-        // Vérification : l'utilisateur est bien un Patient
         if (!$user instanceof Patient) {
             throw $this->createAccessDeniedException('Seul un patient peut modifier son dossier.');
         }

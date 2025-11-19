@@ -67,10 +67,10 @@ class Doctor extends \App\Entity\Doctor implements \Doctrine\ORM\Proxy\Proxy
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'firstname', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'lastname', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'specialty', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'phoneNumber', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'email', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'password', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'patients', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'treatments', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'prescriptions', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'medicines'];
+            return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'firstname', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'lastname', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'specialty', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'phoneNumber', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'email', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'password', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'patients', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'treatments', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'prescriptions', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'medicines', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'appointments'];
         }
 
-        return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'firstname', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'lastname', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'specialty', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'phoneNumber', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'email', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'password', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'patients', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'treatments', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'prescriptions', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'medicines'];
+        return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'firstname', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'lastname', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'specialty', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'phoneNumber', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'email', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'password', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'patients', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'treatments', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'prescriptions', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'medicines', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'appointments'];
     }
 
     /**
@@ -399,6 +399,17 @@ class Doctor extends \App\Entity\Doctor implements \Doctrine\ORM\Proxy\Proxy
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getMedicine', []);
 
         return parent::getMedicine();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getAppointment(): \Doctrine\Common\Collections\Collection
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getAppointment', []);
+
+        return parent::getAppointment();
     }
 
 }

@@ -37,6 +37,10 @@ class Appointment
     #[ORM\JoinColumn(name: "patient_id", referencedColumnName: "id", nullable: true)]
     private ?Patient $patient = null;
 
+    #[ORM\ManyToOne(targetEntity: Doctor::class, inversedBy: "appointments")]
+    #[ORM\JoinColumn(name: "attending_physician_id", referencedColumnName: "id", nullable: true)]
+    private ?Doctor $attendingPhysician = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -102,4 +106,15 @@ class Appointment
 
     public function getPatient(): ?Patient { return $this->patient; }
     public function setPatient(?Patient $patient): static { $this->patient = $patient; return $this; }
+
+        public function getAttendingPhysician(): ?Doctor
+    {
+        return $this->attendingPhysician;
+    }
+
+    public function setAttendingPhysician(?Doctor $doctor): static
+    {
+        $this->attendingPhysician = $doctor;
+        return $this;
+    }
 }

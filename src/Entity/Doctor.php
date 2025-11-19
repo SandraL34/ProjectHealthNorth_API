@@ -47,12 +47,16 @@ class Doctor implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: "attendingPhysician", targetEntity: Medicine::class)]
     private Collection $medicines;
 
+    #[ORM\OneToMany(mappedBy: "attendingPhysician", targetEntity: Appointment::class)]
+    private Collection $appointments;
+
     public function __construct()
     {
         $this->patients = new ArrayCollection();
         $this->treatments = new ArrayCollection();
         $this->prescriptions = new ArrayCollection();
         $this->medicines = new ArrayCollection();
+        $this->appointments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -143,18 +147,23 @@ class Doctor implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->patients;
     }
 
-        public function getTreatments(): Collection
+    public function getTreatments(): Collection
     {
         return $this->treatments;
     }
 
-        public function getPrescription(): Collection
+    public function getPrescription(): Collection
     {
         return $this->prescriptions;
     }
 
-        public function getMedicine(): Collection
+    public function getMedicine(): Collection
     {
         return $this->medicines;
+    }
+
+    public function getAppointment(): Collection
+    {
+        return $this->appointments;
     }
 }

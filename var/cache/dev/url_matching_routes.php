@@ -8,6 +8,7 @@
 return [
     false, // $matchHost
     [ // $staticRoutes
+        '/api/appointment/coming' => [[['_route' => 'api_appointment_coming', '_controller' => 'App\\Controller\\AppointmentController::comingAppointment'], null, ['GET' => 0], null, false, false, null]],
         '/healthnorth/api/patients' => [[['_route' => 'patients', '_controller' => 'App\\Controller\\HealthNorthController::getPatientList'], null, ['GET' => 0], null, false, false, null]],
         '/healthnorth/api/payments' => [[['_route' => 'createPayment', '_controller' => 'App\\Controller\\HealthNorthController::createPayment'], null, ['POST' => 0], null, false, false, null]],
         '/api/login' => [[['_route' => 'api_login', '_controller' => 'App\\Controller\\LoginController::login'], null, ['POST' => 0], null, false, false, null]],
