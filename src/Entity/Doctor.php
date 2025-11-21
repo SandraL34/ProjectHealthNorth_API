@@ -7,8 +7,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use App\Repository\DoctorRepository;
 
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: DoctorRepository::class)]
 #[ORM\Table(name: "doctor")]
 class Doctor implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -34,6 +35,10 @@ class Doctor implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: "string", length: 256)]
     private string $password;
+
+    #[ORM\ManyToOne(targetEntity: Center::class, inversedBy: "doctors")]
+    #[ORM\JoinColumn(name: "center_id", referencedColumnName: "id", nullable: true)]
+    private ?Center $center = null;
 
     #[ORM\OneToMany(mappedBy: "doctor", targetEntity: Patient::class)]
     private Collection $patients;
@@ -174,5 +179,16 @@ class Doctor implements UserInterface, PasswordAuthenticatedUserInterface
     public function getAvailabilities(): Collection
     {
         return $this->availabilities;
+    }
+
+    public function getCenter(): ?Center
+    {
+        return $this->center;
+    }
+
+    public function setCenter(?Center $center): static
+    {
+        $this->center = $center;
+        return $this;
     }
 }

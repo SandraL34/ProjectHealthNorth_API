@@ -22,11 +22,12 @@ class Appointment
     #[ORM\Column(length: 256, nullable: true)]
     private ?string $description = null;
 
-    #[ORM\Column(name: "institution_type", length: 256, nullable: true)]
-    private ?string $institutionType = null;
-
     #[ORM\Column(name: "date_time", type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateTime = null;
+
+    #[ORM\ManyToOne(targetEntity: Center::class, inversedBy: "appointments")]
+    #[ORM\JoinColumn(name: "center_id", referencedColumnName: "id", nullable: true)]
+    private ?Center $center = null;
 
     #[ORM\ManyToOne(targetEntity: Patient::class, inversedBy: "appointments")]
     #[ORM\JoinColumn(name: "patient_id", referencedColumnName: "id", nullable: true)]
@@ -71,14 +72,14 @@ class Appointment
         return $this;
     }
 
-    public function getInstitutionType(): ?string
+    public function getCenter(): ?Center
     {
-        return $this->institutionType;
+        return $this->center;
     }
 
-    public function setInstitutionType(?string $institutionType): static
+    public function setCenter(?Center $center): static
     {
-        $this->institutionType = $institutionType;
+        $this->center = $center;
         return $this;
     }
 

@@ -30,7 +30,11 @@ class AppointmentController extends AbstractController
                 $upcoming[] = [
                     'title' => $appointment->getTitle(),
                     'dateTime' => $appointment->getDateTime()->format('d/m/Y \à H\hi'),
-                    'institutionType' => $appointment->getInstitutionType(),
+                    'center' => $appointment->getCenter()
+                        ? [
+                            'name' => $appointment->getCenter()->getName()
+                        ]
+                        : null,
                     'doctor' => $appointment->getDoctor()
                         ? [
                             'lastname' => $appointment->getDoctor()->getLastname()
@@ -63,7 +67,11 @@ class AppointmentController extends AbstractController
                 $past[] = [
                     'title' => $appointment->getTitle(),
                     'dateTime' => $appointment->getDateTime()->format('d/m/Y \à H\hi'),
-                    'institutionType' => $appointment->getInstitutionType(),
+                    'center' => $appointment->getCenter()
+                        ? [
+                            'name' => $appointment->getCenter()->getName()
+                        ]
+                        : null,
                     'doctor' => $appointment->getDoctor()
                         ? [
                             'lastname' => $appointment->getDoctor()->getLastname()

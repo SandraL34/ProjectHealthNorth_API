@@ -10,6 +10,8 @@ return [
     [ // $staticRoutes
         '/api/appointment/coming' => [[['_route' => 'api_appointment_coming', '_controller' => 'App\\Controller\\AppointmentController::comingAppointment'], null, ['GET' => 0], null, false, false, null]],
         '/api/appointment/past' => [[['_route' => 'api_appointment_past', '_controller' => 'App\\Controller\\AppointmentController::pastAppointment'], null, ['GET' => 0], null, false, false, null]],
+        '/api/centers/search' => [[['_route' => 'api_centers_search', '_controller' => 'App\\Controller\\CenterController::searchCenters'], null, ['GET' => 0], null, false, false, null]],
+        '/api/doctors/search' => [[['_route' => 'api_doctors_search', '_controller' => 'App\\Controller\\DoctorController::searchDoctors'], null, ['GET' => 0], null, false, false, null]],
         '/healthnorth/api/patients' => [[['_route' => 'patients', '_controller' => 'App\\Controller\\HealthNorthController::getPatientList'], null, ['GET' => 0], null, false, false, null]],
         '/healthnorth/api/payments' => [[['_route' => 'createPayment', '_controller' => 'App\\Controller\\HealthNorthController::createPayment'], null, ['POST' => 0], null, false, false, null]],
         '/api/login' => [[['_route' => 'api_login', '_controller' => 'App\\Controller\\LoginController::login'], null, ['POST' => 0], null, false, false, null]],
