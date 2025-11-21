@@ -20,7 +20,10 @@ class PrescriptionController extends AbstractController
             return $this->json(['error' => 'Unauthorized'], 401);
         }
 
-        $prescriptions = $doctrine->getRepository(Prescription::class)->findBy(['patient' => $user]);
+        $repo = $doctrine->getRepository(Prescription::class);
+        /** @var \App\Repository\PrescriptionRepository $repo */
+
+        $prescriptions = $repo->findByPatient($user);
 
         $prescriptionList = [];
 
@@ -28,9 +31,9 @@ class PrescriptionController extends AbstractController
             $prescriptionList[] = [
             'report' => $prescription->getReport(),
             'prescriptionDetails' => $prescription->getPrescriptionDetails(),
-            'attendingPhysician' => $prescription->getAttendingPhysician()
+            'doctor' => $prescription->getDoctor()
             ? [
-                'lastname' => $prescription->getAttendingPhysician()->getLastname()
+                'lastname' => $prescription->getDoctor()->getLastname()
             ]
             : null,
             'treatment' => $prescription->getTreatment()

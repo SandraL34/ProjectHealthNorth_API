@@ -26,7 +26,7 @@ class PatientController extends AbstractController
 
         $patient = $doctrine->getRepository(Patient::class)->find($user->getId());
 
-        $doctor = $patient->getAttendingPhysician();
+        $doctor = $patient->getDoctor();
         $emergencyContact = $patient->getEmergencyContact();
         $option = $patient->getOption();
         $payment = $patient->getPayments()->last();
@@ -51,7 +51,7 @@ class PatientController extends AbstractController
             'lastname' => $emergencyContact->getLastname(),
             'phoneNumber' => $emergencyContact->getPhoneNumber()
             ] : null,
-            'attendingPhysician' => $doctor ? [
+            'doctor' => $doctor ? [
             'firstname' => $doctor->getFirstname(),
             'lastname' => $doctor->getLastname()
             ] : null,
@@ -98,9 +98,9 @@ class PatientController extends AbstractController
         $user->setEmergencyContact($data['emergencyContact'] ?? $user->getEmergencyContact());
         $user->setOption($data['option'] ?? $user->getOption());
 
-        if (isset($data['attendingPhysicianId'])) {
-            $doctor = $doctrine->getRepository(Doctor::class)->find($data['attendingPhysicianId']);
-            $user->setAttendingPhysician($doctor);
+        if (isset($data['doctor'])) {
+            $doctor = $doctrine->getRepository(Doctor::class)->find($data['doctor']);
+            $user->setDoctor($doctor);
         }
 
         $em = $doctrine->getManager();
@@ -124,7 +124,7 @@ class PatientController extends AbstractController
                 'socialsecurityRegime' => $user->getSocialsecurityRegime(),
                 'healthcareInsurance' => $user->getHealthcareInsurance(),
                 'emergencyContact' => $user->getEmergencyContact(),
-                'attendingPhysicianId' => $user->getAttendingPhysician(),
+                'doctor' => $user->getDoctor(),
                 'option' => $user->getOption(),
             ]
         ]);

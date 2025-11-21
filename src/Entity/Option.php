@@ -33,14 +33,9 @@ class Option
     #[ORM\OneToMany(mappedBy: "option", targetEntity: Patient::class)]
     private Collection $patients;
 
-    #[ORM\OneToMany(mappedBy: "option", targetEntity: Appointment::class)]
-    private Collection $appointments;
-
-
     public function __construct()
     {
         $this->patients = new ArrayCollection();
-        $this->appointments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -107,9 +102,5 @@ class Option
     {
         return $this->patients;
     }
-
-    public function getAppointments(): Collection
-    {
-        return $this->appointments;
-    }
+    
 }

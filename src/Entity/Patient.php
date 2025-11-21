@@ -61,8 +61,8 @@ class Patient implements UserInterface, PasswordAuthenticatedUserInterface
     private ?EmergencyContact $emergencyContact = null;
 
     #[ORM\ManyToOne(targetEntity: Doctor::class, inversedBy: "patients")]
-    #[ORM\JoinColumn(name: "attending_physician_id", referencedColumnName: "id", nullable: true)]
-    private ?Doctor $attendingPhysician = null;
+    #[ORM\JoinColumn(name: "doctor_id", referencedColumnName: "id", nullable: true)]
+    private ?Doctor $doctor = null;
 
     #[ORM\ManyToOne(targetEntity: Option::class, inversedBy: "patients")]
     #[ORM\JoinColumn(name: "option_id", referencedColumnName: "id", nullable: true)]
@@ -83,9 +83,6 @@ class Patient implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: "patient", targetEntity: Treatment::class)]
     private Collection $treatments;
 
-    #[ORM\OneToMany(mappedBy: "patient", targetEntity: Prescription::class)]
-    private Collection $prescriptions;
-
 
     public function __construct()
     {
@@ -94,7 +91,6 @@ class Patient implements UserInterface, PasswordAuthenticatedUserInterface
         $this->appointments = new ArrayCollection();
         $this->medicines = new ArrayCollection();
         $this->treatments = new ArrayCollection();
-        $this->prescriptions = new ArrayCollection();
     }
 
     public function getId(): ?int { return $this->id; }
@@ -141,8 +137,8 @@ class Patient implements UserInterface, PasswordAuthenticatedUserInterface
     public function getEmergencyContact(): ?EmergencyContact { return $this->emergencyContact; }
     public function setEmergencyContact(?EmergencyContact $emergencyContact): static { $this->emergencyContact = $emergencyContact; return $this; }
 
-    public function getAttendingPhysician(): ?Doctor { return $this->attendingPhysician; }
-    public function setAttendingPhysician(?Doctor $doctor): static { $this->attendingPhysician = $doctor; return $this; }
+    public function getDoctor(): ?Doctor { return $this->doctor; }
+    public function setDoctor(?Doctor $doctor): static { $this->doctor = $doctor; return $this; }
 
     public function getOption(): ?Option { return $this->option; }
     public function setOption(?Option $option): static { $this->option = $option; return $this; }
@@ -176,10 +172,5 @@ class Patient implements UserInterface, PasswordAuthenticatedUserInterface
     public function getTreatments(): Collection
     {
         return $this->treatments;
-    }
-
-    public function getPrescriptions(): Collection
-    {
-        return $this->prescriptions;
     }
 }

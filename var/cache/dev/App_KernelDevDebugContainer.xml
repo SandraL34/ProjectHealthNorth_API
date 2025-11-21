@@ -298,11 +298,19 @@
       <tag name="doctrine.repository_service"/>
       <argument type="service" id="doctrine"/>
     </service>
+    <service id="App\Repository\AvailabilityRepository" class="App\Repository\AvailabilityRepository" autowire="true" autoconfigure="true">
+      <tag name="doctrine.repository_service"/>
+      <argument type="service" id="doctrine"/>
+    </service>
     <service id="App\Repository\PatientRepository" class="App\Repository\PatientRepository" autowire="true" autoconfigure="true">
       <tag name="doctrine.repository_service"/>
       <argument type="service" id="doctrine"/>
     </service>
     <service id="App\Repository\PaymentRepository" class="App\Repository\PaymentRepository" autowire="true" autoconfigure="true">
+      <tag name="doctrine.repository_service"/>
+      <argument type="service" id="doctrine"/>
+    </service>
+    <service id="App\Repository\PrescriptionRepository" class="App\Repository\PrescriptionRepository" autowire="true" autoconfigure="true">
       <tag name="doctrine.repository_service"/>
       <argument type="service" id="doctrine"/>
     </service>
@@ -2300,7 +2308,7 @@
     <service id="doctrine.orm.configuration" class="Doctrine\ORM\Configuration" abstract="true"/>
     <service id="doctrine.orm.entity_manager.abstract" class="Doctrine\ORM\EntityManager" lazy="true" abstract="true"/>
     <service id="doctrine.orm.container_repository_factory" class="Doctrine\Bundle\DoctrineBundle\Repository\ContainerRepositoryFactory">
-      <argument type="service" id=".service_locator.53apMBa"/>
+      <argument type="service" id=".service_locator.ifIeAWc"/>
     </service>
     <service id="doctrine.orm.manager_configurator.abstract" class="Doctrine\Bundle\DoctrineBundle\ManagerConfigurator" abstract="true">
       <argument type="collection"/>
@@ -4007,10 +4015,14 @@
     <service id=".abstract.instanceof.App\EventSubscriber\JwtCreatedSubscriber" class="App\EventSubscriber\JwtCreatedSubscriber" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\AppointmentRepository" class="App\Repository\AppointmentRepository" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Repository\AppointmentRepository" class="App\Repository\AppointmentRepository" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\AvailabilityRepository" class="App\Repository\AvailabilityRepository" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Repository\AvailabilityRepository" class="App\Repository\AvailabilityRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\PatientRepository" class="App\Repository\PatientRepository" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Repository\PatientRepository" class="App\Repository\PatientRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\PaymentRepository" class="App\Repository\PaymentRepository" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Repository\PaymentRepository" class="App\Repository\PaymentRepository" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\PrescriptionRepository" class="App\Repository\PrescriptionRepository" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Repository\PrescriptionRepository" class="App\Repository\PrescriptionRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".service_locator.gSv9zYw" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
@@ -4515,12 +4527,14 @@
         <argument key="doctrine.orm.listeners.doctrine_token_provider_schema_subscriber" type="service_closure" id="doctrine.orm.listeners.doctrine_token_provider_schema_subscriber"/>
       </argument>
     </service>
-    <service id=".service_locator.53apMBa" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.ifIeAWc" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="App\Repository\AppointmentRepository" type="service_closure" id="App\Repository\AppointmentRepository"/>
+        <argument key="App\Repository\AvailabilityRepository" type="service_closure" id="App\Repository\AvailabilityRepository"/>
         <argument key="App\Repository\PatientRepository" type="service_closure" id="App\Repository\PatientRepository"/>
         <argument key="App\Repository\PaymentRepository" type="service_closure" id="App\Repository\PaymentRepository"/>
+        <argument key="App\Repository\PrescriptionRepository" type="service_closure" id="App\Repository\PrescriptionRepository"/>
       </argument>
     </service>
     <service id=".service_locator.KLVvNIq" class="Symfony\Component\DependencyInjection\ServiceLocator">

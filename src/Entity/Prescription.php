@@ -3,9 +3,11 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\PrescriptionRepository;
 
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: PrescriptionRepository::class)]
 #[ORM\Table(name: "prescription")]
+
 class Prescription
 {
     #[ORM\Id]
@@ -20,16 +22,12 @@ class Prescription
     private ?string $prescriptionDetails = null;
 
     #[ORM\ManyToOne(targetEntity: Doctor::class, inversedBy: "prescriptions")]
-    #[ORM\JoinColumn(name: "attending_physician_id", referencedColumnName: "id", nullable: true)]
-    private ?Doctor $attendingPhysician = null;
+    #[ORM\JoinColumn(name: "doctor_id", referencedColumnName: "id", nullable: true)]
+    private ?Doctor $doctor = null;
 
     #[ORM\ManyToOne(targetEntity: Treatment::class, inversedBy: "prescriptions")]
     #[ORM\JoinColumn(name: "treatment_id", referencedColumnName: "id", nullable: true)]
     private ?Treatment $treatment = null;
-
-    #[ORM\ManyToOne(targetEntity: Patient::class, inversedBy: "prescriptions")]
-    #[ORM\JoinColumn(name: "patient_id", referencedColumnName: "id", nullable: true)]
-    private ?Patient $patient = null;
 
     public function getId(): ?int
     {
@@ -58,14 +56,14 @@ class Prescription
         return $this;
     }
 
-    public function getAttendingPhysician(): ?Doctor
+    public function getDoctor(): ?Doctor
     {
-        return $this->attendingPhysician;
+        return $this->doctor;
     }
 
-    public function setAttendingPhysician(?Doctor $doctor): static
+    public function setDoctor(?Doctor $doctor): static
     {
-        $this->attendingPhysician = $doctor;
+        $this->doctor = $doctor;
         return $this;
     }
 
@@ -80,6 +78,4 @@ class Prescription
         return $this;
     }
 
-    public function getPatient(): ?Patient { return $this->patient; }
-    public function setPatient(?Patient $patient): static { $this->patient = $patient; return $this; }
 }

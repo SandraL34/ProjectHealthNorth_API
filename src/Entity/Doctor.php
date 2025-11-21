@@ -35,20 +35,23 @@ class Doctor implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: "string", length: 256)]
     private string $password;
 
-    #[ORM\OneToMany(mappedBy: "attendingPhysician", targetEntity: Patient::class)]
+    #[ORM\OneToMany(mappedBy: "doctor", targetEntity: Patient::class)]
     private Collection $patients;
 
-    #[ORM\OneToMany(mappedBy: "attendingPhysician", targetEntity: Treatment::class)]
+    #[ORM\ManyToMany(targetEntity: Treatment::class, mappedBy: "doctors")]
     private Collection $treatments;
 
-    #[ORM\OneToMany(mappedBy: "attendingPhysician", targetEntity: Prescription::class)]
+    #[ORM\OneToMany(mappedBy: "doctor", targetEntity: Prescription::class)]
     private Collection $prescriptions;
 
-    #[ORM\OneToMany(mappedBy: "attendingPhysician", targetEntity: Medicine::class)]
+    #[ORM\OneToMany(mappedBy: "doctor", targetEntity: Medicine::class)]
     private Collection $medicines;
 
-    #[ORM\OneToMany(mappedBy: "attendingPhysician", targetEntity: Appointment::class)]
+    #[ORM\OneToMany(mappedBy: "doctor", targetEntity: Appointment::class)]
     private Collection $appointments;
+
+    #[ORM\OneToMany(mappedBy: "doctor", targetEntity: Availability::class)]
+    private Collection $availabilities;
 
     public function __construct()
     {
@@ -57,6 +60,7 @@ class Doctor implements UserInterface, PasswordAuthenticatedUserInterface
         $this->prescriptions = new ArrayCollection();
         $this->medicines = new ArrayCollection();
         $this->appointments = new ArrayCollection();
+        $this->availabilities = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -165,5 +169,10 @@ class Doctor implements UserInterface, PasswordAuthenticatedUserInterface
     public function getAppointment(): Collection
     {
         return $this->appointments;
+    }
+
+    public function getAvailabilities(): Collection
+    {
+        return $this->availabilities;
     }
 }

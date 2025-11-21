@@ -31,10 +31,9 @@ class AppointmentController extends AbstractController
                     'title' => $appointment->getTitle(),
                     'dateTime' => $appointment->getDateTime()->format('d/m/Y \à H\hi'),
                     'institutionType' => $appointment->getInstitutionType(),
-                    'specialtyType' => $appointment->getSpecialtyType(),
-                    'attendingPhysician' => $appointment->getAttendingPhysician()
+                    'doctor' => $appointment->getDoctor()
                         ? [
-                            'lastname' => $appointment->getAttendingPhysician()->getLastname()
+                            'lastname' => $appointment->getDoctor()->getLastname()
                         ]
                         : null,
                 ];
@@ -65,10 +64,9 @@ class AppointmentController extends AbstractController
                     'title' => $appointment->getTitle(),
                     'dateTime' => $appointment->getDateTime()->format('d/m/Y \à H\hi'),
                     'institutionType' => $appointment->getInstitutionType(),
-                    'specialtyType' => $appointment->getSpecialtyType(),
-                    'attendingPhysician' => $appointment->getAttendingPhysician()
+                    'doctor' => $appointment->getDoctor()
                         ? [
-                            'lastname' => $appointment->getAttendingPhysician()->getLastname()
+                            'lastname' => $appointment->getDoctor()->getLastname()
                         ]
                         : null,
                 ];

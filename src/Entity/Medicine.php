@@ -21,8 +21,8 @@ class Medicine
     private ?string $frequency = null;
 
     #[ORM\ManyToOne(targetEntity: Doctor::class, inversedBy: "medicines")]
-    #[ORM\JoinColumn(name: "attending_physician_id", referencedColumnName: "id", nullable: true)]
-    private ?Doctor $attendingPhysician = null;
+    #[ORM\JoinColumn(name: "doctor_id", referencedColumnName: "id", nullable: true)]
+    private ?Doctor $doctor = null;
 
     #[ORM\ManyToOne(targetEntity: Patient::class, inversedBy: "medicines")]
     #[ORM\JoinColumn(name: "patient_id", referencedColumnName: "id", nullable: true)]
@@ -63,14 +63,14 @@ class Medicine
         return $this;
     }
 
-    public function getAttendingPhysician(): ?Doctor
+    public function getDoctor(): ?Doctor
     {
-        return $this->attendingPhysician;
+        return $this->doctor;
     }
 
-    public function setAttendingPhysician(?Doctor $doctor): static
+    public function setDoctor(?Doctor $doctor): static
     {
-        $this->attendingPhysician = $doctor;
+        $this->doctor = $doctor;
         return $this;
     }
 

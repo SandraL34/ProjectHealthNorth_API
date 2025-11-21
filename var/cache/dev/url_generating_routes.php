@@ -4,6 +4,8 @@
 
 return [
     '_preview_error' => [['code', '_format'], ['_controller' => 'error_controller::preview', '_format' => 'html'], ['code' => '\\d+'], [['variable', '.', '[^/]++', '_format', true], ['variable', '/', '\\d+', 'code', true], ['text', '/_error']], [], [], []],
+    'api_appointment_coming' => [[], ['_controller' => 'App\\Controller\\AppointmentController::comingAppointment'], [], [['text', '/api/appointment/coming']], [], [], []],
+    'api_appointment_past' => [[], ['_controller' => 'App\\Controller\\AppointmentController::pastAppointment'], [], [['text', '/api/appointment/past']], [], [], []],
     'patients' => [[], ['_controller' => 'App\\Controller\\HealthNorthController::getPatientList'], [], [['text', '/healthnorth/api/patients']], [], [], []],
     'patient' => [['id'], ['_controller' => 'App\\Controller\\HealthNorthController::getPatient'], [], [['variable', '/', '[^/]++', 'id', true], ['text', '/healthnorth/api/patients']], [], [], []],
     'patientName' => [['id'], ['_controller' => 'App\\Controller\\HealthNorthController::getPatientName'], [], [['variable', '/', '[^/]++', 'id', true], ['text', '/healthnorth/api/patient']], [], [], []],
@@ -12,6 +14,7 @@ return [
     'createPayment' => [[], ['_controller' => 'App\\Controller\\HealthNorthController::createPayment'], [], [['text', '/healthnorth/api/payments']], [], [], []],
     'updatePayment' => [['id'], ['_controller' => 'App\\Controller\\HealthNorthController::updatePayment'], [], [['variable', '/', '[^/]++', 'id', true], ['text', '/healthnorth/api/payments']], [], [], []],
     'api_login' => [[], ['_controller' => 'App\\Controller\\LoginController::login'], [], [['text', '/api/login']], [], [], []],
-    'api_patient_me' => [[], ['_controller' => 'App\\Controller\\PatientController::me'], [], [['text', '/api/patient/me']], [], [], []],
+    'api_patient_medicalRecord' => [[], ['_controller' => 'App\\Controller\\PatientController::me'], [], [['text', '/api/patient/medicalRecord']], [], [], []],
     'api_patient_update' => [[], ['_controller' => 'App\\Controller\\PatientController::update'], [], [['text', '/api/patient/me']], [], [], []],
+    'api_prescription' => [[], ['_controller' => 'App\\Controller\\PrescriptionController::getPrescription'], [], [['text', '/api/prescription']], [], [], []],
 ];

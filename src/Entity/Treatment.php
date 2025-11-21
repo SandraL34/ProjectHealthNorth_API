@@ -17,6 +17,9 @@ class Treatment
     private ?int $id = null;
 
     #[ORM\Column(length: 256, nullable: true)]
+    private ?string $category = null;
+
+    #[ORM\Column(length: 256, nullable: true)]
     private ?string $name = null;
 
     #[ORM\Column(length: 512, nullable: true)]
@@ -25,12 +28,15 @@ class Treatment
     #[ORM\Column(type: "integer", nullable: true)]
     private ?int $price = null;
 
+    #[ORM\Column(type: "integer", nullable: true)]
+    private ?int $duration = null;
+
     #[ORM\Column(type: "boolean", nullable: true)]
     private ?bool $paid = null;
 
-    #[ORM\ManyToOne(targetEntity: Doctor::class, inversedBy: "treatments")]
-    #[ORM\JoinColumn(name: "attending_physician_id", referencedColumnName: "id", nullable: true)]
-    private ?Doctor $attendingPhysician = null;
+    #[ORM\ManyToMany(targetEntity: Doctor::class, inversedBy: "treatments")]
+    #[ORM\JoinTable(name: "treatment_doctor")]
+    private Collection $doctors;
 
     #[ORM\ManyToOne(targetEntity: Patient::class, inversedBy: "treatments")]
     #[ORM\JoinColumn(name: "patient_id", referencedColumnName: "id", nullable: true)]
@@ -50,11 +56,23 @@ class Treatment
     {
         $this->medicines = new ArrayCollection();
         $this->prescriptions = new ArrayCollection();
+        $this->doctors = new ArrayCollection();
     }
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getCategory(): ?string
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?string $category): static
+    {
+        $this->category = $category;
+        return $this;
     }
 
     public function getName(): ?string
@@ -90,6 +108,17 @@ class Treatment
         return $this;
     }
 
+        public function getDuration(): ?int
+    {
+        return $this->duration;
+    }
+
+    public function setDuration(?int $duration): static
+    {
+        $this->duration = $duration;
+        return $this;
+    }
+
     public function isPaid(): ?bool
     {
         return $this->paid;
@@ -101,16 +130,7 @@ class Treatment
         return $this;
     }
 
-    public function getAttendingPhysician(): ?Doctor
-    {
-        return $this->attendingPhysician;
-    }
 
-    public function setAttendingPhysician(?Doctor $doctor): static
-    {
-        $this->attendingPhysician = $doctor;
-        return $this;
-    }
 
     public function getPatient(): ?Patient { return $this->patient; }
     public function setPatient(?Patient $patient): static { $this->patient = $patient; return $this; }
@@ -127,4 +147,24 @@ class Treatment
 
     public function getAppointment(): ?Appointment { return $this->appointment; }
     public function setAppointment(?Appointment $appointment): static { $this->appointment = $appointment; return $this; }
+
+    public function getDoctors(): Collection
+{
+    return $this->doctors;
+}
+
+    public function addDoctor(Doctor $doctor): static
+    {
+        if (!$this->doctors->contains($doctor)) {
+            $this->doctors->add($doctor);
+        }
+
+        return $this;
+    }
+
+    public function removeDoctor(Doctor $doctor): static
+    {
+        $this->doctors->removeElement($doctor);
+        return $this;
+    }
 }

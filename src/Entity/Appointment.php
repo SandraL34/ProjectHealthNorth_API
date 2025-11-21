@@ -25,23 +25,16 @@ class Appointment
     #[ORM\Column(name: "institution_type", length: 256, nullable: true)]
     private ?string $institutionType = null;
 
-    #[ORM\Column(name: "specialty_type", length: 256, nullable: true)]
-    private ?string $specialtyType = null;
-
     #[ORM\Column(name: "date_time", type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateTime = null;
-
-    #[ORM\ManyToOne(targetEntity: Option::class, inversedBy: "apppointments")]
-    #[ORM\JoinColumn(name: "option_id", referencedColumnName: "id", nullable: true)]
-    private ?Option $option = null;
 
     #[ORM\ManyToOne(targetEntity: Patient::class, inversedBy: "appointments")]
     #[ORM\JoinColumn(name: "patient_id", referencedColumnName: "id", nullable: true)]
     private ?Patient $patient = null;
 
     #[ORM\ManyToOne(targetEntity: Doctor::class, inversedBy: "appointments")]
-    #[ORM\JoinColumn(name: "attending_physician_id", referencedColumnName: "id", nullable: true)]
-    private ?Doctor $attendingPhysician = null;
+    #[ORM\JoinColumn(name: "doctor_id", referencedColumnName: "id", nullable: true)]
+    private ?Doctor $doctor = null;
 
     #[ORM\OneToMany(mappedBy: "appointment", targetEntity: Treatment::class)]
     private Collection $treatments;
@@ -89,17 +82,6 @@ class Appointment
         return $this;
     }
 
-    public function getSpecialtyType(): ?string
-    {
-        return $this->specialtyType;
-    }
-
-    public function setSpecialtyType(?string $specialtyType): static
-    {
-        $this->specialtyType = $specialtyType;
-        return $this;
-    }
-
     public function getDateTime(): ?\DateTimeInterface
     {
         return $this->dateTime;
@@ -111,20 +93,17 @@ class Appointment
         return $this;
     }
 
-    public function getOption(): ?Option { return $this->option; }
-    public function setOption(?Option $option): static { $this->option = $option; return $this; }
-
     public function getPatient(): ?Patient { return $this->patient; }
     public function setPatient(?Patient $patient): static { $this->patient = $patient; return $this; }
 
-        public function getAttendingPhysician(): ?Doctor
+        public function getDoctor(): ?Doctor
     {
-        return $this->attendingPhysician;
+        return $this->doctor;
     }
 
-    public function setAttendingPhysician(?Doctor $doctor): static
+    public function setDoctor(?Doctor $doctor): static
     {
-        $this->attendingPhysician = $doctor;
+        $this->doctor = $doctor;
         return $this;
     }
 

@@ -67,10 +67,10 @@ class Treatment extends \App\Entity\Treatment implements \Doctrine\ORM\Proxy\Pro
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Treatment' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Treatment' . "\0" . 'name', '' . "\0" . 'App\\Entity\\Treatment' . "\0" . 'description', '' . "\0" . 'App\\Entity\\Treatment' . "\0" . 'price', '' . "\0" . 'App\\Entity\\Treatment' . "\0" . 'paid', '' . "\0" . 'App\\Entity\\Treatment' . "\0" . 'attendingPhysician', '' . "\0" . 'App\\Entity\\Treatment' . "\0" . 'patient', '' . "\0" . 'App\\Entity\\Treatment' . "\0" . 'appointment', '' . "\0" . 'App\\Entity\\Treatment' . "\0" . 'medicines', '' . "\0" . 'App\\Entity\\Treatment' . "\0" . 'prescriptions'];
+            return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Treatment' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Treatment' . "\0" . 'category', '' . "\0" . 'App\\Entity\\Treatment' . "\0" . 'name', '' . "\0" . 'App\\Entity\\Treatment' . "\0" . 'description', '' . "\0" . 'App\\Entity\\Treatment' . "\0" . 'price', '' . "\0" . 'App\\Entity\\Treatment' . "\0" . 'duration', '' . "\0" . 'App\\Entity\\Treatment' . "\0" . 'paid', '' . "\0" . 'App\\Entity\\Treatment' . "\0" . 'doctors', '' . "\0" . 'App\\Entity\\Treatment' . "\0" . 'patient', '' . "\0" . 'App\\Entity\\Treatment' . "\0" . 'appointment', '' . "\0" . 'App\\Entity\\Treatment' . "\0" . 'medicines', '' . "\0" . 'App\\Entity\\Treatment' . "\0" . 'prescriptions'];
         }
 
-        return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Treatment' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Treatment' . "\0" . 'name', '' . "\0" . 'App\\Entity\\Treatment' . "\0" . 'description', '' . "\0" . 'App\\Entity\\Treatment' . "\0" . 'price', '' . "\0" . 'App\\Entity\\Treatment' . "\0" . 'paid', '' . "\0" . 'App\\Entity\\Treatment' . "\0" . 'attendingPhysician', '' . "\0" . 'App\\Entity\\Treatment' . "\0" . 'patient', '' . "\0" . 'App\\Entity\\Treatment' . "\0" . 'appointment', '' . "\0" . 'App\\Entity\\Treatment' . "\0" . 'medicines', '' . "\0" . 'App\\Entity\\Treatment' . "\0" . 'prescriptions'];
+        return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Treatment' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Treatment' . "\0" . 'category', '' . "\0" . 'App\\Entity\\Treatment' . "\0" . 'name', '' . "\0" . 'App\\Entity\\Treatment' . "\0" . 'description', '' . "\0" . 'App\\Entity\\Treatment' . "\0" . 'price', '' . "\0" . 'App\\Entity\\Treatment' . "\0" . 'duration', '' . "\0" . 'App\\Entity\\Treatment' . "\0" . 'paid', '' . "\0" . 'App\\Entity\\Treatment' . "\0" . 'doctors', '' . "\0" . 'App\\Entity\\Treatment' . "\0" . 'patient', '' . "\0" . 'App\\Entity\\Treatment' . "\0" . 'appointment', '' . "\0" . 'App\\Entity\\Treatment' . "\0" . 'medicines', '' . "\0" . 'App\\Entity\\Treatment' . "\0" . 'prescriptions'];
     }
 
     /**
@@ -195,6 +195,28 @@ class Treatment extends \App\Entity\Treatment implements \Doctrine\ORM\Proxy\Pro
     /**
      * {@inheritDoc}
      */
+    public function getCategory(): ?string
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCategory', []);
+
+        return parent::getCategory();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setCategory(?string $category): static
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCategory', [$category]);
+
+        return parent::setCategory($category);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getName(): ?string
     {
 
@@ -261,6 +283,28 @@ class Treatment extends \App\Entity\Treatment implements \Doctrine\ORM\Proxy\Pro
     /**
      * {@inheritDoc}
      */
+    public function getDuration(): ?int
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getDuration', []);
+
+        return parent::getDuration();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setDuration(?int $duration): static
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setDuration', [$duration]);
+
+        return parent::setDuration($duration);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function isPaid(): ?bool
     {
 
@@ -278,28 +322,6 @@ class Treatment extends \App\Entity\Treatment implements \Doctrine\ORM\Proxy\Pro
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setPaid', [$paid]);
 
         return parent::setPaid($paid);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getAttendingPhysician(): ?\App\Entity\Doctor
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getAttendingPhysician', []);
-
-        return parent::getAttendingPhysician();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setAttendingPhysician(?\App\Entity\Doctor $doctor): static
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setAttendingPhysician', [$doctor]);
-
-        return parent::setAttendingPhysician($doctor);
     }
 
     /**
@@ -366,6 +388,39 @@ class Treatment extends \App\Entity\Treatment implements \Doctrine\ORM\Proxy\Pro
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setAppointment', [$appointment]);
 
         return parent::setAppointment($appointment);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getDoctors(): \Doctrine\Common\Collections\Collection
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getDoctors', []);
+
+        return parent::getDoctors();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function addDoctor(\App\Entity\Doctor $doctor): static
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addDoctor', [$doctor]);
+
+        return parent::addDoctor($doctor);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function removeDoctor(\App\Entity\Doctor $doctor): static
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeDoctor', [$doctor]);
+
+        return parent::removeDoctor($doctor);
     }
 
 }
