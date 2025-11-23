@@ -18,7 +18,7 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 class HealthNorthController extends AbstractController
 {
-    #[Route('/healthnorth/api/patients', name: 'patients', methods: ['GET'])]
+    /*#[Route('/healthnorth/api/patients', name: 'patients', methods: ['GET'])]
     public function getPatientList(PatientRepository $patientRepository, SerializerInterface $serializer): JsonResponse
     {
         $patientList = $patientRepository->findAll();
@@ -122,5 +122,5 @@ class HealthNorthController extends AbstractController
         $em->flush();
 
         return new JsonResponse(null, JsonResponse::HTTP_NO_CONTENT);
-    }
+    }*/
 }

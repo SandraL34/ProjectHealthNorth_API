@@ -26,7 +26,6 @@ class TreatmentController extends AbstractController
             $grouped[$cat][] = [
                 'id' => $treatment->getId(),
                 'name' => $treatment->getName(),
-                'description' => $treatment->getDescription(),
                 'price' => $treatment->getPrice(),
                 'duration' => $treatment->getDuration()
             ];

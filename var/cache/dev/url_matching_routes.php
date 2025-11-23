@@ -12,36 +12,19 @@ return [
         '/api/appointment/past' => [[['_route' => 'api_appointment_past', '_controller' => 'App\\Controller\\AppointmentController::pastAppointment'], null, ['GET' => 0], null, false, false, null]],
         '/api/centers/search' => [[['_route' => 'api_centers_search', '_controller' => 'App\\Controller\\CenterController::searchCentersWhat'], null, ['GET' => 0], null, false, false, null]],
         '/api/doctors/search' => [[['_route' => 'api_doctors_search', '_controller' => 'App\\Controller\\DoctorController::searchDoctors'], null, ['GET' => 0], null, false, false, null]],
-        '/healthnorth/api/patients' => [[['_route' => 'patients', '_controller' => 'App\\Controller\\HealthNorthController::getPatientList'], null, ['GET' => 0], null, false, false, null]],
-        '/healthnorth/api/payments' => [[['_route' => 'createPayment', '_controller' => 'App\\Controller\\HealthNorthController::createPayment'], null, ['POST' => 0], null, false, false, null]],
         '/api/login' => [[['_route' => 'api_login', '_controller' => 'App\\Controller\\LoginController::login'], null, ['POST' => 0], null, false, false, null]],
         '/api/patient/medicalRecord' => [[['_route' => 'api_patient_medicalRecord', '_controller' => 'App\\Controller\\PatientController::me'], null, ['GET' => 0], null, false, false, null]],
-        '/api/patient/me' => [[['_route' => 'api_patient_update', '_controller' => 'App\\Controller\\PatientController::update'], null, ['PUT' => 0], null, false, false, null]],
         '/api/prescription' => [[['_route' => 'api_prescription', '_controller' => 'App\\Controller\\PrescriptionController::getPrescription'], null, ['GET' => 0], null, false, false, null]],
         '/api/treatments/list' => [[['_route' => 'api_treatments_list', '_controller' => 'App\\Controller\\TreatmentController::listTreatments'], null, ['GET' => 0], null, false, false, null]],
     ],
     [ // $regexpList
         0 => '{^(?'
                 .'|/_error/(\\d+)(?:\\.([^/]++))?(*:35)'
-                .'|/healthnorth/api/pa(?'
-                    .'|tient(?'
-                        .'|s/([^/]++)(*:82)'
-                        .'|/([^/]++)(*:98)'
-                    .')'
-                    .'|yments/([^/]++)(?'
-                        .'|(*:124)'
-                    .')'
-                .')'
             .')/?$}sDu',
     ],
     [ // $dynamicRoutes
-        35 => [[['_route' => '_preview_error', '_controller' => 'error_controller::preview', '_format' => 'html'], ['code', '_format'], null, null, false, true, null]],
-        82 => [[['_route' => 'patient', '_controller' => 'App\\Controller\\HealthNorthController::getPatient'], ['id'], ['GET' => 0], null, false, true, null]],
-        98 => [[['_route' => 'patientName', '_controller' => 'App\\Controller\\HealthNorthController::getPatientName'], ['id'], ['GET' => 0], null, false, true, null]],
-        124 => [
-            [['_route' => 'payment', '_controller' => 'App\\Controller\\HealthNorthController::getPayment'], ['id'], ['GET' => 0], null, false, true, null],
-            [['_route' => 'deletePayment', '_controller' => 'App\\Controller\\HealthNorthController::deletePayment'], ['id'], ['DELETE' => 0], null, false, true, null],
-            [['_route' => 'updatePayment', '_controller' => 'App\\Controller\\HealthNorthController::updatePayment'], ['id'], ['PUT' => 0], null, false, true, null],
+        35 => [
+            [['_route' => '_preview_error', '_controller' => 'error_controller::preview', '_format' => 'html'], ['code', '_format'], null, null, false, true, null],
             [null, null, null, null, false, false, 0],
         ],
     ],

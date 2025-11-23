@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Entity\Appointment;
@@ -30,14 +29,10 @@ class AppointmentController extends AbstractController
                 $upcoming[] = [
                     'title' => $appointment->getTitle(),
                     'dateTime' => $appointment->getDateTime()->format('d/m/Y \à H\hi'),
-                    'center' => $appointment->getCenter()
-                        ? [
-                            'name' => $appointment->getCenter()->getName()
-                        ]
-                        : null,
                     'doctor' => $appointment->getDoctor()
                         ? [
-                            'lastname' => $appointment->getDoctor()->getLastname()
+                            'lastname' => $appointment->getDoctor()->getLastname(),
+                            'name' => $appointment->getDoctor()->getCenter()->getName()
                         ]
                         : null,
                 ];
@@ -67,14 +62,10 @@ class AppointmentController extends AbstractController
                 $past[] = [
                     'title' => $appointment->getTitle(),
                     'dateTime' => $appointment->getDateTime()->format('d/m/Y \à H\hi'),
-                    'center' => $appointment->getCenter()
-                        ? [
-                            'name' => $appointment->getCenter()->getName()
-                        ]
-                        : null,
                     'doctor' => $appointment->getDoctor()
                         ? [
-                            'lastname' => $appointment->getDoctor()->getLastname()
+                            'lastname' => $appointment->getDoctor()->getLastname(),
+                            'name' => $appointment->getDoctor()->getCenter()->getName()
                         ]
                         : null,
                 ];

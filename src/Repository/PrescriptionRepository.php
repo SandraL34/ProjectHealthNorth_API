@@ -16,7 +16,7 @@ class PrescriptionRepository extends ServiceEntityRepository
     public function findByPatient($patient)
     {
         return $this->createQueryBuilder('p')
-            ->join('p.treatment', 't')
+            ->join('p.appointment', 't')
             ->where('t.patient = :patient')
             ->setParameter('patient', $patient)
             ->getQuery()

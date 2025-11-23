@@ -67,10 +67,10 @@ class Appointment extends \App\Entity\Appointment implements \Doctrine\ORM\Proxy
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'title', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'description', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'dateTime', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'center', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'patient', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'doctor', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'treatments'];
+            return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'title', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'description', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'dateTime', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'patient', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'doctor', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'treatments', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'invoices', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'prescriptions', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'alarms'];
         }
 
-        return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'title', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'description', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'dateTime', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'center', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'patient', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'doctor', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'treatments'];
+        return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'title', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'description', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'dateTime', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'patient', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'doctor', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'treatments', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'invoices', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'prescriptions', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'alarms'];
     }
 
     /**
@@ -239,28 +239,6 @@ class Appointment extends \App\Entity\Appointment implements \Doctrine\ORM\Proxy
     /**
      * {@inheritDoc}
      */
-    public function getCenter(): ?\App\Entity\Center
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCenter', []);
-
-        return parent::getCenter();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setCenter(?\App\Entity\Center $center): static
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCenter', [$center]);
-
-        return parent::setCenter($center);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function getDateTime(): ?\DateTimeInterface
     {
 
@@ -327,12 +305,56 @@ class Appointment extends \App\Entity\Appointment implements \Doctrine\ORM\Proxy
     /**
      * {@inheritDoc}
      */
-    public function getTreatments(): \Doctrine\Common\Collections\Collection
+    public function getInvoices(): \Doctrine\Common\Collections\Collection
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTreatments', []);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getInvoices', []);
 
-        return parent::getTreatments();
+        return parent::getInvoices();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function addTreatment(\App\Entity\Treatment $treatment): static
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addTreatment', [$treatment]);
+
+        return parent::addTreatment($treatment);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function removeTreatment(\App\Entity\Treatment $treatment): static
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeTreatment', [$treatment]);
+
+        return parent::removeTreatment($treatment);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getPrescriptions(): \Doctrine\Common\Collections\Collection
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPrescriptions', []);
+
+        return parent::getPrescriptions();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getAlarms(): \Doctrine\Common\Collections\Collection
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getAlarms', []);
+
+        return parent::getAlarms();
     }
 
 }
