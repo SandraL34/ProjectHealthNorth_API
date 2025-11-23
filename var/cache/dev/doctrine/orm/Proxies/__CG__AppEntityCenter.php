@@ -67,10 +67,10 @@ class Center extends \App\Entity\Center implements \Doctrine\ORM\Proxy\Proxy
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Center' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Center' . "\0" . 'name', '' . "\0" . 'App\\Entity\\Center' . "\0" . 'type', '' . "\0" . 'App\\Entity\\Center' . "\0" . 'email', '' . "\0" . 'App\\Entity\\Center' . "\0" . 'phoneNumber', '' . "\0" . 'App\\Entity\\Center' . "\0" . 'address', '' . "\0" . 'App\\Entity\\Center' . "\0" . 'doctors'];
+            return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Center' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Center' . "\0" . 'name', '' . "\0" . 'App\\Entity\\Center' . "\0" . 'type', '' . "\0" . 'App\\Entity\\Center' . "\0" . 'email', '' . "\0" . 'App\\Entity\\Center' . "\0" . 'phoneNumber', '' . "\0" . 'App\\Entity\\Center' . "\0" . 'address', '' . "\0" . 'App\\Entity\\Center' . "\0" . 'latitude', '' . "\0" . 'App\\Entity\\Center' . "\0" . 'longitude', '' . "\0" . 'App\\Entity\\Center' . "\0" . 'doctors'];
         }
 
-        return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Center' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Center' . "\0" . 'name', '' . "\0" . 'App\\Entity\\Center' . "\0" . 'type', '' . "\0" . 'App\\Entity\\Center' . "\0" . 'email', '' . "\0" . 'App\\Entity\\Center' . "\0" . 'phoneNumber', '' . "\0" . 'App\\Entity\\Center' . "\0" . 'address', '' . "\0" . 'App\\Entity\\Center' . "\0" . 'doctors'];
+        return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Center' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Center' . "\0" . 'name', '' . "\0" . 'App\\Entity\\Center' . "\0" . 'type', '' . "\0" . 'App\\Entity\\Center' . "\0" . 'email', '' . "\0" . 'App\\Entity\\Center' . "\0" . 'phoneNumber', '' . "\0" . 'App\\Entity\\Center' . "\0" . 'address', '' . "\0" . 'App\\Entity\\Center' . "\0" . 'latitude', '' . "\0" . 'App\\Entity\\Center' . "\0" . 'longitude', '' . "\0" . 'App\\Entity\\Center' . "\0" . 'doctors'];
     }
 
     /**
@@ -311,6 +311,50 @@ class Center extends \App\Entity\Center implements \Doctrine\ORM\Proxy\Proxy
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getDoctors', []);
 
         return parent::getDoctors();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getLongitude()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getLongitude', []);
+
+        return parent::getLongitude();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setLongitude($longitude)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setLongitude', [$longitude]);
+
+        return parent::setLongitude($longitude);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getLatitude()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getLatitude', []);
+
+        return parent::getLatitude();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setLatitude($latitude)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setLatitude', [$latitude]);
+
+        return parent::setLatitude($latitude);
     }
 
 }

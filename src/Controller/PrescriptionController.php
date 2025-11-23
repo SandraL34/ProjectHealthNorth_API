@@ -30,7 +30,7 @@ class PrescriptionController extends AbstractController
             $prescriptionList[] = [
                 'report' => $prescription->getReport(),
                 'prescriptionDetails' => $prescription->getPrescriptionDetails(),
-                'appointment' => $prescription->getAppointment ()
+                'appointment' => $prescription->getAppointment()
                 ? [
                     'lastname' => $prescription->getAppointment()->getDoctor()->getLastname(),
                     'dateTime' => $prescription->getAppointment()->getDateTime()->format('d/m/Y')

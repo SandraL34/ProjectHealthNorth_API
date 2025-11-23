@@ -31,6 +31,12 @@ class Center
     #[ORM\Column(length: 256, nullable: true)]
     private ?string $address = null;
 
+    #[ORM\Column(type: 'float', nullable: true)]
+    private ?float $latitude = null;
+
+    #[ORM\Column(type: 'float', nullable: true)]
+    private ?float $longitude = null;
+
     #[ORM\OneToMany(mappedBy: "center", targetEntity: Doctor::class)]
     private Collection $doctors;
 
@@ -102,5 +108,25 @@ class Center
     public function getDoctors(): Collection
     {
         return $this->doctors;
+    }
+
+    public function getLongitude()
+    {
+        return $this->longitude;
+    }
+
+    public function setLongitude($longitude)
+    {
+        $this->longitude = $longitude;
+    }
+
+    public function getLatitude()
+    {
+        return $this->latitude;
+    }
+
+    public function setLatitude($latitude)
+    {
+        $this->latitude = $latitude;
     }
 }

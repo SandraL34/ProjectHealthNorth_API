@@ -32,4 +32,40 @@ class CenterController extends AbstractController
 
         return $this->json($data);
     }
+
+    #[Route('/api/centers/map', name:'api_centers_map', methods: ['GET'])]
+    public function getCentersForMap(ManagerRegistry $doctrine): JsonResponse
+    {
+        $centers = $doctrine->getRepository(Center::class)->findAll();
+
+        $list = [];
+
+        foreach ($centers as $center) {
+            $list[]= [
+                'id' => $center->getId(),
+                'name' => $center->getName(),
+                'address' => $center->getAddress(),
+                'latitude' => $center->getLatitude(),
+                'longitude' => $center->getLongitude(),
+                'doctors' => array_map(function ($doctor) {
+                    $treatments = [];
+                    foreach ($doctor->getTreatments() as $treatment) {
+                        $treatments[] = [
+                            'id' => $treatment->getId(),
+                            'name' => $treatment->getName(),
+                        ];
+                    }
+
+                    return [
+                        'firstname' => $doctor->getFirstname(),
+                        'lastname' => $doctor->getLastname(),
+                        'treatments' => $treatments,
+                    ];
+                },
+                $center->getDoctors()->toArray())
+            ];
+        }
+
+        return $this->json($list);
+    }
 }
