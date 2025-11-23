@@ -22,41 +22,24 @@ class Treatment
     #[ORM\Column(length: 256, nullable: true)]
     private ?string $name = null;
 
-    #[ORM\Column(length: 512, nullable: true)]
-    private ?string $description = null;
-
     #[ORM\Column(type: "integer", nullable: true)]
     private ?int $price = null;
 
     #[ORM\Column(type: "integer", nullable: true)]
     private ?int $duration = null;
 
-    #[ORM\Column(type: "boolean", nullable: true)]
-    private ?bool $paid = null;
-
     #[ORM\ManyToMany(targetEntity: Doctor::class, inversedBy: "treatments")]
     #[ORM\JoinTable(name: "treatment_doctor")]
     private Collection $doctors;
 
-    #[ORM\ManyToOne(targetEntity: Patient::class, inversedBy: "treatments")]
-    #[ORM\JoinColumn(name: "patient_id", referencedColumnName: "id", nullable: true)]
-    private ?Patient $patient = null;
-
-    #[ORM\ManyToOne(targetEntity: Appointment::class, inversedBy: "treatments")]
-    #[ORM\JoinColumn(name: "appointment_id", referencedColumnName: "id", nullable: true)]
-    private ?Appointment $appointment = null;
-
-    #[ORM\OneToMany(mappedBy: "treatment", targetEntity: Medicine::class)]
-    private Collection $medicines;
-
-    #[ORM\OneToMany(mappedBy: "treatment", targetEntity: Prescription::class)]
-    private Collection $prescriptions;
+    #[ORM\ManyToMany(targetEntity: Appointment::class, mappedBy: "treatments")]
+    #[ORM\JoinTable(name: "appointment_treatment")]
+    private Collection $appointments;
 
         public function __construct()
     {
-        $this->medicines = new ArrayCollection();
-        $this->prescriptions = new ArrayCollection();
         $this->doctors = new ArrayCollection();
+        $this->appointments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -86,17 +69,6 @@ class Treatment
         return $this;
     }
 
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function setDescription(?string $description): static
-    {
-        $this->description = $description;
-        return $this;
-    }
-
     public function getPrice(): ?int
     {
         return $this->price;
@@ -118,35 +90,6 @@ class Treatment
         $this->duration = $duration;
         return $this;
     }
-
-    public function isPaid(): ?bool
-    {
-        return $this->paid;
-    }
-
-    public function setPaid(?bool $paid): static
-    {
-        $this->paid = $paid;
-        return $this;
-    }
-
-
-
-    public function getPatient(): ?Patient { return $this->patient; }
-    public function setPatient(?Patient $patient): static { $this->patient = $patient; return $this; }
-
-    public function getMedicine(): Collection
-    {
-        return $this->medicines;
-    }
-
-        public function getPrescriptions(): Collection
-    {
-        return $this->prescriptions;
-    }
-
-    public function getAppointment(): ?Appointment { return $this->appointment; }
-    public function setAppointment(?Appointment $appointment): static { $this->appointment = $appointment; return $this; }
 
     public function getDoctors(): Collection
 {

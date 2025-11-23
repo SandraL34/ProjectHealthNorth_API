@@ -25,10 +25,6 @@ class Appointment
     #[ORM\Column(name: "date_time", type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateTime = null;
 
-    #[ORM\ManyToOne(targetEntity: Center::class, inversedBy: "appointments")]
-    #[ORM\JoinColumn(name: "center_id", referencedColumnName: "id", nullable: true)]
-    private ?Center $center = null;
-
     #[ORM\ManyToOne(targetEntity: Patient::class, inversedBy: "appointments")]
     #[ORM\JoinColumn(name: "patient_id", referencedColumnName: "id", nullable: true)]
     private ?Patient $patient = null;
@@ -37,12 +33,25 @@ class Appointment
     #[ORM\JoinColumn(name: "doctor_id", referencedColumnName: "id", nullable: true)]
     private ?Doctor $doctor = null;
 
-    #[ORM\OneToMany(mappedBy: "appointment", targetEntity: Treatment::class)]
+    #[ORM\ManyToMany(targetEntity: Treatment::class, inversedBy: "appointments")]
+    #[ORM\JoinTable(name: "appointment_treatment")]
     private Collection $treatments;
 
-        public function __construct()
+    #[ORM\OneToMany(mappedBy: "appointment", targetEntity: Invoice::class)]
+    private Collection $invoices;
+
+    #[ORM\OneToMany(mappedBy: "appointment", targetEntity: Prescription::class)]
+    private Collection $prescriptions;
+
+    #[ORM\OneToMany(mappedBy: "appointment", targetEntity: Alarm::class)]
+    private Collection $alarms;
+
+    public function __construct()
     {
+        $this->invoices = new ArrayCollection();
         $this->treatments = new ArrayCollection();
+        $this->prescriptions = new ArrayCollection();
+        $this->alarms = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -72,17 +81,6 @@ class Appointment
         return $this;
     }
 
-    public function getCenter(): ?Center
-    {
-        return $this->center;
-    }
-
-    public function setCenter(?Center $center): static
-    {
-        $this->center = $center;
-        return $this;
-    }
-
     public function getDateTime(): ?\DateTimeInterface
     {
         return $this->dateTime;
@@ -108,8 +106,33 @@ class Appointment
         return $this;
     }
 
-    public function getTreatments(): Collection
+    public function getInvoices(): Collection
     {
-        return $this->treatments;
+        return $this->invoices;
+    }
+
+    
+    public function addTreatment(Treatment $treatment): static
+    {
+        if (!$this->treatments->contains($treatment)) {
+            $this->treatments->add($treatment);
+        }
+        return $this;
+    }
+
+    public function removeTreatment(Treatment $treatment): static
+    {
+        $this->treatments->removeElement($treatment);
+        return $this;
+    }
+
+    public function getPrescriptions(): Collection
+    {
+        return $this->prescriptions;
+    }
+
+    public function getAlarms(): Collection
+    {
+        return $this->alarms;
     }
 }

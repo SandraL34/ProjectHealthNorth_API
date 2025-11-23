@@ -92,6 +92,14 @@ class Payment
         return $this;
     }
 
-    public function getPatient(): ?Patient { return $this->patient; }
-    public function setPatient(?Patient $patient): static { $this->patient = $patient; return $this; }
+    public function getPatient(): ?Patient 
+    { 
+        return $this->patient; 
+    }
+
+    public function setPatient(?Patient $patient): static 
+    { 
+        $this->patient = $patient; 
+        return $this; 
+    }
 }

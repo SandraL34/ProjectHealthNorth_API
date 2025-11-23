@@ -305,6 +305,13 @@
         <argument type="service" id=".service_locator.l1ae.Qz.App\Controller\PrescriptionController"/>
       </call>
     </service>
+    <service id="App\Controller\TreatmentController" class="App\Controller\TreatmentController" public="true" autowire="true" autoconfigure="true">
+      <tag name="controller.service_arguments"/>
+      <tag name="container.service_subscriber"/>
+      <call method="setContainer">
+        <argument type="service" id=".service_locator.l1ae.Qz.App\Controller\TreatmentController"/>
+      </call>
+    </service>
     <service id="App\EventSubscriber\JwtCreatedSubscriber" class="App\EventSubscriber\JwtCreatedSubscriber" autowire="true" autoconfigure="true">
       <tag name="kernel.event_subscriber"/>
     </service>
@@ -333,6 +340,10 @@
       <argument type="service" id="doctrine"/>
     </service>
     <service id="App\Repository\PrescriptionRepository" class="App\Repository\PrescriptionRepository" autowire="true" autoconfigure="true">
+      <tag name="doctrine.repository_service"/>
+      <argument type="service" id="doctrine"/>
+    </service>
+    <service id="App\Repository\TreatmentRepository" class="App\Repository\TreatmentRepository" autowire="true" autoconfigure="true">
       <tag name="doctrine.repository_service"/>
       <argument type="service" id="doctrine"/>
     </service>
@@ -2330,7 +2341,7 @@
     <service id="doctrine.orm.configuration" class="Doctrine\ORM\Configuration" abstract="true"/>
     <service id="doctrine.orm.entity_manager.abstract" class="Doctrine\ORM\EntityManager" lazy="true" abstract="true"/>
     <service id="doctrine.orm.container_repository_factory" class="Doctrine\Bundle\DoctrineBundle\Repository\ContainerRepositoryFactory">
-      <argument type="service" id=".service_locator.aa7LJYc"/>
+      <argument type="service" id=".service_locator.wr7oAoj"/>
     </service>
     <service id="doctrine.orm.manager_configurator.abstract" class="Doctrine\Bundle\DoctrineBundle\ManagerConfigurator" abstract="true">
       <argument type="collection"/>
@@ -4019,6 +4030,9 @@
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\PrescriptionController" class="App\Controller\PrescriptionController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\PrescriptionController" class="App\Controller\PrescriptionController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\PrescriptionController" class="App\Controller\PrescriptionController" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\TreatmentController" class="App\Controller\TreatmentController" autowire="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\TreatmentController" class="App\Controller\TreatmentController" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Controller\TreatmentController" class="App\Controller\TreatmentController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Component\EventDispatcher\EventSubscriberInterface.0.App\EventSubscriber\JwtCreatedSubscriber" class="App\EventSubscriber\JwtCreatedSubscriber" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\EventSubscriber\JwtCreatedSubscriber" class="App\EventSubscriber\JwtCreatedSubscriber" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\AppointmentRepository" class="App\Repository\AppointmentRepository" autowire="true" abstract="true"/>
@@ -4035,6 +4049,8 @@
     <service id=".abstract.instanceof.App\Repository\PaymentRepository" class="App\Repository\PaymentRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\PrescriptionRepository" class="App\Repository\PrescriptionRepository" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Repository\PrescriptionRepository" class="App\Repository\PrescriptionRepository" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\TreatmentRepository" class="App\Repository\TreatmentRepository" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Repository\TreatmentRepository" class="App\Repository\TreatmentRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".service_locator.gSv9zYw" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
@@ -4450,12 +4466,12 @@
         <argument key="serializer" type="service_closure" id="serializer"/>
       </argument>
     </service>
-    <service id=".service_locator.BIJWinZ" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.Q6fyBVM" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="App\Controller\AppointmentController::comingAppointment" type="service_closure" id=".service_locator.T7xmfzk"/>
         <argument key="App\Controller\AppointmentController::pastAppointment" type="service_closure" id=".service_locator.T7xmfzk"/>
-        <argument key="App\Controller\CenterController::searchCenters" type="service_closure" id=".service_locator.T7xmfzk"/>
+        <argument key="App\Controller\CenterController::searchCentersWhat" type="service_closure" id=".service_locator.T7xmfzk"/>
         <argument key="App\Controller\DoctorController::searchDoctors" type="service_closure" id=".service_locator.T7xmfzk"/>
         <argument key="App\Controller\HealthNorthController::createPayment" type="service_closure" id=".service_locator.H2jV.2L"/>
         <argument key="App\Controller\HealthNorthController::deletePayment" type="service_closure" id=".service_locator.CJtuRdo"/>
@@ -4467,13 +4483,14 @@
         <argument key="App\Controller\PatientController::me" type="service_closure" id=".service_locator.T7xmfzk"/>
         <argument key="App\Controller\PatientController::update" type="service_closure" id=".service_locator.T7xmfzk"/>
         <argument key="App\Controller\PrescriptionController::getPrescription" type="service_closure" id=".service_locator.T7xmfzk"/>
+        <argument key="App\Controller\TreatmentController::listTreatments" type="service_closure" id=".service_locator.T7xmfzk"/>
         <argument key="App\Kernel::loadRoutes" type="service_closure" id=".service_locator.KfbR3DY"/>
         <argument key="App\Kernel::registerContainerConfiguration" type="service_closure" id=".service_locator.KfbR3DY"/>
         <argument key="kernel::loadRoutes" type="service_closure" id=".service_locator.KfbR3DY"/>
         <argument key="kernel::registerContainerConfiguration" type="service_closure" id=".service_locator.KfbR3DY"/>
         <argument key="App\Controller\AppointmentController:comingAppointment" type="service_closure" id=".service_locator.T7xmfzk"/>
         <argument key="App\Controller\AppointmentController:pastAppointment" type="service_closure" id=".service_locator.T7xmfzk"/>
-        <argument key="App\Controller\CenterController:searchCenters" type="service_closure" id=".service_locator.T7xmfzk"/>
+        <argument key="App\Controller\CenterController:searchCentersWhat" type="service_closure" id=".service_locator.T7xmfzk"/>
         <argument key="App\Controller\DoctorController:searchDoctors" type="service_closure" id=".service_locator.T7xmfzk"/>
         <argument key="App\Controller\HealthNorthController:createPayment" type="service_closure" id=".service_locator.H2jV.2L"/>
         <argument key="App\Controller\HealthNorthController:deletePayment" type="service_closure" id=".service_locator.CJtuRdo"/>
@@ -4485,6 +4502,7 @@
         <argument key="App\Controller\PatientController:me" type="service_closure" id=".service_locator.T7xmfzk"/>
         <argument key="App\Controller\PatientController:update" type="service_closure" id=".service_locator.T7xmfzk"/>
         <argument key="App\Controller\PrescriptionController:getPrescription" type="service_closure" id=".service_locator.T7xmfzk"/>
+        <argument key="App\Controller\TreatmentController:listTreatments" type="service_closure" id=".service_locator.T7xmfzk"/>
         <argument key="kernel:loadRoutes" type="service_closure" id=".service_locator.KfbR3DY"/>
         <argument key="kernel:registerContainerConfiguration" type="service_closure" id=".service_locator.KfbR3DY"/>
       </argument>
@@ -4543,7 +4561,7 @@
         <argument key="doctrine.orm.listeners.doctrine_token_provider_schema_subscriber" type="service_closure" id="doctrine.orm.listeners.doctrine_token_provider_schema_subscriber"/>
       </argument>
     </service>
-    <service id=".service_locator.aa7LJYc" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.wr7oAoj" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="App\Repository\AppointmentRepository" type="service_closure" id="App\Repository\AppointmentRepository"/>
@@ -4553,6 +4571,7 @@
         <argument key="App\Repository\PatientRepository" type="service_closure" id="App\Repository\PatientRepository"/>
         <argument key="App\Repository\PaymentRepository" type="service_closure" id="App\Repository\PaymentRepository"/>
         <argument key="App\Repository\PrescriptionRepository" type="service_closure" id="App\Repository\PrescriptionRepository"/>
+        <argument key="App\Repository\TreatmentRepository" type="service_closure" id="App\Repository\TreatmentRepository"/>
       </argument>
     </service>
     <service id=".service_locator.KLVvNIq" class="Symfony\Component\DependencyInjection\ServiceLocator">
@@ -4651,6 +4670,12 @@
     <service id=".service_locator.l1ae.Qz.App\Controller\PrescriptionController" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator_context" id="App\Controller\PrescriptionController"/>
       <argument>App\Controller\PrescriptionController</argument>
+      <argument type="service" id="service_container"/>
+      <factory service=".service_locator.l1ae.Qz" method="withContext"/>
+    </service>
+    <service id=".service_locator.l1ae.Qz.App\Controller\TreatmentController" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Controller\TreatmentController"/>
+      <argument>App\Controller\TreatmentController</argument>
       <argument type="service" id="service_container"/>
       <factory service=".service_locator.l1ae.Qz" method="withContext"/>
     </service>
@@ -4787,12 +4812,12 @@
       <argument type="service" id="security.token_storage"/>
     </service>
     <service id="debug.argument_resolver.service.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">
-      <argument type="service" id=".service_locator.BIJWinZ"/>
+      <argument type="service" id=".service_locator.Q6fyBVM"/>
     </service>
     <service id="debug.argument_resolver.default.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver"/>
     <service id="debug.argument_resolver.variadic.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\VariadicValueResolver"/>
     <service id="debug.argument_resolver.not_tagged_controller.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\NotTaggedControllerValueResolver">
-      <argument type="service" id=".service_locator.BIJWinZ"/>
+      <argument type="service" id=".service_locator.Q6fyBVM"/>
     </service>
     <service id=".doctrine.orm.default_metadata_driver.inner" class="Doctrine\Persistence\Mapping\Driver\MappingDriverChain">
       <call method="addDriver">
@@ -5503,7 +5528,7 @@
     <service id="lexik_jwt_authentication.key_loader" alias="lexik_jwt_authentication.key_loader.raw" public="true"/>
     <service id="container.env_var_processors_locator" alias=".service_locator.gSv9zYw" public="true"/>
     <service id="twig.loader.filesystem" alias="twig.loader.native_filesystem"/>
-    <service id="argument_resolver.controller_locator" alias=".service_locator.BIJWinZ"/>
+    <service id="argument_resolver.controller_locator" alias=".service_locator.Q6fyBVM"/>
     <service id="doctrine.id_generator_locator" alias=".service_locator.KLVvNIq"/>
     <service id="twig.loader" alias="twig.loader.native_filesystem"/>
     <service id="Psr\Log\LoggerInterface" alias="logger"/>
@@ -5512,7 +5537,7 @@
     <service id=".service_locator.65VReFp" alias=".service_locator.CJtuRdo"/>
     <service id=".service_locator.IwVTio5" alias=".service_locator.H2jV.2L"/>
     <service id=".service_locator.ieMpv.4" alias=".service_locator..9EDVyX"/>
-    <service id=".service_locator.QBzLiXS" alias=".service_locator.BIJWinZ"/>
+    <service id=".service_locator.peVEQPc" alias=".service_locator.Q6fyBVM"/>
     <service id=".service_locator.qBCHs1a" alias=".service_locator.QXcJQkF"/>
     <service id=".service_locator.jkb6XQV" alias=".service_locator.l1ae.Qz"/>
     <service id="event_dispatcher" alias="debug.event_dispatcher" public="true"/>

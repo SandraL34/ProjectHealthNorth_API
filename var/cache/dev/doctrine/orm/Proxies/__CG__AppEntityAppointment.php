@@ -67,10 +67,10 @@ class Appointment extends \App\Entity\Appointment implements \Doctrine\ORM\Proxy
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'title', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'description', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'institutionType', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'dateTime', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'patient', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'doctor', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'treatments'];
+            return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'title', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'description', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'dateTime', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'center', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'patient', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'doctor', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'treatments'];
         }
 
-        return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'title', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'description', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'institutionType', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'dateTime', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'patient', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'doctor', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'treatments'];
+        return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'title', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'description', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'dateTime', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'center', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'patient', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'doctor', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'treatments'];
     }
 
     /**
@@ -239,23 +239,23 @@ class Appointment extends \App\Entity\Appointment implements \Doctrine\ORM\Proxy
     /**
      * {@inheritDoc}
      */
-    public function getInstitutionType(): ?string
+    public function getCenter(): ?\App\Entity\Center
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getInstitutionType', []);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCenter', []);
 
-        return parent::getInstitutionType();
+        return parent::getCenter();
     }
 
     /**
      * {@inheritDoc}
      */
-    public function setInstitutionType(?string $institutionType): static
+    public function setCenter(?\App\Entity\Center $center): static
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setInstitutionType', [$institutionType]);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCenter', [$center]);
 
-        return parent::setInstitutionType($institutionType);
+        return parent::setCenter($center);
     }
 
     /**

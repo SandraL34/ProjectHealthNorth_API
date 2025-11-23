@@ -3,7 +3,8 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use App\Entity\Doctor;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity]
 #[ORM\Table(name: "medicine")]
@@ -20,21 +21,17 @@ class Medicine
     #[ORM\Column(length: 256, nullable: true)]
     private ?string $frequency = null;
 
-    #[ORM\ManyToOne(targetEntity: Doctor::class, inversedBy: "medicines")]
-    #[ORM\JoinColumn(name: "doctor_id", referencedColumnName: "id", nullable: true)]
-    private ?Doctor $doctor = null;
+    #[ORM\ManyToOne(targetEntity: Prescription::class, inversedBy: "medicines")]
+    #[ORM\JoinColumn(name: "prescription_id", referencedColumnName: "id", nullable: true)]
+    private ?Prescription $prescription = null;
 
-    #[ORM\ManyToOne(targetEntity: Patient::class, inversedBy: "medicines")]
-    #[ORM\JoinColumn(name: "patient_id", referencedColumnName: "id", nullable: true)]
-    private ?Patient $patient = null;
+    #[ORM\OneToMany(mappedBy: "alarms", targetEntity: Medicine::class)]
+    private Collection $alarms;
 
-    #[ORM\ManyToOne(targetEntity: Treatment::class, inversedBy: "medicines")]
-    #[ORM\JoinColumn(name: "treatment_id", referencedColumnName: "id", nullable: true)]
-    private ?Treatment $treatment = null;
-
-    #[ORM\ManyToOne(targetEntity: Alarm::class, inversedBy: "medicines")]
-    #[ORM\JoinColumn(name: "alarm_id", referencedColumnName: "id", nullable: true)]
-    private ?Alarm $alarm = null;
+    public function __construct()
+    {
+        $this->alarms = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -63,23 +60,19 @@ class Medicine
         return $this;
     }
 
-    public function getDoctor(): ?Doctor
+    public function getPrescription(): ?Prescription
     {
-        return $this->doctor;
+        return $this->prescription;
     }
 
-    public function setDoctor(?Doctor $doctor): static
+    public function setPrescription(?Prescription $prescription): static
     {
-        $this->doctor = $doctor;
+        $this->prescription = $prescription;
         return $this;
     }
 
-    public function getPatient(): ?Patient { return $this->patient; }
-    public function setPatient(?Patient $patient): static { $this->patient = $patient; return $this; }
-
-    public function getTreatment(): ?Treatment { return $this->treatment; }
-    public function setTreatment(?Treatment $treatment): static { $this->treatment = $treatment; return $this; }
-
-    public function getAlarm(): ?Alarm { return $this->alarm; }
-    public function setAlarm(?Alarm $alarm): static { $this->alarm = $alarm; return $this; }
+    public function getAlarms(): Collection
+    {
+        return $this->alarms;
+    }
 }

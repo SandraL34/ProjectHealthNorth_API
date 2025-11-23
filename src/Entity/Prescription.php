@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\PrescriptionRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity(repositoryClass: PrescriptionRepository::class)]
 #[ORM\Table(name: "prescription")]
@@ -21,13 +23,17 @@ class Prescription
     #[ORM\Column(name: "prescription_details", length: 1024, nullable: true)]
     private ?string $prescriptionDetails = null;
 
-    #[ORM\ManyToOne(targetEntity: Doctor::class, inversedBy: "prescriptions")]
-    #[ORM\JoinColumn(name: "doctor_id", referencedColumnName: "id", nullable: true)]
-    private ?Doctor $doctor = null;
+    #[ORM\ManyToOne(targetEntity: Appointment::class, inversedBy: "prescriptions")]
+    #[ORM\JoinColumn(name: "appointment_id", referencedColumnName: "id", nullable: true)]
+    private ?Appointment $appointment = null;
 
-    #[ORM\ManyToOne(targetEntity: Treatment::class, inversedBy: "prescriptions")]
-    #[ORM\JoinColumn(name: "treatment_id", referencedColumnName: "id", nullable: true)]
-    private ?Treatment $treatment = null;
+    #[ORM\OneToMany(mappedBy: "prescriptions", targetEntity: Medicine::class)]
+    private Collection $medicines;
+
+    public function __construct()
+    {
+        $this->medicines = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -56,26 +62,19 @@ class Prescription
         return $this;
     }
 
-    public function getDoctor(): ?Doctor
+    public function getAppointment(): ?Appointment
     {
-        return $this->doctor;
+        return $this->appointment;
     }
 
-    public function setDoctor(?Doctor $doctor): static
+    public function setAppointment(?Appointment $appointment): static
     {
-        $this->doctor = $doctor;
+        $this->appointment = $appointment;
         return $this;
     }
 
-        public function getTreatment(): ?Treatment
+    public function getMedicines(): Collection
     {
-        return $this->treatment;
+        return $this->medicines;
     }
-
-    public function setTreatment(?Treatment $treatment): static
-    {
-        $this->treatment = $treatment;
-        return $this;
-    }
-
 }

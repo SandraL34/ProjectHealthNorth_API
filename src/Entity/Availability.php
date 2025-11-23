@@ -89,7 +89,7 @@ class Availability
         return $this;
     }
 
-        public function getStartTimePM(): ?\DateTimeInterface
+    public function getStartTimePM(): ?\DateTimeInterface
     {
         return $this->startTimePM;
     }

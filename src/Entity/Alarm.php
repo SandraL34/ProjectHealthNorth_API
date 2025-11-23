@@ -31,17 +31,13 @@ class Alarm
     #[ORM\Column(length: 256)]
     private string $notification;
 
-    #[ORM\ManyToOne(targetEntity: Patient::class, inversedBy: "alarms")]
-    #[ORM\JoinColumn(name: "patient_id", referencedColumnName: "id", nullable: true)]
-    private ?Patient $patient = null;
+    #[ORM\ManyToOne(targetEntity: Appointment::class, inversedBy: "alarms")]
+    #[ORM\JoinColumn(name: "appointment_id", referencedColumnName: "id", nullable: true)]
+    private ?Appointment $appointment = null;
 
-    #[ORM\OneToMany(mappedBy: "alarm", targetEntity: Medicine::class)]
-    private Collection $medicines;
-
-    public function __construct()
-    {
-        $this->medicines = new ArrayCollection();
-    }
+    #[ORM\ManyToOne(targetEntity: Medicine::class, inversedBy: "alarms")]
+    #[ORM\JoinColumn(name: "medicine_id", referencedColumnName: "id", nullable: true)]
+    private ?Medicine $medicine = null;
 
     public function getId(): ?int
     {
@@ -103,11 +99,25 @@ class Alarm
         return $this;
     }
 
-    public function getPatient(): ?Patient { return $this->patient; }
-    public function setPatient(?Patient $patient): static { $this->patient = $patient; return $this; }
+    public function getAppointment(): ?Appointment 
+    { 
+        return $this->appointment; 
+    }
 
-    public function getMedicines(): Collection
+    public function setAppointment(?Appointment $appointment): static 
+    { 
+        $this->appointment = $appointment; 
+        return $this; 
+    }
+
+    public function getMedicine(): ?Medicine
     {
-        return $this->medicines;
+        return $this->medicine;
+    }
+
+    public function setMedicine(?Medicine $medicine): static 
+    { 
+        $this->medicine = $medicine; 
+        return $this; 
     }
 }

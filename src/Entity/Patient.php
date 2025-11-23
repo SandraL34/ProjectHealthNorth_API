@@ -71,81 +71,201 @@ class Patient implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: "patient", targetEntity: Payment::class)]
     private Collection $payments;
 
-    #[ORM\OneToMany(mappedBy: "patient", targetEntity: Alarm::class)]
-    private Collection $alarms;
-
     #[ORM\OneToMany(mappedBy: "patient", targetEntity: Appointment::class)]
     private Collection $appointments;
-
-    #[ORM\OneToMany(mappedBy: "patient", targetEntity: Medicine::class)]
-    private Collection $medicines;
-
-    #[ORM\OneToMany(mappedBy: "patient", targetEntity: Treatment::class)]
-    private Collection $treatments;
-
 
     public function __construct()
     {
         $this->payments = new ArrayCollection();
-        $this->alarms = new ArrayCollection();
         $this->appointments = new ArrayCollection();
-        $this->medicines = new ArrayCollection();
-        $this->treatments = new ArrayCollection();
     }
 
-    public function getId(): ?int { return $this->id; }
+    public function getId(): ?int { 
+        return $this->id; 
+    }
 
-    public function getFirstname(): ?string { return $this->firstname; }
-    public function setFirstname(?string $firstname): static { $this->firstname = $firstname; return $this; }
+    public function getFirstname(): ?string 
+    { 
+        return $this->firstname; 
+    }
 
-    public function getLastname(): ?string { return $this->lastname; }
-    public function setLastname(?string $lastname): static { $this->lastname = $lastname; return $this; }
+    public function setFirstname(?string $firstname): static 
+    { 
+        $this->firstname = $firstname; 
+        return $this; 
+    }
 
-    public function getEmail(): ?string { return $this->email; }
-    public function setEmail(?string $email): static { $this->email = $email; return $this; }
+    public function getLastname(): ?string 
+    { 
+        return $this->lastname; 
+    }
 
-    public function getPassword(): ?string { return $this->password; }
-    public function setPassword(?string $password): static { $this->password = $password; return $this; }
+    public function setLastname(?string $lastname): static 
+    { 
+        $this->lastname = $lastname; 
+        return $this; 
+    }
 
-    public function getPostalAddress(): ?string { return $this->postalAddress; }
-    public function setPostalAddress(?string $postalAddress): static { $this->postalAddress = $postalAddress; return $this; }
+    public function getEmail(): ?string 
+    { 
+        return $this->email; 
+    }
+    public function setEmail(?string $email): static 
+    { 
+        $this->email = $email; 
+        return $this; 
+    }
 
-    public function getSocialsecurityNumber(): ?string { return $this->socialsecurityNumber; }
-    public function setSocialsecurityNumber(?string $num): static { $this->socialsecurityNumber = $num; return $this; }
+    public function getPassword(): ?string 
+    { 
+        return $this->password; 
+    }
 
-    public function getPhoneNumber(): ?string { return $this->phoneNumber; }
-    public function setPhoneNumber(?string $num): static { $this->phoneNumber = $num; return $this; }
+    public function setPassword(?string $password): static 
+    { 
+        $this->password = $password; 
+        return $this; 
+    }
 
-    public function getPicture(): ?string { return $this->picture; }
-    public function setPicture(?string $pic): static { $this->picture = $pic; return $this; }
+    public function getPostalAddress(): ?string 
+    { 
+        return $this->postalAddress; 
+    }
 
-    public function getSocialsecurityRegime(): ?string { return $this->socialsecurityRegime; }
-    public function setSocialsecurityRegime(?string $reg): static { $this->socialsecurityRegime = $reg; return $this; }
+    public function setPostalAddress(?string $postalAddress): static 
+    { 
+        $this->postalAddress = $postalAddress; 
+        return $this; 
+    }
 
-    public function getHealthcareInsurance(): ?string { return $this->healthcareInsurance; }
-    public function setHealthcareInsurance(?string $ins): static { $this->healthcareInsurance = $ins; return $this; }
+    public function getSocialsecurityNumber(): ?string 
+    { 
+        return $this->socialsecurityNumber; 
+    }
 
-    public function getAllergy(): ?string { return $this->allergy; }
-    public function setAllergy(?string $al): static { $this->allergy = $al; return $this; }
+    public function setSocialsecurityNumber(?string $socialSecurityNumber): static 
+    { 
+        $this->socialsecurityNumber = $socialSecurityNumber; 
+        return $this; 
+    }
 
-    public function getMedicalTraitmentDisease(): ?string { return $this->medicalTraitmentDisease; }
-    public function setMedicalTraitmentDisease(?string $dis): static { $this->medicalTraitmentDisease = $dis; return $this; }
+    public function getPhoneNumber(): ?string 
+    { 
+        return $this->phoneNumber; 
+    }
 
-    public function getMedicalHistory(): ?string { return $this->medicalHistory; }
-    public function setMedicalHistory(?string $his): static { $this->medicalHistory = $his; return $this; }
+    public function setPhoneNumber(?string $phoneNumber): static 
+    { 
+        $this->phoneNumber = $phoneNumber; 
+        return $this; 
+    }
 
-    public function getEmergencyContact(): ?EmergencyContact { return $this->emergencyContact; }
-    public function setEmergencyContact(?EmergencyContact $emergencyContact): static { $this->emergencyContact = $emergencyContact; return $this; }
+    public function getPicture(): ?string 
+    { 
+        return $this->picture; 
+    }
 
-    public function getDoctor(): ?Doctor { return $this->doctor; }
-    public function setDoctor(?Doctor $doctor): static { $this->doctor = $doctor; return $this; }
+    public function setPicture(?string $picture): static 
+    { 
+        $this->picture = $picture; 
+        return $this; 
+    }
 
-    public function getOption(): ?Option { return $this->option; }
-    public function setOption(?Option $option): static { $this->option = $option; return $this; }
+    public function getSocialsecurityRegime(): ?string 
+    { 
+        return $this->socialsecurityRegime; 
+    }
 
-    public function getRoles(): array { return ['ROLE_PATIENT']; }
+    public function setSocialsecurityRegime(?string $socialsecurityRegime): static 
+    { $this->socialsecurityRegime = $socialsecurityRegime; 
+        return $this; 
+    }
 
-    public function getUserIdentifier(): string { return $this->email; }
+    public function getHealthcareInsurance(): ?string 
+    { 
+        return $this->healthcareInsurance; 
+    }
+
+    public function setHealthcareInsurance(?string $healthcareInsurance): static 
+    { 
+        $this->healthcareInsurance = $healthcareInsurance; 
+        return $this; 
+    }
+
+    public function getAllergy(): ?string 
+    { 
+        return $this->allergy; 
+    }
+
+    public function setAllergy(?string $allergy): static 
+    { 
+        $this->allergy = $allergy; 
+        return $this; 
+    }
+
+    public function getMedicalTraitmentDisease(): ?string 
+    { 
+        return $this->medicalTraitmentDisease; 
+    }
+
+    public function setMedicalTraitmentDisease(?string $medicalTraitmentDisease): static 
+    { $this->medicalTraitmentDisease = $medicalTraitmentDisease; 
+        return $this; 
+    }
+
+    public function getMedicalHistory(): ?string 
+    { 
+        return $this->medicalHistory; 
+    }
+
+    public function setMedicalHistory(?string $medicalHistory): static 
+    { 
+        $this->medicalHistory = $medicalHistory; 
+        return $this; 
+    }
+
+    public function getEmergencyContact(): ?EmergencyContact 
+    { 
+        return $this->emergencyContact; 
+    }
+
+    public function setEmergencyContact(?EmergencyContact $emergencyContact): static 
+    { 
+        $this->emergencyContact = $emergencyContact; 
+        return $this; 
+    }
+
+    public function getDoctor(): ?Doctor 
+    { 
+        return $this->doctor; 
+    }
+
+    public function setDoctor(?Doctor $doctor): static 
+    { 
+        $this->doctor = $doctor; 
+        return $this; 
+    }
+
+    public function getOption(): ?Option 
+    { 
+        return $this->option; 
+    }
+
+    public function setOption(?Option $option): static 
+    { 
+        $this->option = $option; 
+        return $this; 
+    }
+
+    public function getRoles(): array 
+    { 
+        return ['ROLE_PATIENT']; 
+    }
+
+    public function getUserIdentifier(): string 
+    { 
+        return $this->email; 
+    }
 
     public function eraseCredentials(): void {}
 
@@ -154,23 +274,8 @@ class Patient implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->payments;
     }
 
-    public function getAlarms(): Collection
-    {
-        return $this->alarms;
-    }
-
     public function getAppointments(): Collection
     {
         return $this->appointments;
-    }
-
-    public function getMedicines(): Collection
-    {
-        return $this->medicines;
-    }
-
-    public function getTreatments(): Collection
-    {
-        return $this->treatments;
     }
 }

@@ -24,9 +24,6 @@ class Doctor implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: "string", length: 256, nullable: true)]
     private ?string $lastname = null;
 
-    #[ORM\Column(type: "string", length: 256, nullable: true)]
-    private ?string $specialty = null;
-
     #[ORM\Column(type: "string", length: 10, nullable: true)]
     private ?string $phoneNumber = null;
 
@@ -46,12 +43,6 @@ class Doctor implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Treatment::class, mappedBy: "doctors")]
     private Collection $treatments;
 
-    #[ORM\OneToMany(mappedBy: "doctor", targetEntity: Prescription::class)]
-    private Collection $prescriptions;
-
-    #[ORM\OneToMany(mappedBy: "doctor", targetEntity: Medicine::class)]
-    private Collection $medicines;
-
     #[ORM\OneToMany(mappedBy: "doctor", targetEntity: Appointment::class)]
     private Collection $appointments;
 
@@ -62,8 +53,6 @@ class Doctor implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->patients = new ArrayCollection();
         $this->treatments = new ArrayCollection();
-        $this->prescriptions = new ArrayCollection();
-        $this->medicines = new ArrayCollection();
         $this->appointments = new ArrayCollection();
         $this->availabilities = new ArrayCollection();
     }
@@ -92,17 +81,6 @@ class Doctor implements UserInterface, PasswordAuthenticatedUserInterface
     public function setLastname(?string $lastname): static
     {
         $this->lastname = $lastname;
-        return $this;
-    }
-
-    public function getSpecialty(): ?string
-    {
-        return $this->specialty;
-    }
-
-    public function setSpecialty(?string $specialty): static
-    {
-        $this->specialty = $specialty;
         return $this;
     }
 
@@ -159,16 +137,6 @@ class Doctor implements UserInterface, PasswordAuthenticatedUserInterface
     public function getTreatments(): Collection
     {
         return $this->treatments;
-    }
-
-    public function getPrescription(): Collection
-    {
-        return $this->prescriptions;
-    }
-
-    public function getMedicine(): Collection
-    {
-        return $this->medicines;
     }
 
     public function getAppointment(): Collection

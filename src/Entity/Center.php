@@ -34,14 +34,9 @@ class Center
     #[ORM\OneToMany(mappedBy: "center", targetEntity: Doctor::class)]
     private Collection $doctors;
 
-    #[ORM\OneToMany(mappedBy: "center", targetEntity: Appointment::class)]
-    private Collection $appointments;
-
     public function __construct()
     {
         $this->doctors = new ArrayCollection();
-        $this->appointments = new ArrayCollection();
-
     }
 
     public function getId() 
@@ -107,10 +102,5 @@ class Center
     public function getDoctors(): Collection
     {
         return $this->doctors;
-    }
-        
-    public function getAppointments(): Collection
-    {
-        return $this->appointments;
     }
 }

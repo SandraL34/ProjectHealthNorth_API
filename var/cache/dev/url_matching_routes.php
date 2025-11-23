@@ -10,7 +10,7 @@ return [
     [ // $staticRoutes
         '/api/appointment/coming' => [[['_route' => 'api_appointment_coming', '_controller' => 'App\\Controller\\AppointmentController::comingAppointment'], null, ['GET' => 0], null, false, false, null]],
         '/api/appointment/past' => [[['_route' => 'api_appointment_past', '_controller' => 'App\\Controller\\AppointmentController::pastAppointment'], null, ['GET' => 0], null, false, false, null]],
-        '/api/centers/search' => [[['_route' => 'api_centers_search', '_controller' => 'App\\Controller\\CenterController::searchCenters'], null, ['GET' => 0], null, false, false, null]],
+        '/api/centers/search' => [[['_route' => 'api_centers_search', '_controller' => 'App\\Controller\\CenterController::searchCentersWhat'], null, ['GET' => 0], null, false, false, null]],
         '/api/doctors/search' => [[['_route' => 'api_doctors_search', '_controller' => 'App\\Controller\\DoctorController::searchDoctors'], null, ['GET' => 0], null, false, false, null]],
         '/healthnorth/api/patients' => [[['_route' => 'patients', '_controller' => 'App\\Controller\\HealthNorthController::getPatientList'], null, ['GET' => 0], null, false, false, null]],
         '/healthnorth/api/payments' => [[['_route' => 'createPayment', '_controller' => 'App\\Controller\\HealthNorthController::createPayment'], null, ['POST' => 0], null, false, false, null]],
@@ -18,6 +18,7 @@ return [
         '/api/patient/medicalRecord' => [[['_route' => 'api_patient_medicalRecord', '_controller' => 'App\\Controller\\PatientController::me'], null, ['GET' => 0], null, false, false, null]],
         '/api/patient/me' => [[['_route' => 'api_patient_update', '_controller' => 'App\\Controller\\PatientController::update'], null, ['PUT' => 0], null, false, false, null]],
         '/api/prescription' => [[['_route' => 'api_prescription', '_controller' => 'App\\Controller\\PrescriptionController::getPrescription'], null, ['GET' => 0], null, false, false, null]],
+        '/api/treatments/list' => [[['_route' => 'api_treatments_list', '_controller' => 'App\\Controller\\TreatmentController::listTreatments'], null, ['GET' => 0], null, false, false, null]],
     ],
     [ // $regexpList
         0 => '{^(?'
