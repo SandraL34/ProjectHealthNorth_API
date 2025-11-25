@@ -19,6 +19,9 @@ class SlotGeneratorService
         $this->slotDuration = $slotDuration;
     }
 
+    /**
+     * Génère les slots pour tous les médecins sur X jours
+     */
     public function generateSlotsForAllDoctors(int $days = 30): array
     {
         $allSlots = [];
@@ -28,10 +31,12 @@ class SlotGeneratorService
             $allSlots = array_merge($allSlots, $this->generateSlots($doctor, $days));
         }
 
-        $this->em->flush(); // persiste tous les slots créés
         return $allSlots;
     }
 
+    /**
+     * Génère les slots pour un médecin sur X jours
+     */
     public function generateSlots(Doctor $doctor, int $days = 30): array
     {
         $slots = [];
@@ -44,18 +49,29 @@ class SlotGeneratorService
                 continue;
             }
 
-            $dailySlots = $this->generateSlotsForDay($doctor, $date);
-            $slots = array_merge($slots, $dailySlots);
+            $daySlots = $this->generateSlotsForDay($doctor, $date);
+            $slots = array_merge($slots, $daySlots);
+
+            // Flush par lot pour limiter la mémoire
+            if (count($slots) >= 50) {
+                $this->em->flush();
+                $this->em->clear();
+                $slots = [];
+            }
         }
 
-        $this->em->flush(); // persiste tous les slots créés
+        $this->em->flush();
         return $slots;
     }
 
+    /**
+     * Vérifie si un médecin est disponible un jour donné (avec override)
+     */
     private function isDoctorAvailableThatDay(Doctor $doctor, \DateTimeImmutable $date): bool
     {
         $dow = (int) $date->format('w');
 
+        // Override spécifique au jour
         $override = $this->em->getRepository(AvailabilityOverride::class)
             ->findOneBy(['doctor' => $doctor, 'date' => $date]);
 
@@ -63,10 +79,14 @@ class SlotGeneratorService
             return $override->isActive();
         }
 
+        // Disponibilité hebdomadaire
         return $this->em->getRepository(Availability::class)
             ->findOneBy(['doctor' => $doctor, 'dayOfWeek' => $dow, 'isActive' => true]) !== null;
     }
 
+    /**
+     * Génère les slots pour un jour précis
+     */
     private function generateSlotsForDay(Doctor $doctor, \DateTimeImmutable $date): array
     {
         $slots = [];
@@ -85,14 +105,22 @@ class SlotGeneratorService
         ];
 
         foreach ($ranges as $range) {
-            if (!$range['start'] || !$range['end']) continue;
+            if (!$range['start'] || !$range['end']) {
+                continue;
+            }
 
             $start = new \DateTimeImmutable($date->format('Y-m-d') . ' ' . $range['start']->format('H:i'));
             $end   = new \DateTimeImmutable($date->format('Y-m-d') . ' ' . $range['end']->format('H:i'));
 
             while ($start < $end) {
-                if (!$this->isSlotBooked($doctor, $start)) {
-                    // Crée un objet AppointmentSlot
+                // Vérifie si le slot existe déjà
+                $existingSlot = $this->em->getRepository(AppointmentSlot::class)->findOneBy([
+                    'doctor' => $doctor,
+                    'startDate' => $start,
+                    'startTime' => $start
+                ]);
+
+                if (!$existingSlot) {
                     $slot = new AppointmentSlot();
                     $slot->setDoctor($doctor)
                         ->setStartDate($start)
@@ -111,6 +139,7 @@ class SlotGeneratorService
 
         return $slots;
     }
+
 
     private function isSlotBooked(Doctor $doctor, \DateTimeImmutable $startDateTime): bool
     {

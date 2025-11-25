@@ -38,7 +38,9 @@ class AppointmentSlotController extends AbstractController {
         }
 
         $em = $doctrine->getManager();
-        $appointmentSlots = $doctrine->getRepository(AppointmentSlot::class)->findAll();
+        $slotRepo = $doctrine->getRepository(AppointmentSlot::class);
+
+        $appointmentSlots = $slotRepo->findAll();
 
         if (empty($appointmentSlots)) {
             $appointmentSlots = $slotService->generateSlotsForAllDoctors(30);
@@ -47,34 +49,44 @@ class AppointmentSlotController extends AbstractController {
                 $em->persist($slot);
             }
             $em->flush();
+
+            $appointmentSlots = $slotRepo->findAll();
         }
 
         $results = [];
 
         foreach ($appointmentSlots as $slot) {
+
             $doctor = $slot->getDoctor();
-            $center = $doctor?->getCenter();
+            if (!$doctor) continue;
+
+            $center = $doctor->getCenter();
+
+            $treatmentsArray = [];
+            foreach ($doctor->getTreatments() as $treatment) {
+                $treatmentsArray[] = [
+                    'name' => $treatment->getName(),
+                    'duration' => $treatment->getDuration(),
+                ];
+            }
 
             $results[] = [
                 'slot' => [
                     'startDate' => $slot->getStartDate()?->format('Y-m-d'),
-                    'endDate' => $slot->getEndDate()?->format('Y-m-d'),
                     'startTime' => $slot->getStartTime()?->format('H:i'),
+                    'endDate' => $slot->getEndDate()?->format('Y-m-d'),
                     'endTime' => $slot->getEndTime()?->format('H:i'),
                     'isBooked' => $slot->isBooked(),
                 ],
-                'doctor' => $doctor
-                    ? [
-                        'firstname' => $doctor->getFirstname(),
-                        'lastname' => $doctor->getLastname(),
-                        'center' => $center
-                            ? [
-                                'name' => $center->getName(),
-                                'address' => $center->getAddress(),
-                            ]
-                            : null,
-                    ]
-                    : null,
+                'doctor' => [
+                    'firstname' => $doctor->getFirstname(),
+                    'lastname' => $doctor->getLastname(),
+                    'center' => $center ? [
+                        'name' => $center->getName(),
+                        'address' => $center->getAddress(),
+                    ] : null,
+                    'treatments' => $treatmentsArray,
+                ],
             ];
         }
 
