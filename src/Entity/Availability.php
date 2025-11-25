@@ -15,7 +15,6 @@ class Availability
     #[ORM\Column(type: "integer")]
     private ?int $id = null;
 
-    // Jour de la semaine (0 = dimanche, 1 = lundi, ...)
     #[ORM\Column(type: "smallint")]
     private ?int $dayOfWeek = null;
 

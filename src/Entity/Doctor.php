@@ -49,12 +49,20 @@ class Doctor implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: "doctor", targetEntity: Availability::class)]
     private Collection $availabilities;
 
+    #[ORM\OneToMany(mappedBy: "doctor", targetEntity: AppointmentSlot::class)]
+    private Collection $appointmentSlots;
+
+    #[ORM\OneToMany(mappedBy: "doctor", targetEntity: AvailabilityOverride::class)]
+    private Collection $availabilitiesOverride;
+
     public function __construct()
     {
         $this->patients = new ArrayCollection();
         $this->treatments = new ArrayCollection();
         $this->appointments = new ArrayCollection();
         $this->availabilities = new ArrayCollection();
+        $this->appointmentSlots = new ArrayCollection();
+        $this->availabilitiesOverride = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -139,7 +147,7 @@ class Doctor implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->treatments;
     }
 
-    public function getAppointment(): Collection
+    public function getAppointments(): Collection
     {
         return $this->appointments;
     }
@@ -158,5 +166,15 @@ class Doctor implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->center = $center;
         return $this;
+    }
+
+    public function getAppointmentSlots(): Collection
+    {
+        return $this->appointmentSlots;
+    }
+
+    public function getAvailabilitiesOverride(): Collection
+    {
+        return $this->availabilitiesOverride;
     }
 }

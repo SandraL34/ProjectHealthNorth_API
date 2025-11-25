@@ -46,12 +46,16 @@ class Appointment
     #[ORM\OneToMany(mappedBy: "appointment", targetEntity: Alarm::class)]
     private Collection $alarms;
 
+    #[ORM\OneToMany(mappedBy: "appointment", targetEntity: AppointmentSlot::class)]
+    private Collection $appointmentSlots;
+
     public function __construct()
     {
         $this->invoices = new ArrayCollection();
         $this->treatments = new ArrayCollection();
         $this->prescriptions = new ArrayCollection();
         $this->alarms = new ArrayCollection();
+        $this->appointmentSlots = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -92,10 +96,18 @@ class Appointment
         return $this;
     }
 
-    public function getPatient(): ?Patient { return $this->patient; }
-    public function setPatient(?Patient $patient): static { $this->patient = $patient; return $this; }
+    public function getPatient(): ?Patient 
+    { 
+        return $this->patient; 
+    }
 
-        public function getDoctor(): ?Doctor
+    public function setPatient(?Patient $patient): static 
+    { 
+        $this->patient = $patient; 
+        return $this; 
+    }
+
+    public function getDoctor(): ?Doctor
     {
         return $this->doctor;
     }
@@ -134,5 +146,10 @@ class Appointment
     public function getAlarms(): Collection
     {
         return $this->alarms;
+    }
+
+        public function getAppointmentSlots(): Collection
+    {
+        return $this->appointmentSlots;
     }
 }

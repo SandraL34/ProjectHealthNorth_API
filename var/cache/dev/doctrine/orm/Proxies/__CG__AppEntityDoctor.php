@@ -67,10 +67,10 @@ class Doctor extends \App\Entity\Doctor implements \Doctrine\ORM\Proxy\Proxy
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'firstname', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'lastname', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'phoneNumber', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'email', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'password', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'center', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'patients', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'treatments', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'appointments', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'availabilities'];
+            return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'firstname', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'lastname', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'phoneNumber', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'email', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'password', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'center', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'patients', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'treatments', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'appointments', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'availabilities', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'appointmentSlots', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'availabilitiesOverride'];
         }
 
-        return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'firstname', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'lastname', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'phoneNumber', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'email', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'password', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'center', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'patients', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'treatments', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'appointments', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'availabilities'];
+        return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'firstname', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'lastname', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'phoneNumber', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'email', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'password', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'center', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'patients', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'treatments', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'appointments', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'availabilities', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'appointmentSlots', '' . "\0" . 'App\\Entity\\Doctor' . "\0" . 'availabilitiesOverride'];
     }
 
     /**
@@ -360,12 +360,12 @@ class Doctor extends \App\Entity\Doctor implements \Doctrine\ORM\Proxy\Proxy
     /**
      * {@inheritDoc}
      */
-    public function getAppointment(): \Doctrine\Common\Collections\Collection
+    public function getAppointments(): \Doctrine\Common\Collections\Collection
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getAppointment', []);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getAppointments', []);
 
-        return parent::getAppointment();
+        return parent::getAppointments();
     }
 
     /**
@@ -399,6 +399,28 @@ class Doctor extends \App\Entity\Doctor implements \Doctrine\ORM\Proxy\Proxy
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCenter', [$center]);
 
         return parent::setCenter($center);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getAppointmentSlots(): \Doctrine\Common\Collections\Collection
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getAppointmentSlots', []);
+
+        return parent::getAppointmentSlots();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getAvailabilitiesOverride(): \Doctrine\Common\Collections\Collection
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getAvailabilitiesOverride', []);
+
+        return parent::getAvailabilitiesOverride();
     }
 
 }

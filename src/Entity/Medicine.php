@@ -25,7 +25,7 @@ class Medicine
     #[ORM\JoinColumn(name: "prescription_id", referencedColumnName: "id", nullable: true)]
     private ?Prescription $prescription = null;
 
-    #[ORM\OneToMany(mappedBy: "alarms", targetEntity: Medicine::class)]
+    #[ORM\OneToMany(mappedBy: "medicine", targetEntity: Alarm::class)]
     private Collection $alarms;
 
     public function __construct()
