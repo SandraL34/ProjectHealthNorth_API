@@ -65,6 +65,7 @@ class AppointmentSlotController extends AbstractController {
             $treatmentsArray = [];
             foreach ($doctor->getTreatments() as $treatment) {
                 $treatmentsArray[] = [
+                    'id' => $treatment->getId(),
                     'name' => $treatment->getName(),
                     'duration' => $treatment->getDuration(),
                 ];
@@ -82,6 +83,7 @@ class AppointmentSlotController extends AbstractController {
                     'firstname' => $doctor->getFirstname(),
                     'lastname' => $doctor->getLastname(),
                     'center' => $center ? [
+                        'id' => $center->getId(),
                         'name' => $center->getName(),
                         'address' => $center->getAddress(),
                     ] : null,

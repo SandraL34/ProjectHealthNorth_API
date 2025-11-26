@@ -67,10 +67,10 @@ class Appointment extends \App\Entity\Appointment implements \Doctrine\ORM\Proxy
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'title', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'description', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'dateTime', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'patient', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'doctor', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'treatments', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'invoices', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'prescriptions', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'alarms'];
+            return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'title', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'description', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'dateTime', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'patient', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'doctor', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'treatments', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'invoices', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'prescriptions', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'alarms', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'appointmentSlots'];
         }
 
-        return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'title', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'description', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'dateTime', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'patient', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'doctor', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'treatments', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'invoices', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'prescriptions', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'alarms'];
+        return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'title', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'description', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'dateTime', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'patient', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'doctor', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'treatments', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'invoices', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'prescriptions', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'alarms', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'appointmentSlots'];
     }
 
     /**
@@ -355,6 +355,17 @@ class Appointment extends \App\Entity\Appointment implements \Doctrine\ORM\Proxy
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getAlarms', []);
 
         return parent::getAlarms();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getAppointmentSlots(): \Doctrine\Common\Collections\Collection
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getAppointmentSlots', []);
+
+        return parent::getAppointmentSlots();
     }
 
 }
