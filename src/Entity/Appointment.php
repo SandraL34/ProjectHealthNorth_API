@@ -143,6 +143,11 @@ class Appointment
         return $this->prescriptions;
     }
 
+    public function getTreatments(): Collection
+    {
+        return $this->treatments;
+    }
+
     public function getAlarms(): Collection
     {
         return $this->alarms;

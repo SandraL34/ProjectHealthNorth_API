@@ -27,6 +27,7 @@ class AppointmentController extends AbstractController
         foreach ($appointments as $appointment) {
             if ($appointment->getDateTime() > $now) {
                 $upcoming[] = [
+                    'id' => $appointment->getId(),
                     'title' => $appointment->getTitle(),
                     'dateTime' => $appointment->getDateTime()->format('d/m/Y \à H\hi'),
                     'doctor' => $appointment->getDoctor()

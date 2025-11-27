@@ -113,7 +113,6 @@ class SlotGeneratorService
             $end   = new \DateTimeImmutable($date->format('Y-m-d') . ' ' . $range['end']->format('H:i'));
 
             while ($start < $end) {
-                // Vérifie si le slot existe déjà
                 $existingSlot = $this->em->getRepository(AppointmentSlot::class)->findOneBy([
                     'doctor' => $doctor,
                     'startDate' => $start,

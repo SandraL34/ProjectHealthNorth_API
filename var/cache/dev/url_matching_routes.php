@@ -12,6 +12,7 @@ return [
         '/api/appointment/past' => [[['_route' => 'api_appointment_past', '_controller' => 'App\\Controller\\AppointmentController::pastAppointment'], null, ['GET' => 0], null, false, false, null]],
         '/all-doctors/slots' => [[['_route' => 'all_doctors_slots', '_controller' => 'App\\Controller\\AppointmentSlotController::allDoctorsSlots'], null, null, null, false, false, null]],
         '/api/appointment/results' => [[['_route' => 'api_appointment_results', '_controller' => 'App\\Controller\\AppointmentSlotController::appointmentResults'], null, ['GET' => 0], null, false, false, null]],
+        '/api/appointment/change' => [[['_route' => 'api_appointment_change', '_controller' => 'App\\Controller\\AppointmentSlotController::appointmentChange'], null, ['GET' => 0], null, false, false, null]],
         '/api/centers/search' => [[['_route' => 'api_centers_search', '_controller' => 'App\\Controller\\CenterController::searchCentersWhat'], null, ['GET' => 0], null, false, false, null]],
         '/api/centers/map' => [[['_route' => 'api_centers_map', '_controller' => 'App\\Controller\\CenterController::getCentersForMap'], null, ['GET' => 0], null, false, false, null]],
         '/api/doctors/search' => [[['_route' => 'api_doctors_search', '_controller' => 'App\\Controller\\DoctorController::searchDoctors'], null, ['GET' => 0], null, false, false, null]],

@@ -349,6 +349,17 @@ class Appointment extends \App\Entity\Appointment implements \Doctrine\ORM\Proxy
     /**
      * {@inheritDoc}
      */
+    public function getTreatments(): \Doctrine\Common\Collections\Collection
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTreatments', []);
+
+        return parent::getTreatments();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getAlarms(): \Doctrine\Common\Collections\Collection
     {
 

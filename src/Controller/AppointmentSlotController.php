@@ -94,4 +94,80 @@ class AppointmentSlotController extends AbstractController {
 
         return $this->json($results);
     }
+
+    #[Route('/api/appointment/change', name: 'api_appointment_change', methods: ['GET'])]
+    public function appointmentChange(ManagerRegistry $doctrine, SlotGeneratorService $slotService): JsonResponse
+    {
+        $user = $this->getUser();
+
+        if (!$user) {
+            return $this->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $em = $doctrine->getManager();
+        $slotRepo = $doctrine->getRepository(AppointmentSlot::class);
+
+        $appointmentSlots = $slotRepo->findAll();
+
+        if (empty($appointmentSlots)) {
+            $appointmentSlots = $slotService->generateSlotsForAllDoctors(30);
+
+            foreach ($appointmentSlots as $slot) {
+                $em->persist($slot);
+            }
+            $em->flush();
+
+            $appointmentSlots = $slotRepo->findAll();
+        }
+
+        $results = [];
+
+        foreach ($appointmentSlots as $slot) {
+
+            $doctor = $slot->getDoctor();
+            $appointment = $slot->getAppointment();
+
+            if (!$doctor) continue;
+
+            $center = $doctor->getCenter();
+
+            
+            $treatmentsArray = [];
+
+            if ($appointment) {
+                foreach ($appointment->getTreatments() as $treatment) {
+                    $treatmentsArray[] = [
+                        'id' => $treatment->getId(),
+                        'name' => $treatment->getName(),
+                        'duration' => $treatment->getDuration(),
+                    ];
+                }
+            }
+
+            $results[] = [
+                'slot' => [
+                    'startDate' => $slot->getStartDate()?->format('Y-m-d'),
+                    'startTime' => $slot->getStartTime()?->format('H:i'),
+                    'endDate' => $slot->getEndDate()?->format('Y-m-d'),
+                    'endTime' => $slot->getEndTime()?->format('H:i'),
+                    'isBooked' => $slot->isBooked(),
+                ],
+                'doctor' => [
+                    'firstname' => $doctor->getFirstname(),
+                    'lastname' => $doctor->getLastname(),
+                    'center' => $center ? [
+                        'id' => $center->getId(),
+                        'name' => $center->getName(),
+                        'address' => $center->getAddress(),
+                    ] : null,
+                ],
+                'appointment' => $appointment ? [
+                    'id' => $appointment->getId(),
+                    'treatments' => $treatmentsArray,
+                ] : null,
+            ];
+        }
+
+        return $this->json($results);
+    }
 }
