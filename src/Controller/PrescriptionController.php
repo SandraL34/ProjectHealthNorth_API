@@ -28,6 +28,7 @@ class PrescriptionController extends AbstractController
 
         foreach ($prescriptions as $prescription) {
             $prescriptionList[] = [
+                'id' => $prescription->getId(),
                 'report' => $prescription->getReport(),
                 'prescriptionDetails' => $prescription->getPrescriptionDetails(),
                 'appointment' => $prescription->getAppointment()

@@ -21,6 +21,9 @@ class Medicine
     #[ORM\Column(length: 256, nullable: true)]
     private ?string $frequency = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $duration = null;
+
     #[ORM\ManyToOne(targetEntity: Prescription::class, inversedBy: "medicines")]
     #[ORM\JoinColumn(name: "prescription_id", referencedColumnName: "id", nullable: true)]
     private ?Prescription $prescription = null;
@@ -57,6 +60,17 @@ class Medicine
     public function setFrequency(?string $frequency): static
     {
         $this->frequency = $frequency;
+        return $this;
+    }
+
+    public function getDuration(): ?int
+    {
+        return $this->duration;
+    }
+
+    public function setDuration(?int $duration): static
+    {
+        $this->duration = $duration;
         return $this;
     }
 
