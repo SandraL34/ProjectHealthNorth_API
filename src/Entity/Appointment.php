@@ -19,9 +19,6 @@ class Appointment
     #[ORM\Column(length: 256, nullable: true)]
     private ?string $title = null;
 
-    #[ORM\Column(length: 256, nullable: true)]
-    private ?string $description = null;
-
     #[ORM\Column(name: "date_time", type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateTime = null;
 
@@ -71,17 +68,6 @@ class Appointment
     public function setTitle(?string $title): static
     {
         $this->title = $title;
-        return $this;
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function setDescription(?string $description): static
-    {
-        $this->description = $description;
         return $this;
     }
 

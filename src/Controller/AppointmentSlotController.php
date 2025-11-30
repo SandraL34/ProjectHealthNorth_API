@@ -73,13 +73,14 @@ class AppointmentSlotController extends AbstractController {
 
             $results[] = [
                 'slot' => [
-                    'startDate' => $slot->getStartDate()?->format('Y-m-d'),
-                    'startTime' => $slot->getStartTime()?->format('H:i'),
-                    'endDate' => $slot->getEndDate()?->format('Y-m-d'),
-                    'endTime' => $slot->getEndTime()?->format('H:i'),
+                    'startDate' => $slot->getStartDate()?->format('d/m/Y'),
+                    'startTime' => $slot->getStartTime()?->format('H\hi'),
+                    'endDate' => $slot->getEndDate()?->format('d/m/Y'),
+                    'endTime' => $slot->getEndTime()?->format('H\hi'),
                     'isBooked' => $slot->isBooked(),
                 ],
                 'doctor' => [
+                    'id' => $doctor->getId(),
                     'firstname' => $doctor->getFirstname(),
                     'lastname' => $doctor->getLastname(),
                     'center' => $center ? [
@@ -146,10 +147,10 @@ class AppointmentSlotController extends AbstractController {
 
             $results[] = [
                 'slot' => [
-                    'startDate' => $slot->getStartDate()?->format('Y-m-d'),
-                    'startTime' => $slot->getStartTime()?->format('H:i'),
-                    'endDate' => $slot->getEndDate()?->format('Y-m-d'),
-                    'endTime' => $slot->getEndTime()?->format('H:i'),
+                    'startDate' => $slot->getStartDate()?->format('d/m/Y'),
+                    'startTime' => $slot->getStartTime()?->format('H\hi'),
+                    'endDate' => $slot->getEndDate()?->format('d/m/Y'),
+                    'endTime' => $slot->getEndTime()?->format('H\hi'),
                     'isBooked' => $slot->isBooked(),
                 ],
                 'doctor' => [

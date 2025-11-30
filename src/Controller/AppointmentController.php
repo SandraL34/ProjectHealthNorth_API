@@ -7,6 +7,16 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Entity\Appointment;
+use App\Entity\AppointmentSlot;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use App\Repository\DoctorRepository;
+use App\Repository\PatientRepository;
+use App\Repository\TreatmentRepository;
+use App\Repository\AppointmentRepository;
 
 class AppointmentController extends AbstractController
 {
@@ -97,5 +107,59 @@ class AppointmentController extends AbstractController
 
     return $this->json($past);
 
+    }
+
+    #[Route('/api/appointment/create', name: 'api_appointment_create', methods: ['POST'])]
+    public function bookAppointment(
+        Request $request,
+        EntityManagerInterface $em,
+        PatientRepository $patientRepo,
+        DoctorRepository $doctorRepo,
+        TreatmentRepository $treatmentRepo
+    ): JsonResponse {
+
+        $data = json_decode($request->getContent(), true);
+
+        $patientId = basename($data['patient']);
+        $doctorId = basename($data['doctor']);
+        $treatmentId = basename($data['treatments'][0]);
+
+        $patient = $patientRepo->find($patientId);
+        $doctor = $doctorRepo->find($doctorId);
+        $treatment = $treatmentRepo->find($treatmentId);
+
+        if (!$patient || !$doctor || !$treatment) {
+            return new JsonResponse(['error' => 'Patient, doctor or treatment not found'], 400);
+        }
+
+        $appointment = new Appointment();
+        $appointment->setTitle($data['title']);
+        $appointment->setPatient($patient);
+        $appointment->setDoctor($doctor);
+        $appointment->addTreatment($treatment);
+
+        $dateTime = \DateTime::createFromFormat('Y-m-d\TH:i:s', $data['dateTime']);
+        if (!$dateTime) {
+            return new JsonResponse(['error' => 'Invalid dateTime format'], 400);
+        }
+        $appointment->setDateTime($dateTime);
+
+        $em->persist($appointment);
+        $em->flush();
+
+        $durationMinutes = $treatment->getDuration();
+
+        $startTime = \DateTime::createFromFormat('Y-m-d H:i:s', $appointment->getDateTime()->format('Y-m-d H:i:s'));
+        $endTime = (clone $startTime)->modify("+{$durationMinutes} minutes");
+
+        $slot = new AppointmentSlot();
+        $slot->setStartTime($startTime);
+        $slot->setEndTime($endTime);
+        $slot->setAppointment($appointment);
+
+        $em->persist($slot);
+        $em->flush();
+
+        return new JsonResponse(['success' => true], 201);
     }
 }
