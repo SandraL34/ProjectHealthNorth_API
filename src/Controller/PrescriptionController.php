@@ -32,11 +32,12 @@ class PrescriptionController extends AbstractController
                 'report' => $prescription->getReport(),
                 'prescriptionDetails' => $prescription->getPrescriptionDetails(),
                 'appointment' => $prescription->getAppointment()
-                ? [
-                    'lastname' => $prescription->getAppointment()->getDoctor()->getLastname(),
-                    'dateTime' => $prescription->getAppointment()->getDateTime()->format('d/m/Y')
-                ]
-                : null,
+                    ? [
+                        'lastname' => $prescription->getAppointment()->getDoctor()->getLastname(),
+                        'date' => $prescription->getAppointment()->getDate()?->format('Y-m-d'),
+                        'time' => $prescription->getAppointment()->getTime()?->format('H:i:s'),
+                    ]
+                    : null,
             ];
         }
 

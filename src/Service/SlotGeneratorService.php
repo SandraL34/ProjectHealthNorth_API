@@ -3,150 +3,92 @@
 namespace App\Service;
 
 use App\Entity\Doctor;
-use App\Entity\Availability;
-use App\Entity\AvailabilityOverride;
-use App\Entity\AppointmentSlot;
-use Doctrine\ORM\EntityManagerInterface;
 
 class SlotGeneratorService
 {
-    private EntityManagerInterface $em;
-    private int $slotDuration;
-
-    public function __construct(EntityManagerInterface $em, int $slotDuration = 30)
-    {
-        $this->em = $em;
-        $this->slotDuration = $slotDuration;
-    }
-
     /**
-     * Génère les slots pour tous les médecins sur X jours
+     *
+     * @param Doctor $doctor
+     * @param int $slotDuration Minutes
+     * @param int $daysAhead Nombre de jours à générer
+     * @return array
      */
-    public function generateSlotsForAllDoctors(int $days = 30): array
+    public function generateSlotsForDoctor(Doctor $doctor, int $slotDuration = 30, int $daysAhead = 30): array
     {
-        $allSlots = [];
-        $doctors = $this->em->getRepository(Doctor::class)->findAll();
+        $slots = [];
+        $today = new \DateTimeImmutable();
 
-        foreach ($doctors as $doctor) {
-            $allSlots = array_merge($allSlots, $this->generateSlots($doctor, $days));
+        for ($i = 0; $i <= $daysAhead; $i++) {
+            $date = $today->modify("+$i days");
+            $dayOfWeek = (int) $date->format('N');
+
+            foreach ($doctor->getAvailabilities() as $availability) {
+                if (!$availability->isActive() || $availability->getDayOfWeek() !== $dayOfWeek) continue;
+
+                $start = \DateTimeImmutable::createFromFormat('H:i:s', $availability->getStartTimeAM()->format('H:i:s'));
+                $end = \DateTimeImmutable::createFromFormat('H:i:s', $availability->getEndTimeAM()->format('H:i:s'));
+                for ($slotStart = $start; $slotStart < $end; $slotStart = $slotStart->modify("+$slotDuration minutes")) {
+                    $slotEnd = $slotStart->modify("+$slotDuration minutes");
+                    $slots[] = [
+                        'doctorId' => $doctor->getId(),
+                        'startDate' => $date->format('Y-m-d'),
+                        'startTime' => $slotStart->format('H:i:s'),
+                        'endDate' => $date->format('Y-m-d'),
+                        'endTime' => $slotEnd->format('H:i:s'),
+                        'isBooked' => false,
+                        'appointment' => null,
+                    ];
+                }
+
+                $start = \DateTimeImmutable::createFromFormat('H:i:s', $availability->getStartTimePM()->format('H:i:s'));
+                $end = \DateTimeImmutable::createFromFormat('H:i:s', $availability->getEndTimePM()->format('H:i:s'));
+                for ($slotStart = $start; $slotStart < $end; $slotStart = $slotStart->modify("+$slotDuration minutes")) {
+                    $slotEnd = $slotStart->modify("+$slotDuration minutes");
+                    $slots[] = [
+                        'doctorId' => $doctor->getId(),
+                        'startDate' => $date->format('Y-m-d'),
+                        'startTime' => $slotStart->format('H:i:s'),
+                        'endDate' => $date->format('Y-m-d'),
+                        'endTime' => $slotEnd->format('H:i:s'),
+                        'isBooked' => false,
+                        'appointment' => null,
+                    ];
+                }
+            }
         }
 
+        return $slots;
+    }
+
+    public function generateSlotsForAllDoctors(array $doctors, int $slotDuration = 30, int $daysAhead = 30): array
+    {
+        $allSlots = [];
+        foreach ($doctors as $doctor) {
+            $allSlots = array_merge($allSlots, $this->generateSlotsForDoctor($doctor, $slotDuration, $daysAhead));
+        }
         return $allSlots;
     }
 
-    /**
-     * Génère les slots pour un médecin sur X jours
-     */
-    public function generateSlots(Doctor $doctor, int $days = 30): array
+    public function markBookedSlots(array $slots, array $bookedSlots): array
     {
-        $slots = [];
-        $today = new \DateTimeImmutable('today');
-
-        for ($i = 0; $i < $days; $i++) {
-            $date = $today->modify("+{$i} days");
-
-            if (!$this->isDoctorAvailableThatDay($doctor, $date)) {
-                continue;
-            }
-
-            $daySlots = $this->generateSlotsForDay($doctor, $date);
-            $slots = array_merge($slots, $daySlots);
-
-            // Flush par lot pour limiter la mémoire
-            if (count($slots) >= 50) {
-                $this->em->flush();
-                $this->em->clear();
-                $slots = [];
-            }
-        }
-
-        $this->em->flush();
-        return $slots;
-    }
-
-    /**
-     * Vérifie si un médecin est disponible un jour donné (avec override)
-     */
-    private function isDoctorAvailableThatDay(Doctor $doctor, \DateTimeImmutable $date): bool
-    {
-        $dow = (int) $date->format('w');
-
-        // Override spécifique au jour
-        $override = $this->em->getRepository(AvailabilityOverride::class)
-            ->findOneBy(['doctor' => $doctor, 'date' => $date]);
-
-        if ($override !== null) {
-            return $override->isActive();
-        }
-
-        // Disponibilité hebdomadaire
-        return $this->em->getRepository(Availability::class)
-            ->findOneBy(['doctor' => $doctor, 'dayOfWeek' => $dow, 'isActive' => true]) !== null;
-    }
-
-    /**
-     * Génère les slots pour un jour précis
-     */
-    private function generateSlotsForDay(Doctor $doctor, \DateTimeImmutable $date): array
-    {
-        $slots = [];
-        $dow = (int) $date->format('w');
-
-        $availability = $this->em->getRepository(Availability::class)
-            ->findOneBy(['doctor' => $doctor, 'dayOfWeek' => $dow]);
-
-        if (!$availability) {
-            return [];
-        }
-
-        $ranges = [
-            ['start' => $availability->getStartTimeAM(), 'end' => $availability->getEndTimeAM()],
-            ['start' => $availability->getStartTimePM(), 'end' => $availability->getEndTimePM()],
-        ];
-
-        foreach ($ranges as $range) {
-            if (!$range['start'] || !$range['end']) {
-                continue;
-            }
-
-            $start = new \DateTimeImmutable($date->format('Y-m-d') . ' ' . $range['start']->format('H:i'));
-            $end   = new \DateTimeImmutable($date->format('Y-m-d') . ' ' . $range['end']->format('H:i'));
-
-            while ($start < $end) {
-                $existingSlot = $this->em->getRepository(AppointmentSlot::class)->findOneBy([
-                    'doctor' => $doctor,
-                    'startDate' => $start,
-                    'startTime' => $start
-                ]);
-
-                if (!$existingSlot) {
-                    $slot = new AppointmentSlot();
-                    $slot->setDoctor($doctor)
-                        ->setStartDate($start)
-                        ->setEndDate($start)
-                        ->setStartTime($start)
-                        ->setEndTime($start->modify("+{$this->slotDuration} minutes"))
-                        ->setIsBooked(false);
-
-                    $this->em->persist($slot);
-                    $slots[] = $slot;
+        foreach ($slots as &$slot) {
+            foreach ($bookedSlots as $booked) {
+                if (
+                    $slot['doctorId'] === $booked->getDoctor()?->getId() &&
+                    $slot['startDate'] === $booked->getStartDate()?->format('Y-m-d') &&
+                    $slot['startTime'] === $booked->getStartTime()?->format('H:i:s')
+                ) {
+                    $slot['isBooked'] = true;
+                    $appointment = $booked->getAppointment();
+                    if ($appointment) {
+                        $slot['appointment'] = [
+                            'id' => $appointment->getId(),
+                            'title' => $appointment->getTitle(),
+                        ];
+                    }
                 }
-
-                $start = $start->modify("+{$this->slotDuration} minutes");
             }
         }
-
         return $slots;
-    }
-
-
-    private function isSlotBooked(Doctor $doctor, \DateTimeImmutable $startDateTime): bool
-    {
-        return $this->em->getRepository(AppointmentSlot::class)->findOneBy([
-            'doctor' => $doctor,
-            'startDate' => $startDateTime,
-            'startTime' => $startDateTime,
-            'isBooked' => true,
-        ]) !== null;
     }
 }

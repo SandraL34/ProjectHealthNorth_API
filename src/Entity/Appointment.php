@@ -19,8 +19,12 @@ class Appointment
     #[ORM\Column(length: 256, nullable: true)]
     private ?string $title = null;
 
-    #[ORM\Column(name: "date_time", type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $dateTime = null;
+    #[ORM\Column(type:"date", nullable: true)]
+    private ?\DateTimeInterface $date = null;
+
+    #[ORM\Column(type:"time", nullable: true)]
+    private ?\DateTimeInterface $time = null;
+
 
     #[ORM\ManyToOne(targetEntity: Patient::class, inversedBy: "appointments")]
     #[ORM\JoinColumn(name: "patient_id", referencedColumnName: "id", nullable: true)]
@@ -71,14 +75,25 @@ class Appointment
         return $this;
     }
 
-    public function getDateTime(): ?\DateTimeInterface
+    public function getDate(): ?\DateTimeInterface
     {
-        return $this->dateTime;
+        return $this->date;
     }
 
-    public function setDateTime(?\DateTimeInterface $dateTime): static
+    public function setDate(\DateTimeInterface $date): static
     {
-        $this->dateTime = $dateTime;
+        $this->date = $date;
+        return $this;
+    }
+
+    public function getTime(): ?\DateTimeInterface
+    {
+        return $this->time;
+    }
+
+    public function setTime(\DateTimeInterface $time): static
+    {
+        $this->time = $time;
         return $this;
     }
 

@@ -9,14 +9,10 @@ use Doctrine\Persistence\ManagerRegistry;
 use App\Entity\Appointment;
 use App\Entity\AppointmentSlot;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Serializer\SerializerInterface;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use App\Repository\DoctorRepository;
 use App\Repository\PatientRepository;
+use App\Repository\DoctorRepository;
 use App\Repository\TreatmentRepository;
-use App\Repository\AppointmentRepository;
 
 class AppointmentController extends AbstractController
 {
@@ -24,62 +20,50 @@ class AppointmentController extends AbstractController
     public function comingAppointment(ManagerRegistry $doctrine): JsonResponse
     {
         $user = $this->getUser();
-
-        if (!$user) {
-            return $this->json(['error' => 'Unauthorized'], 401);
-        }
+        if (!$user) return $this->json(['error' => 'Unauthorized'], 401);
 
         $appointments = $doctrine->getRepository(Appointment::class)->findBy(['patient' => $user]);
-
         $now = new \DateTimeImmutable();
         $upcoming = [];
 
         foreach ($appointments as $appointment) {
-            if ($appointment->getDateTime() > $now) {
+            if ($appointment->getDate() > $now) {
                 $upcoming[] = [
                     'id' => $appointment->getId(),
                     'title' => $appointment->getTitle(),
-                    'dateTime' => $appointment->getDateTime()->format('d/m/Y \à H\hi'),
-                    'doctor' => $appointment->getDoctor()
-                        ? [
-                            'lastname' => $appointment->getDoctor()->getLastname(),
-                            'name' => $appointment->getDoctor()->getCenter()->getName()
-                        ]
-                        : null,
+                    'date' => $appointment->getDate()?->format('Y-m-d'),
+                    'time' => $appointment->getTime()?->format('H:i:s'),
+                    'doctor' => $appointment->getDoctor() ? [
+                        'lastname' => $appointment->getDoctor()->getLastname(),
+                        'name' => $appointment->getDoctor()->getCenter()?->getName()
+                    ] : null,
                 ];
             }
         }
-
-    return $this->json($upcoming);
-
+        return $this->json($upcoming);
     }
 
     #[Route('/api/appointment/past', name: 'api_appointment_past', methods: ['GET'])]
     public function pastAppointment(ManagerRegistry $doctrine): JsonResponse
     {
         $user = $this->getUser();
-
-        if (!$user) {
-            return $this->json(['error' => 'Unauthorized'], 401);
-        }
+        if (!$user) return $this->json(['error' => 'Unauthorized'], 401);
 
         $appointments = $doctrine->getRepository(Appointment::class)->findBy(['patient' => $user]);
-
         $now = new \DateTimeImmutable();
-        $upcoming = [];
-
-        $medicinesArray = [];
-        $prescriptionsArray = [];
+        $past = [];
 
         foreach ($appointments as $appointment) {
-            if ($appointment->getDateTime() < $now) {
+            if ($appointment->getDate() < $now) {
+                $prescriptionsArray = [];
                 foreach ($appointment->getPrescriptions() as $prescription) {
+                    $medicinesArray = [];
                     foreach ($prescription->getMedicines() as $medicine) {
                         $medicinesArray[] = [
-                        'id' => $medicine->getId(),
-                        'name' => $medicine->getName(),
-                        'frequency' => $medicine->getFrequency(),
-                        'duration' => $medicine->getDuration()
+                            'id' => $medicine->getId(),
+                            'name' => $medicine->getName(),
+                            'frequency' => $medicine->getFrequency(),
+                            'duration' => $medicine->getDuration()
                         ];
                     }
 
@@ -93,73 +77,59 @@ class AppointmentController extends AbstractController
 
                 $past[] = [
                     'title' => $appointment->getTitle(),
-                    'dateTime' => $appointment->getDateTime()->format('d/m/Y \à H\hi'),
-                    'doctor' => $appointment->getDoctor()
-                        ? [
-                            'lastname' => $appointment->getDoctor()->getLastname(),
-                            'name' => $appointment->getDoctor()->getCenter()->getName()
-                        ]
-                        : null,
+                    'date' => $appointment->getDate()?->format('Y-m-d'),
+                    'time' => $appointment->getTime()?->format('H:i:s'),
+                    'doctor' => $appointment->getDoctor() ? [
+                        'lastname' => $appointment->getDoctor()->getLastname(),
+                        'name' => $appointment->getDoctor()->getCenter()?->getName()
+                    ] : null,
                     'prescriptions' => $prescriptionsArray,
                 ];
             }
         }
 
-    return $this->json($past);
-
+        return $this->json($past);
     }
 
     #[Route('/api/appointment/create', name: 'api_appointment_create', methods: ['POST'])]
-    public function bookAppointment(
-        Request $request,
-        EntityManagerInterface $em,
-        PatientRepository $patientRepo,
-        DoctorRepository $doctorRepo,
-        TreatmentRepository $treatmentRepo
-    ): JsonResponse {
+    public function bookAppointment(Request $request, EntityManagerInterface $em, PatientRepository $patientRepo,
+    DoctorRepository $doctorRepo, TreatmentRepository $treatmentRepo): JsonResponse 
+    {
+        $user = $this->getUser();
+        if (!$user) return $this->json(['error' => 'Unauthorized'], 401);
 
         $data = json_decode($request->getContent(), true);
 
-        $patientId = basename($data['patient']);
-        $doctorId = basename($data['doctor']);
-        $treatmentId = basename($data['treatments'][0]);
-
-        $patient = $patientRepo->find($patientId);
-        $doctor = $doctorRepo->find($doctorId);
-        $treatment = $treatmentRepo->find($treatmentId);
+        $patient = $patientRepo->find(basename($data['patient']));
+        $doctor = $doctorRepo->find(basename($data['doctor']));
+        $treatment = $treatmentRepo->find(basename($data['treatments'][0]));
 
         if (!$patient || !$doctor || !$treatment) {
-            return new JsonResponse(['error' => 'Patient, doctor or treatment not found'], 400);
+            return $this->json(['error' => 'Patient, doctor or treatment not found'], 400);
         }
 
         $appointment = new Appointment();
-        $appointment->setTitle($data['title']);
-        $appointment->setPatient($patient);
-        $appointment->setDoctor($doctor);
-        $appointment->addTreatment($treatment);
-
-        $dateTime = \DateTime::createFromFormat('Y-m-d\TH:i:s', $data['dateTime']);
-        if (!$dateTime) {
-            return new JsonResponse(['error' => 'Invalid dateTime format'], 400);
-        }
-        $appointment->setDateTime($dateTime);
+        $appointment->setTitle($data['title'])
+                    ->setPatient($patient)
+                    ->setDoctor($doctor)
+                    ->addTreatment($treatment)
+                    ->setDate(new \DateTimeImmutable($data['date']))
+                    ->setTime(new \DateTimeImmutable($data['time']));
 
         $em->persist($appointment);
-        $em->flush();
-
-        $durationMinutes = $treatment->getDuration();
-
-        $startTime = \DateTime::createFromFormat('Y-m-d H:i:s', $appointment->getDateTime()->format('Y-m-d H:i:s'));
-        $endTime = (clone $startTime)->modify("+{$durationMinutes} minutes");
 
         $slot = new AppointmentSlot();
-        $slot->setStartTime($startTime);
-        $slot->setEndTime($endTime);
-        $slot->setAppointment($appointment);
+        $slot->setStartTime(new \DateTimeImmutable($data['time']))
+            ->setEndTime((new \DateTimeImmutable($data['time']))->modify("+{$treatment->getDuration()} minutes"))
+            ->setAppointment($appointment)
+            ->setDoctor($doctor)
+            ->setStartDate(new \DateTimeImmutable($data['date']))
+            ->setEndDate(new \DateTimeImmutable($data['date']))
+            ->setIsBooked(true);
 
         $em->persist($slot);
         $em->flush();
 
-        return new JsonResponse(['success' => true], 201);
+        return $this->json(['success' => true, 'appointmentId' => $appointment->getId()], 201);
     }
 }

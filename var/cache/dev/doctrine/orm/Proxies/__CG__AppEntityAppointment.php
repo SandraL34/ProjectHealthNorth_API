@@ -67,10 +67,10 @@ class Appointment extends \App\Entity\Appointment implements \Doctrine\ORM\Proxy
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'title', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'description', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'dateTime', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'patient', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'doctor', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'treatments', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'invoices', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'prescriptions', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'alarms', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'appointmentSlots'];
+            return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'title', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'date', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'time', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'patient', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'doctor', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'treatments', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'invoices', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'prescriptions', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'alarms', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'appointmentSlots'];
         }
 
-        return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'title', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'description', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'dateTime', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'patient', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'doctor', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'treatments', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'invoices', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'prescriptions', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'alarms', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'appointmentSlots'];
+        return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'title', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'date', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'time', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'patient', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'doctor', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'treatments', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'invoices', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'prescriptions', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'alarms', '' . "\0" . 'App\\Entity\\Appointment' . "\0" . 'appointmentSlots'];
     }
 
     /**
@@ -217,45 +217,45 @@ class Appointment extends \App\Entity\Appointment implements \Doctrine\ORM\Proxy
     /**
      * {@inheritDoc}
      */
-    public function getDescription(): ?string
+    public function getDate(): ?\DateTimeInterface
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getDescription', []);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getDate', []);
 
-        return parent::getDescription();
+        return parent::getDate();
     }
 
     /**
      * {@inheritDoc}
      */
-    public function setDescription(?string $description): static
+    public function setDate(\DateTimeInterface $date): static
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setDescription', [$description]);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setDate', [$date]);
 
-        return parent::setDescription($description);
+        return parent::setDate($date);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getDateTime(): ?\DateTimeInterface
+    public function getTime(): ?\DateTimeInterface
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getDateTime', []);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTime', []);
 
-        return parent::getDateTime();
+        return parent::getTime();
     }
 
     /**
      * {@inheritDoc}
      */
-    public function setDateTime(?\DateTimeInterface $dateTime): static
+    public function setTime(\DateTimeInterface $time): static
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setDateTime', [$dateTime]);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTime', [$time]);
 
-        return parent::setDateTime($dateTime);
+        return parent::setTime($time);
     }
 
     /**

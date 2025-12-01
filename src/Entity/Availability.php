@@ -110,12 +110,12 @@ class Availability
         return $this;
     }
 
-    public function getIsActive(): bool
+    public function isActive(): bool
     {
         return $this->isActive;
     }
 
-    public function setIsActive(bool $isActive): static
+    public function setActive(bool $isActive): static
     {
         $this->isActive = $isActive;
         return $this;
