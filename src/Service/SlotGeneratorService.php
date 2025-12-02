@@ -69,26 +69,57 @@ class SlotGeneratorService
         return $allSlots;
     }
 
-    public function markBookedSlots(array $slots, array $bookedSlots): array
+    public function markBookedSlots(array $generatedSlots, array $bookedSlots): array
     {
-        foreach ($slots as &$slot) {
-            foreach ($bookedSlots as $booked) {
-                if (
-                    $slot['doctorId'] === $booked->getDoctor()?->getId() &&
-                    $slot['startDate'] === $booked->getStartDate()?->format('Y-m-d') &&
-                    $slot['startTime'] === $booked->getStartTime()?->format('H:i:s')
-                ) {
+        $booked = [];
+        foreach ($bookedSlots as $b) {
+            $booked[] = [
+                'doctorId' => $b->getDoctor()?->getId(),
+                'startDate' => $b->getStartDate()?->format('Y-m-d'),
+                'startTime' => $b->getStartTime()?->format('H:i:s'),
+                'endDate' => $b->getEndDate()?->format('Y-m-d'),
+                'endTime' => $b->getEndTime()?->format('H:i:s'),
+                'appointmentId' => $b->getAppointment()?->getId(),
+                'appointmentTitle' => $b->getAppointment()?->getTitle(),
+            ];
+        }
+
+        foreach ($generatedSlots as &$slot) {
+            $slot['isBooked'] = $slot['isBooked'] ?? false;
+            $slot['appointment'] = $slot['appointment'] ?? null;
+
+            $slotStart = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $slot['startDate'] . ' ' . $slot['startTime']);
+            if (!empty($slot['endDate']) && !empty($slot['endTime'])) {
+                $slotEnd = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $slot['endDate'] . ' ' . $slot['endTime']);
+            } else {
+                $slotEnd = $slotStart->modify('+30 minutes');
+            }
+
+            foreach ($booked as $b) {
+                if ($slot['doctorId'] !== $b['doctorId']) continue;
+
+                $bookedStart = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $b['startDate'] . ' ' . $b['startTime']);
+                $bookedEnd = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $b['endDate'] . ' ' . $b['endTime']);
+
+                if (!$slotStart || !$slotEnd || !$bookedStart || !$bookedEnd) continue;
+
+                if ($slotStart < $bookedEnd && $slotEnd > $bookedStart) {
                     $slot['isBooked'] = true;
-                    $appointment = $booked->getAppointment();
-                    if ($appointment) {
-                        $slot['appointment'] = [
-                            'id' => $appointment->getId(),
-                            'title' => $appointment->getTitle(),
-                        ];
-                    }
+                    $slot['appointment'] = [
+                        'id' => $b['appointmentId'],
+                        'title' => $b['appointmentTitle'] ?? null,
+                    ];
+                    $slot['bookedStartDate'] = $b['startDate'];
+                    $slot['bookedStartTime'] = $b['startTime'];
+                    $slot['bookedEndDate'] = $b['endDate'];
+                    $slot['bookedEndTime'] = $b['endTime'];
+
+                    break;
                 }
             }
         }
-        return $slots;
+        unset($slot);
+
+        return $generatedSlots;
     }
 }

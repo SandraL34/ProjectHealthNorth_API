@@ -10,6 +10,8 @@ use App\Entity\Doctor;
 use App\Entity\AppointmentSlot;
 use App\Service\SlotGeneratorService;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Entity\Appointment;
+use Symfony\Component\HttpFoundation\Request;
 
 
 class AppointmentSlotController extends AbstractController
@@ -63,12 +65,15 @@ class AppointmentSlotController extends AbstractController
                     $slot['startTime'] === $booked->getStartTime()?->format('H:i:s')
                 ) {
                     $appointment = $booked->getAppointment();
+                    $appointmentSlots = $appointment->getAppointmentSlots()->toArray();
+                    $appointmentSlotIds = array_map(fn($s) => $s->getId(), $appointmentSlots);
                     if ($appointment) {
                         $slot['appointment'] = [
                             'id' => $appointment->getId(),
                             'title' => $appointment->getTitle(),
                             'date' => $appointment->getDate()?->format('Y-m-d'),
                             'time' => $appointment->getTime()?->format('H:i:s'),
+                            'appointmentSlotIds' => $appointmentSlotIds,
                             'treatments' => array_map(fn($t) => [
                                 'id' => $t->getId(),
                                 'name' => $t->getName(),
@@ -110,6 +115,76 @@ class AppointmentSlotController extends AbstractController
         }
 
         return $this->json($results);
+    }
+
+    #[Route('/api/appointment/change/{id}', name: 'api_appointment_update', methods: ['PATCH'])]
+    public function updateAppointment(int $id, Request $request, ManagerRegistry $doctrine): JsonResponse {
+        $user = $this->getUser();
+        if (!$user) {
+            return $this->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $em = $doctrine->getManager();
+
+        $appointment = $doctrine->getRepository(Appointment::class)->find($id);
+        if (!$appointment) {
+            return $this->json(['error' => 'Appointment not found'], 404);
+        }
+
+        $data = json_decode($request->getContent(), true);
+
+        if (!$data) {
+            return $this->json(['error' => 'Invalid JSON'], 400);
+        }
+
+        $newDate = $data['date'] ?? null;
+        $newTime = $data['time'] ?? null;
+        $newEndDate = $data['endDate'] ?? null;
+        $newEndTime = $data['endTime'] ?? null;
+
+        if ($newDate) {
+            $appointment->setDate(new \DateTime($newDate));
+        }
+        if ($newTime) {
+            $appointment->setTime(new \DateTime($newTime));
+        }
+
+        $appointmentSlots = $appointment->getAppointmentSlots()->toArray();
+        $slot = $appointmentSlots[0] ?? null;
+
+        if ($slot) {
+            if ($newDate) {
+                $slot->setStartDate(new \DateTime($newDate));
+            }
+            if ($newTime) {
+                $startTime = new \DateTime($newTime);
+                $slot->setStartTime($startTime);
+            }
+            if ($newEndDate) {
+                $slot->setEndDate(new \DateTime($newEndDate));
+            }
+            if ($newEndTime) {
+                $slot->setEndTime(new \DateTime($newEndTime));
+            }
+        }
+
+        $em->flush();
+
+        return $this->json([
+            'success' => true,
+            'appointment' => [
+                'id' => $appointment->getId(),
+                'date' => $appointment->getDate()?->format('Y-m-d'),
+                'time' => $appointment->getTime()?->format('H:i:s'),
+            ],
+            'slot' => $slot ? [
+                'id' => $slot->getId(),
+                'startDate' => $slot->getStartDate()?->format('Y-m-d'),
+                'startTime' => $slot->getStartTime()?->format('H:i:s'),
+                'endDate' => $slot->getEndDate()?->format('Y-m-d'),
+                'endTime' => $slot->getEndTime()?->format('H:i:s'),
+            ] : null
+        ]);
     }
 
     #[Route('/api/appointment/results', name: 'api_appointment_results', methods: ['GET'])]

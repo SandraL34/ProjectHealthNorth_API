@@ -1,0 +1,3 @@
+<?php //App%255CEntity%255CAppointmentSlot%2523getEndDate
+
+return [PHP_INT_MAX, []];
