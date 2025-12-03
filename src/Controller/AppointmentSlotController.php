@@ -12,6 +12,7 @@ use App\Service\SlotGeneratorService;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Appointment;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 
 class AppointmentSlotController extends AbstractController
@@ -224,5 +225,12 @@ class AppointmentSlotController extends AbstractController
         }
 
         return $this->json($results);
+    }
+
+    #[Route('/api/appointment/cancel/{id}', name: 'api_appointment_cancel', methods: ['DELETE'])]
+    public function cancelAppointment(Appointment $appointment, EntityManagerInterface $em) {
+        $em->remove($appointment);
+        $em->flush();
+        return new JsonResponse(null, Response::HTTP_NO_CONTENT);
     }
 }

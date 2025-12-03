@@ -47,7 +47,7 @@ class Appointment
     #[ORM\OneToMany(mappedBy: "appointment", targetEntity: Alarm::class)]
     private Collection $alarms;
 
-    #[ORM\OneToMany(mappedBy: "appointment", targetEntity: AppointmentSlot::class)]
+    #[ORM\OneToMany(mappedBy: "appointment", targetEntity: AppointmentSlot::class, cascade: ['remove'], orphanRemoval: true)]
     private Collection $appointmentSlots;
 
     public function __construct()

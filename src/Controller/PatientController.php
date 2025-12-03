@@ -8,6 +8,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\PatientRepository;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class PatientController extends AbstractController
 {
@@ -66,5 +69,35 @@ class PatientController extends AbstractController
             'expirationDateYear' => $payment->getExpirationDateYear()
             ] : null,
         ]);
+    }
+
+    #[Route('/api/registration', name: 'api_registration', methods:['POST'])]
+    function registration(Request $request, EntityManagerInterface $em, PatientRepository $patientRepo,
+    UserPasswordHasherInterface $passwordHasher): JsonResponse 
+    {
+        $data = json_decode($request->getContent(), true);
+
+        if (!is_array($data)) {
+            return $this->json(['error' => 'Invalid JSON'], 400);
+        }
+
+        if (empty($data['email']) || empty($data['password']) || empty($data['phoneNumber'])) {
+            return $this->json(['error' => 'Missing fields'], 400);
+        }
+
+        if ($patientRepo->findOneBy(['email' => $data['email']])) {
+            return $this->json(['error' => 'Email already used'], 409);
+        }
+
+        $patient = new Patient();
+        $hashedPassword = $passwordHasher->hashPassword($patient, $data['password']);
+        $patient->setemail($data['email'])
+                ->setPassword($hashedPassword)
+                ->setPhoneNumber($data['phoneNumber']);
+
+        $em->persist($patient);
+        $em->flush();
+
+        return $this->json(['success' => true, 'patientId' => $patient->getId()], 201);
     }
 }
