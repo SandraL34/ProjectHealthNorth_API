@@ -71,7 +71,7 @@ class PatientController extends AbstractController
         ]);
     }
 
-    #[Route('/api/registration', name: 'api_registration', methods:['POST'])]
+    #[Route('/registration', name: 'registration', methods:['POST'])]
     function registration(Request $request, EntityManagerInterface $em, PatientRepository $patientRepo,
     UserPasswordHasherInterface $passwordHasher): JsonResponse 
     {
