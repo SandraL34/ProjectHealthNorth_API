@@ -3,6 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Patient;
+use App\Entity\EmergencyContact;
+use App\Entity\Doctor;
+use App\Entity\Option;
+use App\Entity\Payment;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -99,5 +103,156 @@ class PatientController extends AbstractController
         $em->flush();
 
         return $this->json(['success' => true, 'patientId' => $patient->getId()], 201);
+    }
+
+    #[Route('/api/medicalrecord/change', name: 'api_medicalrecord_change', methods:['PUT'])]
+    function changeMedicalRecord(Request $request, EntityManagerInterface $em, PatientRepository $patientRepo,
+    UserPasswordHasherInterface $passwordHasher, ManagerRegistry $doctrine): JsonResponse
+    {
+        $patient = $this->getUser();
+
+        if (!$patient instanceof Patient) {  
+            return $this->json(['error' => 'Unauthorized'], 401);  
+        }  
+
+        $em = $doctrine->getManager();  
+        $data = json_decode($request->getContent(), true);  
+
+        if (!is_array($data)) {  
+            return $this->json(['error' => 'Invalid JSON'], 400);  
+        }  
+
+        $fields = ['firstname', 'lastname', 'email', 'phoneNumber', 'postalAddress', 'allergy', 'medicalTraitmentDisease', 'medicalHistory', 'picture', 'socialsecurityNumber', 'socialsecurityRegime', 'healthcareInsurance'];  
+        foreach ($fields as $field) {  
+            if (isset($data[$field])) {  
+                $setter = 'set' . ucfirst($field);  
+                $patient->$setter($data[$field]);  
+            }  
+        }  
+    
+        if (!empty($data['password'])) {  
+            $hashed = $passwordHasher->hashPassword($patient, $data['password']);  
+            $patient->setPassword($hashed);  
+        }  
+
+        if (isset($data['emergencyContact'])) {  
+            $contactData = $data['emergencyContact'];  
+            $emergencyContact = $patient->getEmergencyContact() ?? new EmergencyContact();  
+
+            if (!$patient->getEmergencyContact()) {  
+                $patient->setEmergencyContact($emergencyContact);  
+                $em->persist($emergencyContact);  
+            }  
+
+            foreach (['firstname', 'lastname', 'phoneNumber'] as $f) {  
+                if (isset($contactData[$f])) {  
+                    $setter = 'set' . ucfirst($f);  
+                    $emergencyContact->$setter($contactData[$f]);  
+                }  
+            }  
+        }  
+    
+        if (isset($data['doctor'])) {  
+            $doctorData = $data['doctor'];  
+            $doctor = $patient->getDoctor();  
+
+            if ($doctor) {  
+                foreach (['firstname', 'lastname'] as $f) {  
+                    if (isset($doctorData[$f])) {  
+                        $setter = 'set' . ucfirst($f);  
+                        $doctor->$setter($doctorData[$f]);  
+                    }  
+                }  
+            }  
+        }  
+    
+        if (isset($data['option'])) {  
+            $optionData = $data['option'];  
+            $option = $patient->getOption() ?? new Option();  
+
+            if (!$patient->getOption()) {  
+                $patient->setOption($option);  
+                $em->persist($option);  
+            }  
+
+            $optionFields = ['communicationForm', 'privateRoom', 'television', 'wifi', 'diet'];  
+            foreach ($optionFields as $f) {  
+                if (isset($optionData[$f])) {  
+                    $setter = 'set' . ucfirst($f);  
+                    $option->$setter($optionData[$f]);  
+                }  
+            }  
+        }  
+
+        if (isset($data['payment'])) {  
+            $paymentData = $data['payment'];  
+            $payment = $patient->getPayments()->last() ?: null;  
+
+            if (!$payment) {  
+                $payment = new Payment();  
+                $patient->addPayment($payment);  
+                $em->persist($payment);  
+            }  
+
+            $paymentFields = ['cardNumber', 'expirationDateMonth', 'expirationDateYear', 'ownerName', 'secretCode'];  
+            foreach ($paymentFields as $f) {  
+                if (isset($paymentData[$f])) {  
+                    $setter = 'set' . ucfirst($f);  
+                    $value = $paymentData[$f];  
+                    if (in_array($f, ['expirationDateMonth', 'expirationDateYear'])) {  
+                        $value = (int) $value;  
+                    }  
+                    $payment->$setter($value);  
+                }  
+            }  
+        }  
+
+        $em->flush();  
+
+        $doctor = $patient->getDoctor();  
+        $emergencyContact = $patient->getEmergencyContact();  
+        $option = $patient->getOption();  
+        $payment = $patient->getPayments()->last();  
+
+        return $this->json([  
+            'success' => true,  
+            'id' => $patient->getId(),  
+            'firstname' => $patient->getFirstname(),  
+            'lastname' => $patient->getLastname(),  
+            'email' => $patient->getEmail(),  
+            'password' => $patient->getPassword(),  
+            'phoneNumber' => $patient->getPhoneNumber(),  
+            'postalAddress' => $patient->getPostalAddress(),  
+            'allergy' => $patient->getAllergy(),  
+            'medicalTraitmentDisease' => $patient->getMedicalTraitmentDisease(),  
+            'medicalHistory' => $patient->getMedicalHistory(),  
+            'picture' => $patient->getPicture(),  
+            'socialsecurityNumber' => $patient->getSocialsecurityNumber(),  
+            'socialsecurityRegime' => $patient->getSocialsecurityRegime(),  
+            'healthcareInsurance' => $patient->getHealthcareInsurance(),  
+            'emergencyContact' => $emergencyContact ? [  
+                'firstname' => $emergencyContact->getFirstname(),  
+                'lastname' => $emergencyContact->getLastname(),  
+                'phoneNumber' => $emergencyContact->getPhoneNumber()  
+            ] : null,  
+            'doctor' => $doctor ? [  
+                'firstname' => $doctor->getFirstname(),  
+                'lastname' => $doctor->getLastname()  
+            ] : null,  
+            'option' => $option ? [  
+                'communicationForm' => $option->getCommunicationForm(),  
+                'privateRoom' => $option->isPrivateRoom(),  
+                'television' => $option->isTelevision(),  
+                'wifi' => $option->isWifi(),  
+                'diet' => $option->getDiet()  
+            ] : null,  
+            'payment' => $payment ? [  
+                'cardNumber' => $payment->getCardNumber(),  
+                'expirationDateMonth' => $payment->getExpirationDateMonth(),  
+                'secretCode' => $payment->getSecretCode(),  
+                'ownerName' => $payment->getOwnerName(),  
+                'expirationDateYear' => $payment->getExpirationDateYear()  
+            ] : null,  
+        ]);  
     }
 }

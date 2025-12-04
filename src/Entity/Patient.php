@@ -56,7 +56,7 @@ class Patient implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: "string", length: 1024, nullable: true)]
     private ?string $medicalHistory = null;
 
-    #[ORM\ManyToOne(targetEntity: EmergencyContact::class, inversedBy: "patients")]
+    #[ORM\ManyToOne(targetEntity: EmergencyContact::class, inversedBy: "patients", cascade: ['persist'])]
     #[ORM\JoinColumn(name: "emergency_contact_id", referencedColumnName: "id", nullable: true)]
     private ?EmergencyContact $emergencyContact = null;
 
@@ -68,7 +68,7 @@ class Patient implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\JoinColumn(name: "option_id", referencedColumnName: "id", nullable: true)]
     private ?Option $option = null;
 
-    #[ORM\OneToMany(mappedBy: "patient", targetEntity: Payment::class)]
+    #[ORM\OneToMany(mappedBy: "patient", targetEntity: Payment::class, cascade: ['persist'], orphanRemoval: true)]
     private Collection $payments;
 
     #[ORM\OneToMany(mappedBy: "patient", targetEntity: Appointment::class)]
@@ -272,6 +272,25 @@ class Patient implements UserInterface, PasswordAuthenticatedUserInterface
     public function getPayments(): Collection
     {
         return $this->payments;
+    }
+
+    public function addPayment(Payment $payment): static
+    {
+        if (!$this->payments->contains($payment)) {
+            $this->payments->add($payment);
+            $payment->setPatient($this);
+        }
+        return $this;
+    }
+
+    public function removePayment(Payment $payment): static
+    {
+        if ($this->payments->removeElement($payment)) {
+            if ($payment->getPatient() === $this) {
+                $payment->setPatient(null);
+            }
+        }
+        return $this;
     }
 
     public function getAppointments(): Collection

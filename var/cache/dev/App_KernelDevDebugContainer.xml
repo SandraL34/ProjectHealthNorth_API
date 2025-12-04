@@ -4499,7 +4499,16 @@
         <argument key="patientRepo" type="service_closure" id="App\Repository\PatientRepository"/>
       </argument>
     </service>
-    <service id=".service_locator.ysKq6Em" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.jgeIDBu" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="doctrine" type="service_closure" id="doctrine"/>
+        <argument key="em" type="service_closure" id="doctrine.orm.default_entity_manager"/>
+        <argument key="passwordHasher" type="service_closure" id="security.user_password_hasher"/>
+        <argument key="patientRepo" type="service_closure" id="App\Repository\PatientRepository"/>
+      </argument>
+    </service>
+    <service id=".service_locator.nfIWE8L" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="App\Controller\AppointmentController::bookAppointment" type="service_closure" id=".service_locator.4.bt_iB"/>
@@ -4513,7 +4522,9 @@
         <argument key="App\Controller\AppointmentSlotController::updateAppointment" type="service_closure" id=".service_locator.T7xmfzk"/>
         <argument key="App\Controller\CenterController::getCentersForMap" type="service_closure" id=".service_locator.T7xmfzk"/>
         <argument key="App\Controller\CenterController::searchCentersWhat" type="service_closure" id=".service_locator.T7xmfzk"/>
+        <argument key="App\Controller\DoctorController::listDoctors" type="service_closure" id=".service_locator.T7xmfzk"/>
         <argument key="App\Controller\DoctorController::searchDoctors" type="service_closure" id=".service_locator.T7xmfzk"/>
+        <argument key="App\Controller\PatientController::changeMedicalRecord" type="service_closure" id=".service_locator.jgeIDBu"/>
         <argument key="App\Controller\PatientController::me" type="service_closure" id=".service_locator.T7xmfzk"/>
         <argument key="App\Controller\PatientController::registration" type="service_closure" id=".service_locator.HpgKGH5"/>
         <argument key="App\Controller\PrescriptionController::getPrescription" type="service_closure" id=".service_locator.T7xmfzk"/>
@@ -4533,7 +4544,9 @@
         <argument key="App\Controller\AppointmentSlotController:updateAppointment" type="service_closure" id=".service_locator.T7xmfzk"/>
         <argument key="App\Controller\CenterController:getCentersForMap" type="service_closure" id=".service_locator.T7xmfzk"/>
         <argument key="App\Controller\CenterController:searchCentersWhat" type="service_closure" id=".service_locator.T7xmfzk"/>
+        <argument key="App\Controller\DoctorController:listDoctors" type="service_closure" id=".service_locator.T7xmfzk"/>
         <argument key="App\Controller\DoctorController:searchDoctors" type="service_closure" id=".service_locator.T7xmfzk"/>
+        <argument key="App\Controller\PatientController:changeMedicalRecord" type="service_closure" id=".service_locator.jgeIDBu"/>
         <argument key="App\Controller\PatientController:me" type="service_closure" id=".service_locator.T7xmfzk"/>
         <argument key="App\Controller\PatientController:registration" type="service_closure" id=".service_locator.HpgKGH5"/>
         <argument key="App\Controller\PrescriptionController:getPrescription" type="service_closure" id=".service_locator.T7xmfzk"/>
@@ -4853,12 +4866,12 @@
       <argument type="service" id="security.token_storage"/>
     </service>
     <service id="debug.argument_resolver.service.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">
-      <argument type="service" id=".service_locator.ysKq6Em"/>
+      <argument type="service" id=".service_locator.nfIWE8L"/>
     </service>
     <service id="debug.argument_resolver.default.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver"/>
     <service id="debug.argument_resolver.variadic.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\VariadicValueResolver"/>
     <service id="debug.argument_resolver.not_tagged_controller.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\NotTaggedControllerValueResolver">
-      <argument type="service" id=".service_locator.ysKq6Em"/>
+      <argument type="service" id=".service_locator.nfIWE8L"/>
     </service>
     <service id=".doctrine.orm.default_metadata_driver.inner" class="Doctrine\Persistence\Mapping\Driver\MappingDriverChain">
       <call method="addDriver">
@@ -5570,7 +5583,7 @@
     <service id="lexik_jwt_authentication.key_loader" alias="lexik_jwt_authentication.key_loader.raw" public="true"/>
     <service id="container.env_var_processors_locator" alias=".service_locator.gSv9zYw" public="true"/>
     <service id="twig.loader.filesystem" alias="twig.loader.native_filesystem"/>
-    <service id="argument_resolver.controller_locator" alias=".service_locator.ysKq6Em"/>
+    <service id="argument_resolver.controller_locator" alias=".service_locator.nfIWE8L"/>
     <service id="doctrine.id_generator_locator" alias=".service_locator.KLVvNIq"/>
     <service id="twig.loader" alias="twig.loader.native_filesystem"/>
     <service id="Psr\Log\LoggerInterface" alias="logger"/>
@@ -5579,7 +5592,8 @@
     <service id=".service_locator.wODV6ID" alias=".service_locator.4.bt_iB"/>
     <service id=".service_locator.HiZqKKw" alias=".service_locator.P3xdELH"/>
     <service id=".service_locator.8hwuKrC" alias=".service_locator.HpgKGH5"/>
-    <service id=".service_locator.wfMFMZA" alias=".service_locator.ysKq6Em"/>
+    <service id=".service_locator.3pBzuze" alias=".service_locator.jgeIDBu"/>
+    <service id=".service_locator.vat4B8y" alias=".service_locator.nfIWE8L"/>
     <service id=".service_locator.qBCHs1a" alias=".service_locator.QXcJQkF"/>
     <service id=".service_locator.jkb6XQV" alias=".service_locator.l1ae.Qz"/>
     <service id="event_dispatcher" alias="debug.event_dispatcher" public="true"/>
@@ -5607,6 +5621,7 @@
     <service id=".service_locator.c3AUiaN" alias=".service_locator.OuSGbL3"/>
     <service id=".service_locator.YdD0A4I" alias=".service_locator.6rDw3zv"/>
     <service id=".service_locator.xJStLqH" alias=".service_locator.HpgKGH5"/>
+    <service id=".service_locator.hFRnIyd" alias=".service_locator.jgeIDBu"/>
     <service id=".service_locator.bk6HUrh" alias=".service_locator.l1ae.Qz"/>
     <service id=".service_locator.rbkQM6D" alias=".service_locator._IghnoT"/>
     <service id=".service_locator.u6DWx23" alias=".service_locator.cXsfP3P"/>
