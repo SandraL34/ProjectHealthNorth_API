@@ -51,4 +51,32 @@ class DoctorController extends AbstractController
 
         return $this->json($grouped);
     }
+
+    #[Route('/api/doctors/results', name: 'api_doctors_results', methods:['GET'])]
+    public function resultsDoctors(ManagerRegistry $doctrine): JsonResponse
+    {
+        $doctors = $doctrine->getRepository(Doctor::class)->findAll();
+
+        $grouped = [];
+
+        foreach ($doctors as $doctor) {
+            $center = $doctor->getCenter(); 
+
+            $grouped[] = [
+                'id' => $doctor->getId(),
+                'email' => $doctor->getEmail(),
+                'firstname' => $doctor->getFirstname(),
+                'lastname' => $doctor->getLastName(),
+                'phoneNumber' => $doctor->getPhoneNumber(),
+                'center'=> $doctor->getCenter()
+                ? [
+                    'id' => $center->getId(),
+                    'name' => $center->getName(),
+                    'address' => $center->getAddress(),
+                ] : null,
+            ];
+        }
+
+        return $this->json($grouped);
+    }
 }

@@ -15,6 +15,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\PatientRepository;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\HttpFoundation\Response;
 
 class PatientController extends AbstractController
 {
@@ -55,6 +56,7 @@ class PatientController extends AbstractController
             'phoneNumber' => $emergencyContact->getPhoneNumber()
             ] : null,
             'doctor' => $doctor ? [
+            'id' => $doctor->getId(),
             'firstname' => $doctor->getFirstname(),
             'lastname' => $doctor->getLastname()
             ] : null,
@@ -152,19 +154,14 @@ class PatientController extends AbstractController
             }  
         }  
     
-        if (isset($data['doctor'])) {  
-            $doctorData = $data['doctor'];  
-            $doctor = $patient->getDoctor();  
+        if (isset($data['doctor']['id'])) {
+            $doctorId = $data['doctor']['id'];
+            $doctorEntity = $doctrine->getRepository(Doctor::class)->find($doctorId);
 
-            if ($doctor) {  
-                foreach (['firstname', 'lastname'] as $f) {  
-                    if (isset($doctorData[$f])) {  
-                        $setter = 'set' . ucfirst($f);  
-                        $doctor->$setter($doctorData[$f]);  
-                    }  
-                }  
-            }  
-        }  
+            if ($doctorEntity) {
+                $patient->setDoctor($doctorEntity);
+            }
+        }
     
         if (isset($data['option'])) {  
             $optionData = $data['option'];  
@@ -236,6 +233,7 @@ class PatientController extends AbstractController
                 'phoneNumber' => $emergencyContact->getPhoneNumber()  
             ] : null,  
             'doctor' => $doctor ? [  
+                'id' => $doctor->getId(),
                 'firstname' => $doctor->getFirstname(),  
                 'lastname' => $doctor->getLastname()  
             ] : null,  
@@ -254,5 +252,19 @@ class PatientController extends AbstractController
                 'expirationDateYear' => $payment->getExpirationDateYear()  
             ] : null,  
         ]);  
+    }
+
+    #[Route('/api/medicalrecord/delete', name: 'api_medicalRecord_delete', methods: ['DELETE'])]
+    public function deleteMedicalRecord(EntityManagerInterface $em) {
+        $patient = $this->getUser();
+
+        if (!$patient instanceof Patient) {
+            return $this->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $em->remove($patient);
+        $em->flush();
+
+        return new JsonResponse(null, Response::HTTP_NO_CONTENT);
     }
 }
