@@ -62,6 +62,31 @@ class DoctorController extends AbstractController
         foreach ($doctors as $doctor) {
             $center = $doctor->getCenter(); 
 
+            $availabilitiesArray = [];
+                foreach ($doctor->getAvailabilities() as $availability) {
+                    $availabilitiesArray[] = [
+                        'id' => $availability->getId(),
+                        'dayOfWeek' => $availability->getDayOfWeek(),
+                        'startTimeAM' => $availability->getStartTimeAM(),
+                        'endTimeAM' => $availability->getEndTimeAM(),
+                        'startTimePM' => $availability->getStartTimePM(),
+                        'endTimePM' => $availability->getEndTimePM(),
+                        'isActive' => $availability->isActive(),
+                    ];
+                }
+
+                
+            $treatmentsArray = [];
+                foreach ($doctor->getTreatments() as $treatment) {
+                    $treatmentsArray[] = [
+                        'id' => $treatment->getId(),
+                        'name' => $treatment->getName(),
+                        'category' => $treatment->getCategory(),
+                        'price' => $treatment->getPrice(),
+                        'duration' => $treatment->getDuration(),
+                    ];
+                }
+
             $grouped[] = [
                 'id' => $doctor->getId(),
                 'email' => $doctor->getEmail(),
@@ -74,6 +99,8 @@ class DoctorController extends AbstractController
                     'name' => $center->getName(),
                     'address' => $center->getAddress(),
                 ] : null,
+                'availabilities' => $availabilitiesArray,
+                'treatments' => $treatmentsArray,
             ];
         }
 
