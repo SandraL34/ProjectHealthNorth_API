@@ -360,6 +360,28 @@ class Doctor extends \App\Entity\Doctor implements \Doctrine\ORM\Proxy\Proxy
     /**
      * {@inheritDoc}
      */
+    public function addTreatment(\App\Entity\Treatment $treatment): \App\Entity\Doctor
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addTreatment', [$treatment]);
+
+        return parent::addTreatment($treatment);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function removeTreatment(\App\Entity\Treatment $treatment): \App\Entity\Doctor
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeTreatment', [$treatment]);
+
+        return parent::removeTreatment($treatment);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getAppointments(): \Doctrine\Common\Collections\Collection
     {
 

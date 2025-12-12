@@ -40,7 +40,8 @@ class Doctor implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: "doctor", targetEntity: Patient::class)]
     private Collection $patients;
 
-    #[ORM\ManyToMany(targetEntity: Treatment::class, mappedBy: "doctors")]
+    #[ORM\ManyToMany(targetEntity: Treatment::class, inversedBy: "doctors")]
+    #[ORM\JoinTable(name: "treatment_doctor")]
     private Collection $treatments;
 
     #[ORM\OneToMany(mappedBy: "doctor", targetEntity: Appointment::class)]
@@ -145,6 +146,23 @@ class Doctor implements UserInterface, PasswordAuthenticatedUserInterface
     public function getTreatments(): Collection
     {
         return $this->treatments;
+    }
+
+    public function addTreatment(Treatment $treatment): self
+    {
+        if (!$this->treatments->contains($treatment)) {
+            $this->treatments[] = $treatment;
+            $treatment->addDoctor($this);
+        }
+        return $this;
+    }
+
+    public function removeTreatment(Treatment $treatment): self
+    {
+        if ($this->treatments->removeElement($treatment)) {
+            $treatment->removeDoctor($this);
+        }
+        return $this;
     }
 
     public function getAppointments(): Collection

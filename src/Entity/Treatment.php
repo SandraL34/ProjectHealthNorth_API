@@ -28,8 +28,7 @@ class Treatment
     #[ORM\Column(type: "integer", nullable: true)]
     private ?int $duration = null;
 
-    #[ORM\ManyToMany(targetEntity: Doctor::class, inversedBy: "treatments")]
-    #[ORM\JoinTable(name: "treatment_doctor")]
+    #[ORM\ManyToMany(targetEntity: Doctor::class, mappedBy: "treatments")]
     private Collection $doctors;
 
     #[ORM\ManyToMany(targetEntity: Appointment::class, mappedBy: "treatments")]
@@ -96,16 +95,15 @@ class Treatment
     return $this->doctors;
 }
 
-    public function addDoctor(Doctor $doctor): static
+    public function addDoctor(Doctor $doctor): self
     {
         if (!$this->doctors->contains($doctor)) {
-            $this->doctors->add($doctor);
+            $this->doctors[] = $doctor;
         }
-
         return $this;
     }
 
-    public function removeDoctor(Doctor $doctor): static
+    public function removeDoctor(Doctor $doctor): self
     {
         $this->doctors->removeElement($doctor);
         return $this;

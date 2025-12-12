@@ -33,4 +33,26 @@ class TreatmentController extends AbstractController
 
         return $this->json($grouped);
     }
+
+    #[Route('/api/treatments/search', name: 'api_treatments_search', methods: ['GET'])]
+    public function searchTreatments(Request $request, ManagerRegistry $doctrine): JsonResponse
+    {
+        $query = $request->query->get('query', '');
+    /** @var \App\Repository\TreatmentRepository $repo */
+    $repo = $doctrine->getRepository(Treatment::class);
+
+    $treatments = $repo->createQueryBuilder('t')
+        ->where('t.name LIKE :query')
+        ->setParameter('query', '%' . $query . '%')
+        ->setMaxResults(10)
+        ->getQuery()
+        ->getResult();
+        
+        $data = array_map(fn($t) => [
+            'id' => $t->getId(),
+            'name' => $t->getName()
+        ], $treatments);
+
+        return $this->json($data);
+    }
 }
