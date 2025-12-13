@@ -11,7 +11,9 @@ use App\Entity\Doctor;
 use App\Entity\Center;
 use App\Entity\Availability;
 use App\Entity\Treatment;
+use App\Repository\DoctorRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class DoctorController extends AbstractController
 {
@@ -210,5 +212,65 @@ class DoctorController extends AbstractController
                 'id' => $t->getId(),
             ], $treatments->toArray()),
         ]);
+    }
+
+    #[Route ('/api/doctors/add', name: 'api_doctors_add', methods:['POST'])]
+    public function addDoctor(Request $request, DoctorRepository $doctorRepo, EntityManagerInterface $em, 
+    UserPasswordHasherInterface $passwordHasher, ManagerRegistry $doctrine): JsonResponse {
+
+        $data = json_decode($request->getContent(), true);
+
+        if (empty($data['firstname']) || empty($data['lastname']) || empty($data['email'])) {
+            return $this->json(['error' => 'Missing fields'], 400);
+        }
+
+        if ($doctorRepo->findOneBy(['email' => $data['email']])) {
+            return $this->json(['error' => 'Email already used'], 409);
+        }
+
+        $doctor = new Doctor();
+        $hashedPassword = $passwordHasher->hashPassword($doctor, $data['password']);
+
+        if (!empty($data['centerId'])) {
+            $center = $doctrine->getRepository(Center::class)->find($data['centerId']);
+            if ($center) {
+                $doctor->setCenter($center);
+            }
+        }
+
+        $doctor->setEmail($data['email'])
+                ->setPassword($hashedPassword)
+                ->setFirstname($data['firstname'])
+                ->setLastname($data['lastname'])
+                ->setPhoneNumber($data['phoneNumber']);
+
+        if (!empty($data['availabilities'])) {
+            foreach ($data['availabilities'] as $a) {
+                $av = new Availability();
+                $av->setDayOfWeek($a['dayOfWeek']);
+                $av->setStartTimeAM(!empty($a['startTimeAM']) ? new \DateTime($a['startTimeAM']) : null);
+                $av->setEndTimeAM(!empty($a['endTimeAM']) ? new \DateTime($a['endTimeAM']) : null);
+                $av->setStartTimePM(!empty($a['startTimePM']) ? new \DateTime($a['startTimePM']) : null);
+                $av->setEndTimePM(!empty($a['endTimePM']) ? new \DateTime($a['endTimePM']) : null);
+                $av->setDoctor($doctor);
+
+                $em->persist($av);
+            }
+        }
+
+        $em->persist($doctor);
+
+        if (!empty($data['newTreatments'])) {
+            $repo = $em->getRepository(Treatment::class);
+            foreach ($data['newTreatments'] as $id) {
+                if ($t = $repo->find($id)) {
+                    $doctor->addTreatment($t);
+                }
+            }
+        }
+
+        $em->flush();
+
+        return $this->json(['success' => true, 'doctorId' => $doctor->getId()], 201);
     }
 }

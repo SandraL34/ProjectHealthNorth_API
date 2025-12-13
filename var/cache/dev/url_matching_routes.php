@@ -20,6 +20,7 @@ return [
         '/api/doctors/list' => [[['_route' => 'api_doctors_list', '_controller' => 'App\\Controller\\DoctorController::listDoctors'], null, ['GET' => 0], null, false, false, null]],
         '/api/doctors/results' => [[['_route' => 'api_doctors_results', '_controller' => 'App\\Controller\\DoctorController::resultsDoctors'], null, ['GET' => 0], null, false, false, null]],
         '/api/doctors/change' => [[['_route' => 'api_doctors_change', '_controller' => 'App\\Controller\\DoctorController::changeDoctor'], null, ['PUT' => 0], null, false, false, null]],
+        '/api/doctors/add' => [[['_route' => 'api_doctors_add', '_controller' => 'App\\Controller\\DoctorController::addDoctor'], null, ['POST' => 0], null, false, false, null]],
         '/api/login' => [[['_route' => 'api_login', '_controller' => 'App\\Controller\\LoginController::login'], null, ['POST' => 0], null, false, false, null]],
         '/api/patient/medicalRecord' => [[['_route' => 'api_patient_medicalRecord', '_controller' => 'App\\Controller\\PatientController::me'], null, ['GET' => 0], null, false, false, null]],
         '/registration' => [[['_route' => 'registration', '_controller' => 'App\\Controller\\PatientController::registration'], null, ['POST' => 0], null, false, false, null]],
