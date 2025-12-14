@@ -34,19 +34,23 @@ return [
         0 => '{^(?'
                 .'|/_error/(\\d+)(?:\\.([^/]++))?(*:35)'
                 .'|/api/(?'
-                    .'|doctor/([^/]++)/slots(*:71)'
+                    .'|doctor(?'
+                        .'|/([^/]++)/slots(*:74)'
+                        .'|s/delete/([^/]++)(*:98)'
+                    .')'
                     .'|appointment/c(?'
-                        .'|hange/([^/]++)(*:108)'
-                        .'|ancel/([^/]++)(*:130)'
+                        .'|hange/([^/]++)(*:136)'
+                        .'|ancel/([^/]++)(*:158)'
                     .')'
                 .')'
             .')/?$}sDu',
     ],
     [ // $dynamicRoutes
         35 => [[['_route' => '_preview_error', '_controller' => 'error_controller::preview', '_format' => 'html'], ['code', '_format'], null, null, false, true, null]],
-        71 => [[['_route' => 'doctor_slots', '_controller' => 'App\\Controller\\AppointmentSlotController::slots'], ['id'], null, null, false, false, null]],
-        108 => [[['_route' => 'api_appointment_update', '_controller' => 'App\\Controller\\AppointmentSlotController::updateAppointment'], ['id'], ['PATCH' => 0], null, false, true, null]],
-        130 => [
+        74 => [[['_route' => 'doctor_slots', '_controller' => 'App\\Controller\\AppointmentSlotController::slots'], ['id'], null, null, false, false, null]],
+        98 => [[['_route' => 'api_doctor_delete', '_controller' => 'App\\Controller\\DoctorController::deleteDoctor'], ['id'], ['DELETE' => 0], null, false, true, null]],
+        136 => [[['_route' => 'api_appointment_update', '_controller' => 'App\\Controller\\AppointmentSlotController::updateAppointment'], ['id'], ['PATCH' => 0], null, false, true, null]],
+        158 => [
             [['_route' => 'api_appointment_cancel', '_controller' => 'App\\Controller\\AppointmentSlotController::cancelAppointment'], ['id'], ['DELETE' => 0], null, false, true, null],
             [null, null, null, null, false, false, 0],
         ],

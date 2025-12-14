@@ -14,6 +14,7 @@ use App\Entity\Treatment;
 use App\Repository\DoctorRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\HttpFoundation\Response;
 
 class DoctorController extends AbstractController
 {
@@ -272,5 +273,31 @@ class DoctorController extends AbstractController
         $em->flush();
 
         return $this->json(['success' => true, 'doctorId' => $doctor->getId()], 201);
+    }
+
+    #[Route('/api/doctors/delete/{id}', name: 'api_doctor_delete', methods: ['DELETE'])]
+    public function deleteDoctor(int $id, DoctorRepository $doctorRepository, EntityManagerInterface $em): JsonResponse {
+        $doctor = $doctorRepository->find($id);
+
+        if (!$doctor) {
+            return $this->json(['error' => 'Doctor not found'], 404);
+        }
+
+        foreach ($doctor->getAvailabilities() as $availability) {
+            $em->remove($availability);
+        }
+
+        foreach ($doctor->getAvailabilitiesOverride() as $override) {
+            $em->remove($override);
+        }
+
+        foreach ($doctor->getTreatments() as $treatment) {
+            $doctor->removeTreatment($treatment);
+        }
+
+        $em->remove($doctor);
+        $em->flush();
+
+        return new JsonResponse(null, Response::HTTP_NO_CONTENT);
     }
 }
