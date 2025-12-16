@@ -16,6 +16,8 @@ return [
         '/api/appointment/results' => [[['_route' => 'api_appointment_results', '_controller' => 'App\\Controller\\AppointmentSlotController::results'], null, ['GET' => 0], null, false, false, null]],
         '/api/centers/search' => [[['_route' => 'api_centers_search', '_controller' => 'App\\Controller\\CenterController::searchCentersWhat'], null, ['GET' => 0], null, false, false, null]],
         '/api/centers/map' => [[['_route' => 'api_centers_map', '_controller' => 'App\\Controller\\CenterController::getCentersForMap'], null, ['GET' => 0], null, false, false, null]],
+        '/api/centers/change' => [[['_route' => 'api_centers_change', '_controller' => 'App\\Controller\\CenterController::changeCenter'], null, ['PUT' => 0], null, false, false, null]],
+        '/api/centers/add' => [[['_route' => 'api_centers_add', '_controller' => 'App\\Controller\\CenterController::addCenter'], null, ['POST' => 0], null, false, false, null]],
         '/api/doctors/search' => [[['_route' => 'api_doctors_search', '_controller' => 'App\\Controller\\DoctorController::searchDoctors'], null, ['GET' => 0], null, false, false, null]],
         '/api/doctors/list' => [[['_route' => 'api_doctors_list', '_controller' => 'App\\Controller\\DoctorController::listDoctors'], null, ['GET' => 0], null, false, false, null]],
         '/api/doctors/results' => [[['_route' => 'api_doctors_results', '_controller' => 'App\\Controller\\DoctorController::resultsDoctors'], null, ['GET' => 0], null, false, false, null]],
@@ -44,7 +46,8 @@ return [
                         .'|hange/([^/]++)(*:136)'
                         .'|ancel/([^/]++)(*:158)'
                     .')'
-                    .'|treatments/delete/([^/]++)(*:193)'
+                    .'|centers/delete/([^/]++)(*:190)'
+                    .'|treatments/delete/([^/]++)(*:224)'
                 .')'
             .')/?$}sDu',
     ],
@@ -54,7 +57,8 @@ return [
         98 => [[['_route' => 'api_doctor_delete', '_controller' => 'App\\Controller\\DoctorController::deleteDoctor'], ['id'], ['DELETE' => 0], null, false, true, null]],
         136 => [[['_route' => 'api_appointment_update', '_controller' => 'App\\Controller\\AppointmentSlotController::updateAppointment'], ['id'], ['PATCH' => 0], null, false, true, null]],
         158 => [[['_route' => 'api_appointment_cancel', '_controller' => 'App\\Controller\\AppointmentSlotController::cancelAppointment'], ['id'], ['DELETE' => 0], null, false, true, null]],
-        193 => [
+        190 => [[['_route' => 'api_centers_delete', '_controller' => 'App\\Controller\\CenterController::deleteDoctor'], ['id'], ['DELETE' => 0], null, false, true, null]],
+        224 => [
             [['_route' => 'api_treatments_delete', '_controller' => 'App\\Controller\\TreatmentController::deleteDoctor'], ['id'], ['DELETE' => 0], null, false, true, null],
             [null, null, null, null, false, false, 0],
         ],

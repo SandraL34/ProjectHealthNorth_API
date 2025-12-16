@@ -115,9 +115,10 @@ class Center
         return $this->longitude;
     }
 
-    public function setLongitude($longitude)
+    public function setLongitude(?float $longitude): static
     {
         $this->longitude = $longitude;
+        return $this;
     }
 
     public function getLatitude()
@@ -125,8 +126,9 @@ class Center
         return $this->latitude;
     }
 
-    public function setLatitude($latitude)
+    public function setLatitude(?float $latitude): static
     {
         $this->latitude = $latitude;
+        return $this;
     }
 }
