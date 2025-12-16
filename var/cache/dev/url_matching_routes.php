@@ -29,6 +29,8 @@ return [
         '/api/prescription' => [[['_route' => 'api_prescription', '_controller' => 'App\\Controller\\PrescriptionController::getPrescription'], null, ['GET' => 0], null, false, false, null]],
         '/api/treatments/list' => [[['_route' => 'api_treatments_list', '_controller' => 'App\\Controller\\TreatmentController::listTreatments'], null, ['GET' => 0], null, false, false, null]],
         '/api/treatments/search' => [[['_route' => 'api_treatments_search', '_controller' => 'App\\Controller\\TreatmentController::searchTreatments'], null, ['GET' => 0], null, false, false, null]],
+        '/api/treatments/change' => [[['_route' => 'api_treatments_change', '_controller' => 'App\\Controller\\TreatmentController::changeTreatment'], null, ['PUT' => 0], null, false, false, null]],
+        '/api/treatments/add' => [[['_route' => 'api_treatments_add', '_controller' => 'App\\Controller\\TreatmentController::addTreatment'], null, ['POST' => 0], null, false, false, null]],
     ],
     [ // $regexpList
         0 => '{^(?'
@@ -42,6 +44,7 @@ return [
                         .'|hange/([^/]++)(*:136)'
                         .'|ancel/([^/]++)(*:158)'
                     .')'
+                    .'|treatments/delete/([^/]++)(*:193)'
                 .')'
             .')/?$}sDu',
     ],
@@ -50,8 +53,9 @@ return [
         74 => [[['_route' => 'doctor_slots', '_controller' => 'App\\Controller\\AppointmentSlotController::slots'], ['id'], null, null, false, false, null]],
         98 => [[['_route' => 'api_doctor_delete', '_controller' => 'App\\Controller\\DoctorController::deleteDoctor'], ['id'], ['DELETE' => 0], null, false, true, null]],
         136 => [[['_route' => 'api_appointment_update', '_controller' => 'App\\Controller\\AppointmentSlotController::updateAppointment'], ['id'], ['PATCH' => 0], null, false, true, null]],
-        158 => [
-            [['_route' => 'api_appointment_cancel', '_controller' => 'App\\Controller\\AppointmentSlotController::cancelAppointment'], ['id'], ['DELETE' => 0], null, false, true, null],
+        158 => [[['_route' => 'api_appointment_cancel', '_controller' => 'App\\Controller\\AppointmentSlotController::cancelAppointment'], ['id'], ['DELETE' => 0], null, false, true, null]],
+        193 => [
+            [['_route' => 'api_treatments_delete', '_controller' => 'App\\Controller\\TreatmentController::deleteDoctor'], ['id'], ['DELETE' => 0], null, false, true, null],
             [null, null, null, null, false, false, 0],
         ],
     ],
