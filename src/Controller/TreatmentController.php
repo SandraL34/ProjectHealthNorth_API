@@ -91,7 +91,7 @@ class TreatmentController extends AbstractController
         ]);
     }
 
-        #[Route ('/api/treatments/add', name: 'api_treatments_add', methods:['POST'])]
+    #[Route ('/api/treatments/add', name: 'api_treatments_add', methods:['POST'])]
     public function addTreatment(Request $request, TreatmentRepository $treatmentRepo, EntityManagerInterface $em,
     ManagerRegistry $doctrine): JsonResponse {
 
@@ -112,6 +112,7 @@ class TreatmentController extends AbstractController
                 ->setDuration($data['duration'])
                 ->setPrice($data['price']);
 
+        $em->persist($treatment);
         $em->flush();
 
         return $this->json(['success' => true, 'treatmentId' => $treatment->getId()], 201);
