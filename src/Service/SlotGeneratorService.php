@@ -13,7 +13,7 @@ class SlotGeneratorService
      * @param int $daysAhead Nombre de jours à générer
      * @return array
      */
-    public function generateSlotsForDoctor(Doctor $doctor, int $slotDuration = 30, int $daysAhead = 30): array
+    public function generateSlotsForDoctor(Doctor $doctor, int $slotDuration = 60, int $daysAhead = 30): array
     {
         $slots = [];
         $today = new \DateTimeImmutable();

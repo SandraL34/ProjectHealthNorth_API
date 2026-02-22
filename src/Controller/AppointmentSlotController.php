@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 
+
 class AppointmentSlotController extends AbstractController
 {
     private SlotGeneratorService $slotService;
@@ -195,7 +196,6 @@ class AppointmentSlotController extends AbstractController
         $results = [];
 
         foreach ($doctors as $doctor) {
-
             $generatedSlots = $slotGenerator->generateSlotsForDoctor($doctor);
 
             $bookedSlots = $doctor->getAppointmentSlots()->toArray();
@@ -203,29 +203,39 @@ class AppointmentSlotController extends AbstractController
             $finalSlots = $slotGenerator->markBookedSlots($generatedSlots, $bookedSlots);
 
             foreach ($finalSlots as $slot) {
-                $results[] = [
-                    'doctorId' => $doctor->getId(),
-                    'doctor' => [
-                        'firstname' => $doctor->getFirstname(),
-                        'lastname' => $doctor->getLastname(),
-                        'center' => $doctor->getCenter() ? [
-                            'id' => $doctor->getCenter()->getId(),
-                            'name' => $doctor->getCenter()->getName(),
-                            'address' => $doctor->getCenter()->getAddress(),
-                        ] : null,
-                        'treatments' => array_map(fn($t) => [
-                            'id' => $t->getId(),
-                            'name' => $t->getName(),
-                            'duration' => $t->getDuration(),
-                        ], $doctor->getTreatments()->toArray()),
-                    ],
-                    'slot' => $slot
-                ];
-            }
+            $results[] = [
+                'doctorId' => $doctor->getId(),
+                'doctor' => [
+                    'firstname' => $doctor->getFirstname(),
+                    'lastname' => $doctor->getLastname(),
+                    'center' => $doctor->getCenter() ? [
+                        'id' => $doctor->getCenter()->getId(),
+                        'name' => $doctor->getCenter()->getName(),
+                        'address' => $doctor->getCenter()->getAddress(),
+                    ] : null,
+                    'treatments' => array_map(fn($t) => [
+                        'id' => $t->getId(),
+                        'name' => $t->getName(),
+                        'duration' => $t->getDuration(),
+                    ], $doctor->getTreatments()->toArray()),
+                ],
+                'slot' => [
+                    'startDate' => $slot['startDate'] ?? null,
+                    'startTime' => $slot['startTime'] ?? null,
+                    'endDate' => $slot['endDate'] ?? null,
+                    'endTime' => $slot['endTime'] ?? null,
+                    'isBooked' => $slot['isBooked'] ?? false,
+                ]
+            ];
         }
-
-        return $this->json($results);
     }
+
+    try {
+        return $this->json($results);
+    } catch (\Throwable $e) {
+        return new JsonResponse(['error' => $e->getMessage()], 500);
+    }
+}
 
     #[Route('/api/appointment/cancel/{id}', name: 'api_appointment_cancel', methods: ['DELETE'])]
     public function cancelAppointment(Appointment $appointment, EntityManagerInterface $em) {

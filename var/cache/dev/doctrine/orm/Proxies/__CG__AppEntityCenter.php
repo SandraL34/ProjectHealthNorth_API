@@ -327,7 +327,7 @@ class Center extends \App\Entity\Center implements \Doctrine\ORM\Proxy\Proxy
     /**
      * {@inheritDoc}
      */
-    public function setLongitude($longitude)
+    public function setLongitude(?float $longitude): static
     {
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setLongitude', [$longitude]);
@@ -349,7 +349,7 @@ class Center extends \App\Entity\Center implements \Doctrine\ORM\Proxy\Proxy
     /**
      * {@inheritDoc}
      */
-    public function setLatitude($latitude)
+    public function setLatitude(?float $latitude): static
     {
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setLatitude', [$latitude]);
