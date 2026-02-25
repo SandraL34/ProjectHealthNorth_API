@@ -13,12 +13,12 @@ class SlotGeneratorService
      * @param int $daysAhead Nombre de jours à générer
      * @return array
      */
-    public function generateSlotsForDoctor(Doctor $doctor, int $slotDuration = 60, int $daysAhead = 30): array
+    public function generateSlotsForDoctor(Doctor $doctor, int $slotDuration = 60, int $daysAhead = 7,  ?\DateTimeImmutable $startFrom = null): array
     {
         $slots = [];
-        $today = new \DateTimeImmutable();
+        $today = $startFrom ?? new \DateTimeImmutable();
 
-        for ($i = 0; $i <= $daysAhead; $i++) {
+        for ($i = 0; $i < $daysAhead; $i++) {
             $date = $today->modify("+$i days");
             $dayOfWeek = (int) $date->format('N');
 

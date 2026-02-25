@@ -190,13 +190,24 @@ class AppointmentSlotController extends AbstractController
     }
 
     #[Route('/api/appointment/results', name: 'api_appointment_results', methods: ['GET'])]
-    public function results(EntityManagerInterface $em, SlotGeneratorService $slotGenerator): JsonResponse
+    public function results(Request $request, EntityManagerInterface $em, SlotGeneratorService $slotGenerator): JsonResponse
     {
+        $weekStart = $request->query->get('week'); // format: "2026-02-23"
+    
+        if ($weekStart) {
+            $startDate = new \DateTimeImmutable($weekStart);
+        } else {
+            $today = new \DateTimeImmutable();
+            $startDate = $today->modify('monday this week');
+        }
+        
+        $endDate = $startDate->modify('+6 days'); // lundi → dimanche
+
         $doctors = $em->getRepository(Doctor::class)->findAll();
         $results = [];
 
         foreach ($doctors as $doctor) {
-            $generatedSlots = $slotGenerator->generateSlotsForDoctor($doctor);
+            $generatedSlots = $slotGenerator->generateSlotsForDoctor($doctor, 60, 7, $startDate);
 
             $bookedSlots = $doctor->getAppointmentSlots()->toArray();
 
