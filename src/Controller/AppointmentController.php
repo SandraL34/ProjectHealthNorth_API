@@ -133,4 +133,80 @@ class AppointmentController extends AbstractController
 
         return new JsonResponse(['success' => true, 'appointmentId' => $appointment->getId()],Response::HTTP_CREATED);
     }
+
+    #[Route('/api/appointment/{id}', name: 'api_appointment_update', methods: ['PATCH'])]
+    public function updateAppointment(int $id, Request $request, EntityManagerInterface $em): JsonResponse 
+    {
+        $user = $this->getUser();
+        if (!$user) {
+            return $this->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $appointment = $em->getRepository(Appointment::class)->find($id);
+        if (!$appointment) {
+            return $this->json(['error' => 'Appointment not found'], 404);
+        }
+
+        $data = json_decode($request->getContent(), true);
+        if (!$data) {
+            return $this->json(['error' => 'Invalid JSON'], 400);
+        }
+
+        $newDate = $data['date'] ?? null;
+        $newTime = $data['time'] ?? null;
+
+        if (!$newDate || !$newTime) {
+            return $this->json(['error' => 'Date and time required'], 400);
+        }
+
+        $doctor = $appointment->getDoctor();
+
+        $newStartDate = new \DateTimeImmutable($newDate);
+        $newStartTime = new \DateTimeImmutable($newTime);
+
+        $treatment = $appointment->getTreatments()->first();
+        $duration = $treatment->getDuration();
+
+        $newEndTime = $newStartTime->modify("+{$duration} minutes");
+
+        $existingSlot = $em->getRepository(AppointmentSlot::class)->findOneBy([
+            'doctor' => $doctor,
+            'startDate' => $newStartDate,
+            'startTime' => $newStartTime,
+            'isBooked' => true
+        ]);
+
+        if ($existingSlot) {
+            return $this->json(['error' => 'Slot already booked'], 409);
+        }
+
+        foreach ($appointment->getAppointmentSlots() as $oldSlot) {
+            $em->remove($oldSlot);
+        }
+
+        $newSlot = new AppointmentSlot();
+        $newSlot->setDoctor($doctor)
+            ->setAppointment($appointment)
+            ->setStartDate($newStartDate)
+            ->setEndDate($newStartDate)
+            ->setStartTime($newStartTime)
+            ->setEndTime($newEndTime)
+            ->setIsBooked(true);
+
+        $em->persist($newSlot);
+
+        $appointment->setDate($newStartDate);
+        $appointment->setTime($newStartTime);
+
+        $em->flush();
+
+        return $this->json([
+            'success' => true,
+            'appointment' => [
+                'id' => $appointment->getId(),
+                'date' => $appointment->getDate()?->format('Y-m-d'),
+                'time' => $appointment->getTime()?->format('H:i:s'),
+            ]
+        ]);
+    }
 }

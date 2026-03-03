@@ -46,80 +46,9 @@ class AppointmentSlotController extends AbstractController
         return new JsonResponse($slots);
     }
 
-    #[Route('/api/appointment/change', name: 'api_appointment_change', methods: ['GET'])]
-    public function appointmentChange(ManagerRegistry $doctrine, SlotGeneratorService $slotService): JsonResponse
-    {
-        $user = $this->getUser();
-        if (!$user) {
-            return $this->json(['error' => 'Unauthorized'], 401);
-        }
 
-        $doctors = $doctrine->getRepository(Doctor::class)->findAll();
-        $slots = $slotService->generateSlotsForAllDoctors($doctors, 30);
 
-        $slotRepo = $doctrine->getRepository(AppointmentSlot::class);
-        $bookedSlots = $slotRepo->findBy(['isBooked' => true]);
-
-        foreach ($slots as &$slot) {
-            foreach ($bookedSlots as $booked) {
-                if ($slot['doctorId'] === $booked->getDoctor()?->getId() &&
-                    $slot['startDate'] === $booked->getStartDate()?->format('Y-m-d') &&
-                    $slot['startTime'] === $booked->getStartTime()?->format('H:i:s')
-                ) {
-                    $appointment = $booked->getAppointment();
-                    $appointmentSlots = $appointment->getAppointmentSlots()->toArray();
-                    $appointmentSlotIds = array_map(fn($s) => $s->getId(), $appointmentSlots);
-                    if ($appointment) {
-                        $slot['appointment'] = [
-                            'id' => $appointment->getId(),
-                            'title' => $appointment->getTitle(),
-                            'date' => $appointment->getDate()?->format('Y-m-d'),
-                            'time' => $appointment->getTime()?->format('H:i:s'),
-                            'appointmentSlotIds' => $appointmentSlotIds,
-                            'treatments' => array_map(fn($t) => [
-                                'id' => $t->getId(),
-                                'name' => $t->getName(),
-                                'duration' => $t->getDuration()
-                            ], $appointment->getTreatments()->toArray())
-                        ];
-                        $slot['isBooked'] = true;
-                    }
-                }
-            }
-        }
-
-        $results = [];
-        foreach ($slots as $slot) {
-            $doctor = $doctrine->getRepository(Doctor::class)->find($slot['doctorId']);
-            if (!$doctor) continue;
-
-            $center = $doctor->getCenter();
-            $doctorTreatments = $doctor->getTreatments()->toArray();
-
-            $results[] = [
-                'doctor' => [
-                    'id' => $doctor->getId(),
-                    'firstname' => $doctor->getFirstname(),
-                    'lastname' => $doctor->getLastname(),
-                    'center' => $center ? [
-                        'id' => $center->getId(),
-                        'name' => $center->getName(),
-                        'address' => $center->getAddress(),
-                    ] : null,
-                    'treatments' => array_map(fn($t) => [
-                        'id' => $t->getId(),
-                        'name' => $t->getName(),
-                        'duration' => $t->getDuration(),
-                    ], $doctorTreatments),
-                ],
-                'slot' => $slot,
-            ];
-        }
-
-        return new JsonResponse($results);
-    }
-
-    #[Route('/api/appointment/change/{id}', name: 'api_appointment_update', methods: ['PATCH'])]
+    #[Route('/api/appointment/change/{id}', name: 'api_appointment_slot_update', methods: ['PATCH'])]
     public function updateAppointment(int $id, Request $request, ManagerRegistry $doctrine): JsonResponse {
         $user = $this->getUser();
         if (!$user) {
@@ -216,6 +145,21 @@ class AppointmentSlotController extends AbstractController
             $finalSlots = $slotGenerator->markBookedSlots($generatedSlots, $bookedSlots);
 
             foreach ($finalSlots as $slot) {
+                $appointmentId = null;
+
+                if (!empty($slot['isBooked'])) {
+                    $appointmentSlot = $em->getRepository(AppointmentSlot::class)->findOneBy([
+                        'doctor' => $doctor,
+                        'startDate' => new \DateTimeImmutable($slot['startDate']),
+                        'startTime' => new \DateTimeImmutable($slot['startTime']),
+                        'isBooked' => true
+                    ]);
+
+                    if ($appointmentSlot && $appointmentSlot->getAppointment()) {
+                        $appointmentId = $appointmentSlot->getAppointment()->getId();
+                    }
+                }
+
             $results[] = [
                 'doctorId' => $doctor->getId(),
                 'doctor' => [
@@ -238,6 +182,7 @@ class AppointmentSlotController extends AbstractController
                     'endDate' => $slot['endDate'] ?? null,
                     'endTime' => $slot['endTime'] ?? null,
                     'isBooked' => $slot['isBooked'] ?? false,
+                    'appointmentId' => $appointmentId
                 ]
             ];
         }
@@ -251,7 +196,13 @@ class AppointmentSlotController extends AbstractController
 }
 
     #[Route('/api/appointment/cancel/{id}', name: 'api_appointment_cancel', methods: ['DELETE'])]
-    public function cancelAppointment(Appointment $appointment, EntityManagerInterface $em) {
+    public function cancelAppointment(int $id, EntityManagerInterface $em): JsonResponse {
+        $appointment = $em->getRepository(Appointment::class)->find($id);
+        
+        if (!$appointment) {
+            return new JsonResponse(['error' => 'Appointment not found'], 404);
+        }
+
         $em->remove($appointment);
         $em->flush();
         return new JsonResponse(null, Response::HTTP_NO_CONTENT);
