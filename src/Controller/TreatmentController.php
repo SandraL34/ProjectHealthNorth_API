@@ -34,7 +34,7 @@ class TreatmentController extends AbstractController
             ];
         }
 
-        return $this->json($grouped);
+        return new JsonResponse($grouped, Response::HTTP_OK);
     }
 
     #[Route('/api/treatments/search', name: 'api_treatments_search', methods: ['GET'])]
@@ -56,7 +56,7 @@ class TreatmentController extends AbstractController
             'name' => $t->getName()
         ], $treatments);
 
-        return $this->json($data);
+        return new JsonResponse($data);
     }
 
     #[Route('/api/treatments/change', name: 'api_treatments_change', methods:['PUT'])]
@@ -82,7 +82,7 @@ class TreatmentController extends AbstractController
 
         $em->flush();
 
-        return $this->json([
+        return new JsonResponse([
             'id' => $treatment->getId(),
             'name' => $treatment->getName(),
             'category' => $treatment->getCategory(),
@@ -115,7 +115,7 @@ class TreatmentController extends AbstractController
         $em->persist($treatment);
         $em->flush();
 
-        return $this->json(['success' => true, 'treatmentId' => $treatment->getId()], 201);
+        return new JsonResponse(['success' => true, 'treatmentId' => $treatment->getId()],Response::HTTP_CREATED);
     }
 
     #[Route('/api/treatments/delete/{id}', name: 'api_treatments_delete', methods: ['DELETE'])]

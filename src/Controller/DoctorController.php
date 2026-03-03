@@ -38,7 +38,7 @@ class DoctorController extends AbstractController
             'lastname' => $d->getLastname()
         ], $doctors);
 
-        return $this->json($data);
+        return new JsonResponse($data);
     }
 
     #[Route('/api/doctors/list', name: 'api_doctors_list', methods: ['GET'])]
@@ -56,7 +56,7 @@ class DoctorController extends AbstractController
             ];
         }
 
-        return $this->json($grouped);
+        return new JsonResponse($grouped);
     }
 
     #[Route('/api/doctors/results', name: 'api_doctors_results', methods:['GET'])]
@@ -111,7 +111,7 @@ class DoctorController extends AbstractController
             ];
         }
 
-        return $this->json($grouped);
+        return new JsonResponse($grouped);
     }
 
     #[Route ('/api/doctors/change', name: 'api_doctors_change', methods:['PUT'])]
@@ -187,7 +187,7 @@ class DoctorController extends AbstractController
         $treatments = $doctor->getTreatments();
 
 
-        return $this->json([
+        return new JsonResponse([
             'id' => $doctor->getId(),
             'email' => $doctor->getEmail(),
             'firstname' => $doctor->getFirstname(),
@@ -272,7 +272,7 @@ class DoctorController extends AbstractController
 
         $em->flush();
 
-        return $this->json(['success' => true, 'doctorId' => $doctor->getId()], 201);
+        return new JsonResponse(['success' => true, 'doctorId' => $doctor->getId()],Response::HTTP_CREATED);
     }
 
     #[Route('/api/doctors/delete/{id}', name: 'api_doctor_delete', methods: ['DELETE'])]

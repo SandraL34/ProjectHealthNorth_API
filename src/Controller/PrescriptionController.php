@@ -41,6 +41,6 @@ class PrescriptionController extends AbstractController
             ];
         }
 
-        return $this->json($prescriptionList);
+        return new JsonResponse($prescriptionList);
     }
 }

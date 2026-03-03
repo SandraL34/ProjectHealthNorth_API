@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Entity\Appointment;
@@ -40,7 +41,7 @@ class AppointmentController extends AbstractController
                 ];
             }
         }
-        return $this->json($upcoming);
+        return new JsonResponse($upcoming);
     }
 
     #[Route('/api/appointment/past', name: 'api_appointment_past', methods: ['GET'])]
@@ -88,7 +89,7 @@ class AppointmentController extends AbstractController
             }
         }
 
-        return $this->json($past);
+        return new JsonResponse($past);
     }
 
     #[Route('/api/appointment/create', name: 'api_appointment_create', methods: ['POST'])]
@@ -130,6 +131,6 @@ class AppointmentController extends AbstractController
         $em->persist($slot);
         $em->flush();
 
-        return $this->json(['success' => true, 'appointmentId' => $appointment->getId()], 201);
+        return new JsonResponse(['success' => true, 'appointmentId' => $appointment->getId()],Response::HTTP_CREATED);
     }
 }

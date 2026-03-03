@@ -35,7 +35,7 @@ class PatientController extends AbstractController
         $option = $patient->getOption();
         $payment = $patient->getPayments()->last();
 
-        return $this->json([
+        return new JsonResponse([
             'id' => $patient->getId(),
             'firstname' => $patient->getFirstname(),
             'lastname' => $patient->getLastname(),
@@ -104,7 +104,7 @@ class PatientController extends AbstractController
         $em->persist($patient);
         $em->flush();
 
-        return $this->json(['success' => true, 'patientId' => $patient->getId()], 201);
+        return new JsonResponse(['success' => true, 'patientId' => $patient->getId()],Response::HTTP_CREATED);
     }
 
     #[Route('/api/medicalrecord/change', name: 'api_medicalrecord_change', methods:['PUT'])]
@@ -211,7 +211,7 @@ class PatientController extends AbstractController
         $option = $patient->getOption();  
         $payment = $patient->getPayments()->last();  
 
-        return $this->json([  
+        return new JsonResponse([  
             'success' => true,  
             'id' => $patient->getId(),  
             'firstname' => $patient->getFirstname(),  

@@ -33,7 +33,7 @@ class CenterController extends AbstractController
             'name' => $d->getName(),
         ], $centers);
 
-        return $this->json($data);
+        return new JsonResponse($data);
     }
 
     #[Route('/api/centers/map', name:'api_centers_map', methods: ['GET'])]
@@ -72,7 +72,7 @@ class CenterController extends AbstractController
             ];
         }
 
-        return $this->json($list);
+        return new JsonResponse($list);
     }
 
     #[Route('/api/centers/change', name: 'api_centers_change', methods:['PUT'])]
@@ -98,7 +98,7 @@ class CenterController extends AbstractController
 
         $em->flush();
 
-        return $this->json([
+        return new JsonResponse([
             'id' => $center->getId(),
             'name' => $center->getName(),
             'type' => $center->getType(),
@@ -137,7 +137,7 @@ class CenterController extends AbstractController
         $em->persist($center);
         $em->flush();
 
-        return $this->json(['success' => true, 'centerId' => $center->getId()], 201);
+        return new JsonResponse(['success' => true, 'centerId' => $center->getId()],Response::HTTP_CREATED);
     }
 
     #[Route('/api/centers/delete/{id}', name: 'api_centers_delete', methods: ['DELETE'])]

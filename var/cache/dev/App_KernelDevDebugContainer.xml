@@ -80,7 +80,7 @@
     <parameter key="kernel.enabled_locales" type="collection"/>
     <parameter key="kernel.error_controller">error_controller</parameter>
     <parameter key="debug.file_link_format">null</parameter>
-    <parameter key="debug.error_handler.throw_at">-1</parameter>
+    <parameter key="debug.error_handler.throw_at">0</parameter>
     <parameter key="debug.container.dump">D:\Logiciel\XAMPP\htdocs\ProjectHealthNorth_API\var\cache\dev/App_KernelDevDebugContainer.xml</parameter>
     <parameter key="router.request_context.host">localhost</parameter>
     <parameter key="router.request_context.scheme">http</parameter>
@@ -1119,7 +1119,7 @@
       <argument>null</argument>
       <argument>null</argument>
       <argument>null</argument>
-      <argument>-1</argument>
+      <argument>0</argument>
       <argument>true</argument>
       <argument>true</argument>
       <argument>null</argument>

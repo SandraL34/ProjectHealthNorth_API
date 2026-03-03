@@ -29,7 +29,7 @@ class AppointmentSlotController extends AbstractController
     public function slots(Doctor $doctor, SlotGeneratorService $slotService): JsonResponse
     {
         $slots = $slotService->generateSlotsForDoctor($doctor, 30, 30);
-        return $this->json($slots);
+        return new JsonResponse($slots);
     }
 
     #[Route('/api/all-doctors/slots', name: 'all_doctors_slots')]
@@ -43,7 +43,7 @@ class AppointmentSlotController extends AbstractController
 
         $slots = $slotService->markBookedSlots($slots, $bookedSlots);
 
-        return $this->json($slots);
+        return new JsonResponse($slots);
     }
 
     #[Route('/api/appointment/change', name: 'api_appointment_change', methods: ['GET'])]
@@ -116,7 +116,7 @@ class AppointmentSlotController extends AbstractController
             ];
         }
 
-        return $this->json($results);
+        return new JsonResponse($results);
     }
 
     #[Route('/api/appointment/change/{id}', name: 'api_appointment_update', methods: ['PATCH'])]
@@ -172,7 +172,7 @@ class AppointmentSlotController extends AbstractController
 
         $em->flush();
 
-        return $this->json([
+        return new JsonResponse([
             'success' => true,
             'appointment' => [
                 'id' => $appointment->getId(),
@@ -186,13 +186,15 @@ class AppointmentSlotController extends AbstractController
                 'endDate' => $slot->getEndDate()?->format('Y-m-d'),
                 'endTime' => $slot->getEndTime()?->format('H:i:s'),
             ] : null
+        ], Response::HTTP_OK, [
+            'Content-Type' => 'application/json; charset=UTF-8',
         ]);
     }
 
     #[Route('/api/appointment/results', name: 'api_appointment_results', methods: ['GET'])]
     public function results(Request $request, EntityManagerInterface $em, SlotGeneratorService $slotGenerator): JsonResponse
     {
-        $weekStart = $request->query->get('week'); // format: "2026-02-23"
+        $weekStart = $request->query->get('week');
     
         if ($weekStart) {
             $startDate = new \DateTimeImmutable($weekStart);
@@ -201,7 +203,7 @@ class AppointmentSlotController extends AbstractController
             $startDate = $today->modify('monday this week');
         }
         
-        $endDate = $startDate->modify('+6 days'); // lundi → dimanche
+        $endDate = $startDate->modify('+6 days');
 
         $doctors = $em->getRepository(Doctor::class)->findAll();
         $results = [];
@@ -242,7 +244,7 @@ class AppointmentSlotController extends AbstractController
     }
 
     try {
-        return $this->json($results);
+        return new JsonResponse($results);
     } catch (\Throwable $e) {
         return new JsonResponse(['error' => $e->getMessage()], 500);
     }
