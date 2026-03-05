@@ -121,9 +121,10 @@ class AppointmentSlotController extends AbstractController
     }
 
     #[Route('/api/appointment/results', name: 'api_appointment_results', methods: ['GET'])]
-    public function results(Request $request, EntityManagerInterface $em, SlotGeneratorService $slotGenerator): JsonResponse
+    public function results(Request $request, EntityManagerInterface $em, SlotGeneratorService $slotGenerator): Response
     {
         $weekStart = $request->query->get('week');
+        $appointmentId = $request->query->get('appointmentId');
     
         if ($weekStart) {
             $startDate = new \DateTimeImmutable($weekStart);
@@ -134,7 +135,16 @@ class AppointmentSlotController extends AbstractController
         
         $endDate = $startDate->modify('+6 days');
 
-        $doctors = $em->getRepository(Doctor::class)->findAll();
+        if ($appointmentId) {
+            $appointment = $em->getRepository(Appointment::class)->find($appointmentId);
+            if (!$appointment || !$appointment->getDoctor()) {
+                return new Response(json_encode([]), 200, ['Content-Type' => 'application/json']);
+            }
+            $doctors = [$appointment->getDoctor()];
+        } else {
+            $doctors = $em->getRepository(Doctor::class)->findAll();
+        }
+
         $results = [];
 
         foreach ($doctors as $doctor) {
@@ -189,7 +199,32 @@ class AppointmentSlotController extends AbstractController
     }
 
     try {
-        return new JsonResponse($results);
+        foreach ($results as $item) {
+            $test = json_encode($item);
+            if ($test === false) {
+                error_log("JSON encode failed for doctorId: " . ($item['doctorId'] ?? 'unknown'));
+                error_log("Error: " . json_last_error_msg());
+                error_log("Item: " . print_r($item, true));
+            }
+        }
+        array_walk_recursive($results, function (&$value) {
+            if (is_string($value)) {
+                $value = iconv('UTF-8', 'UTF-8//IGNORE', $value);
+            }
+        });
+
+        $json = json_encode($results, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
+        if ($json === false) {
+            return new Response(
+                json_encode(['error' => json_last_error_msg()]),
+                500,
+                ['Content-Type' => 'application/json']
+            );
+        }
+
+        return new Response($json, 200, ['Content-Type' => 'application/json; charset=UTF-8']);
+
     } catch (\Throwable $e) {
         return new JsonResponse(['error' => $e->getMessage()], 500);
     }
