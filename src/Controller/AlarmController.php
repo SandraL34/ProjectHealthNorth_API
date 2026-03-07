@@ -66,27 +66,27 @@ class AlarmController extends AbstractController
 
         $alarm = $alarmRepository->find($id);
 
-         if (!$alarm) {
+        if (!$alarm) {
             return $this->json(['error' => 'Alarm not found'], 404);
         }
 
-        if (isset($data['dateTime'])) { // MODIFIED
+        if (isset($data['dateTime'])) {
             $alarm->setDateTime(new \DateTime($data['dateTime']));
         }
 
-        if (isset($data['frequency'])) { // MODIFIED
+        if (isset($data['frequency'])) {
             $alarm->setFrequency($data['frequency']);
         }
 
-        if (isset($data['type'])) { // MODIFIED
+        if (isset($data['type'])) {
             $alarm->setType($data['type']);
         }
 
-        if (isset($data['title'])) { // MODIFIED
+        if (isset($data['title'])) {
             $alarm->setTitle($data['title']);
         }
 
-        if (isset($data['notification'])) { // MODIFIED
+        if (isset($data['notification'])) {
             $alarm->setNotification($data['notification']);
         }
 

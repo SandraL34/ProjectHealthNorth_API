@@ -258,6 +258,13 @@
         <argument>app:hash-passwords</argument>
       </call>
     </service>
+    <service id="App\Controller\AlarmController" class="App\Controller\AlarmController" public="true" autowire="true" autoconfigure="true">
+      <tag name="controller.service_arguments"/>
+      <tag name="container.service_subscriber"/>
+      <call method="setContainer">
+        <argument type="service" id=".service_locator.l1ae.Qz.App\Controller\AlarmController"/>
+      </call>
+    </service>
     <service id="App\Controller\AppointmentController" class="App\Controller\AppointmentController" public="true" autowire="true" autoconfigure="true">
       <tag name="controller.service_arguments"/>
       <tag name="container.service_subscriber"/>
@@ -324,6 +331,11 @@
     </service>
     <service id="App\EventSubscriber\JwtCreatedSubscriber" class="App\EventSubscriber\JwtCreatedSubscriber" autowire="true" autoconfigure="true">
       <tag name="kernel.event_subscriber"/>
+      <argument type="service" id="doctrine.orm.default_entity_manager"/>
+    </service>
+    <service id="App\Repository\AlarmRepository" class="App\Repository\AlarmRepository" autowire="true" autoconfigure="true">
+      <tag name="doctrine.repository_service"/>
+      <argument type="service" id="doctrine"/>
       <argument type="service" id="doctrine.orm.default_entity_manager"/>
     </service>
     <service id="App\Repository\AppointmentRepository" class="App\Repository\AppointmentRepository" autowire="true" autoconfigure="true">
@@ -2255,7 +2267,7 @@
     <service id="doctrine.orm.configuration" class="Doctrine\ORM\Configuration" abstract="true"/>
     <service id="doctrine.orm.entity_manager.abstract" class="Doctrine\ORM\EntityManager" lazy="true" abstract="true"/>
     <service id="doctrine.orm.container_repository_factory" class="Doctrine\Bundle\DoctrineBundle\Repository\ContainerRepositoryFactory">
-      <argument type="service" id=".service_locator.wr7oAoj"/>
+      <argument type="service" id=".service_locator.FFWkvYM"/>
     </service>
     <service id="doctrine.orm.manager_configurator.abstract" class="Doctrine\Bundle\DoctrineBundle\ManagerConfigurator" abstract="true">
       <argument type="collection"/>
@@ -3865,6 +3877,9 @@
     </service>
     <service id=".instanceof.Symfony\Component\Console\Command\Command.0.App\Command\HashPasswordsCommand" class="App\Command\HashPasswordsCommand" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Command\HashPasswordsCommand" class="App\Command\HashPasswordsCommand" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\AlarmController" class="App\Controller\AlarmController" autowire="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\AlarmController" class="App\Controller\AlarmController" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Controller\AlarmController" class="App\Controller\AlarmController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\AppointmentController" class="App\Controller\AppointmentController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\AppointmentController" class="App\Controller\AppointmentController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\AppointmentController" class="App\Controller\AppointmentController" autowire="true" autoconfigure="true" abstract="true"/>
@@ -3894,6 +3909,8 @@
     <service id=".abstract.instanceof.App\Controller\TreatmentController" class="App\Controller\TreatmentController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Component\EventDispatcher\EventSubscriberInterface.0.App\EventSubscriber\JwtCreatedSubscriber" class="App\EventSubscriber\JwtCreatedSubscriber" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\EventSubscriber\JwtCreatedSubscriber" class="App\EventSubscriber\JwtCreatedSubscriber" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\AlarmRepository" class="App\Repository\AlarmRepository" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Repository\AlarmRepository" class="App\Repository\AlarmRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\AppointmentRepository" class="App\Repository\AppointmentRepository" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Repository\AppointmentRepository" class="App\Repository\AppointmentRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\AvailabilityRepository" class="App\Repository\AvailabilityRepository" autowire="true" abstract="true"/>
@@ -4282,6 +4299,26 @@
         <argument key="loader" type="service_closure" id=".errored..service_locator.KfbR3DY.Symfony\Component\Config\Loader\LoaderInterface"/>
       </argument>
     </service>
+    <service id=".service_locator.B5sbwUI" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="alarmRepository" type="service_closure" id="App\Repository\AlarmRepository"/>
+      </argument>
+    </service>
+    <service id=".service_locator.k58hXLZ" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="alarmRepository" type="service_closure" id="App\Repository\AlarmRepository"/>
+        <argument key="em" type="service_closure" id="doctrine.orm.default_entity_manager"/>
+      </argument>
+    </service>
+    <service id=".service_locator.ninRdod" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="alarmRepo" type="service_closure" id="App\Repository\AlarmRepository"/>
+        <argument key="em" type="service_closure" id="doctrine.orm.default_entity_manager"/>
+      </argument>
+    </service>
     <service id=".service_locator.T7xmfzk" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
@@ -4394,9 +4431,13 @@
         <argument key="treatmentRepo" type="service_closure" id="App\Repository\TreatmentRepository"/>
       </argument>
     </service>
-    <service id=".service_locator.tlON5rC" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.CxssZao" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
+        <argument key="App\Controller\AlarmController::addAlarm" type="service_closure" id=".service_locator.ninRdod"/>
+        <argument key="App\Controller\AlarmController::changeAlarm" type="service_closure" id=".service_locator.k58hXLZ"/>
+        <argument key="App\Controller\AlarmController::deleteAlarm" type="service_closure" id=".service_locator.ninRdod"/>
+        <argument key="App\Controller\AlarmController::getAlarms" type="service_closure" id=".service_locator.B5sbwUI"/>
         <argument key="App\Controller\AppointmentController::bookAppointment" type="service_closure" id=".service_locator.4.bt_iB"/>
         <argument key="App\Controller\AppointmentController::comingAppointment" type="service_closure" id=".service_locator.T7xmfzk"/>
         <argument key="App\Controller\AppointmentController::pastAppointment" type="service_closure" id=".service_locator.T7xmfzk"/>
@@ -4431,6 +4472,10 @@
         <argument key="App\Kernel::registerContainerConfiguration" type="service_closure" id=".service_locator.KfbR3DY"/>
         <argument key="kernel::loadRoutes" type="service_closure" id=".service_locator.KfbR3DY"/>
         <argument key="kernel::registerContainerConfiguration" type="service_closure" id=".service_locator.KfbR3DY"/>
+        <argument key="App\Controller\AlarmController:addAlarm" type="service_closure" id=".service_locator.ninRdod"/>
+        <argument key="App\Controller\AlarmController:changeAlarm" type="service_closure" id=".service_locator.k58hXLZ"/>
+        <argument key="App\Controller\AlarmController:deleteAlarm" type="service_closure" id=".service_locator.ninRdod"/>
+        <argument key="App\Controller\AlarmController:getAlarms" type="service_closure" id=".service_locator.B5sbwUI"/>
         <argument key="App\Controller\AppointmentController:bookAppointment" type="service_closure" id=".service_locator.4.bt_iB"/>
         <argument key="App\Controller\AppointmentController:comingAppointment" type="service_closure" id=".service_locator.T7xmfzk"/>
         <argument key="App\Controller\AppointmentController:pastAppointment" type="service_closure" id=".service_locator.T7xmfzk"/>
@@ -4519,9 +4564,10 @@
         <argument key="doctrine.orm.listeners.doctrine_token_provider_schema_subscriber" type="service_closure" id="doctrine.orm.listeners.doctrine_token_provider_schema_subscriber"/>
       </argument>
     </service>
-    <service id=".service_locator.wr7oAoj" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.FFWkvYM" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
+        <argument key="App\Repository\AlarmRepository" type="service_closure" id="App\Repository\AlarmRepository"/>
         <argument key="App\Repository\AppointmentRepository" type="service_closure" id="App\Repository\AppointmentRepository"/>
         <argument key="App\Repository\AvailabilityRepository" type="service_closure" id="App\Repository\AvailabilityRepository"/>
         <argument key="App\Repository\CenterRepository" type="service_closure" id="App\Repository\CenterRepository"/>
@@ -4588,6 +4634,12 @@
         <argument key="serializer" type="service_closure" id="serializer" on-invalid="ignore"/>
         <argument key="twig" type="service_closure" id="twig" on-invalid="ignore"/>
       </argument>
+    </service>
+    <service id=".service_locator.l1ae.Qz.App\Controller\AlarmController" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Controller\AlarmController"/>
+      <argument>App\Controller\AlarmController</argument>
+      <argument type="service" id="service_container"/>
+      <factory service=".service_locator.l1ae.Qz" method="withContext"/>
     </service>
     <service id=".service_locator.l1ae.Qz.App\Controller\AppointmentController" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator_context" id="App\Controller\AppointmentController"/>
@@ -4764,12 +4816,12 @@
       <argument type="service" id="security.token_storage"/>
     </service>
     <service id="debug.argument_resolver.service.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">
-      <argument type="service" id=".service_locator.tlON5rC"/>
+      <argument type="service" id=".service_locator.CxssZao"/>
     </service>
     <service id="debug.argument_resolver.default.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver"/>
     <service id="debug.argument_resolver.variadic.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\VariadicValueResolver"/>
     <service id="debug.argument_resolver.not_tagged_controller.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\NotTaggedControllerValueResolver">
-      <argument type="service" id=".service_locator.tlON5rC"/>
+      <argument type="service" id=".service_locator.CxssZao"/>
     </service>
     <service id=".doctrine.orm.default_metadata_driver.inner" class="Doctrine\Persistence\Mapping\Driver\MappingDriverChain">
       <call method="addDriver">
@@ -5477,7 +5529,7 @@
     <service id="lexik_jwt_authentication.key_loader" alias="lexik_jwt_authentication.key_loader.raw" public="true"/>
     <service id="container.env_var_processors_locator" alias=".service_locator.gSv9zYw" public="true"/>
     <service id="twig.loader.filesystem" alias="twig.loader.native_filesystem"/>
-    <service id="argument_resolver.controller_locator" alias=".service_locator.tlON5rC"/>
+    <service id="argument_resolver.controller_locator" alias=".service_locator.CxssZao"/>
     <service id="doctrine.id_generator_locator" alias=".service_locator.KLVvNIq"/>
     <service id="twig.loader" alias="twig.loader.native_filesystem"/>
     <service id="Psr\Log\LoggerInterface" alias="logger"/>
@@ -5492,7 +5544,7 @@
     <service id=".service_locator.3pBzuze" alias=".service_locator.jgeIDBu"/>
     <service id=".service_locator.NNE_WhH" alias=".service_locator.wHOAN6u"/>
     <service id=".service_locator.7PfVv6q" alias=".service_locator.y5B2joc"/>
-    <service id=".service_locator.XzPU3fA" alias=".service_locator.tlON5rC"/>
+    <service id=".service_locator.d553.YB" alias=".service_locator.CxssZao"/>
     <service id=".service_locator.qBCHs1a" alias=".service_locator.QXcJQkF"/>
     <service id=".service_locator.jkb6XQV" alias=".service_locator.l1ae.Qz"/>
     <service id="event_dispatcher" alias="debug.event_dispatcher" public="true"/>
@@ -5513,6 +5565,9 @@
     <service id="argument_resolver.not_tagged_controller" alias="debug.argument_resolver.not_tagged_controller"/>
     <service id="doctrine.orm.default_metadata_driver" alias=".doctrine.orm.default_metadata_driver"/>
     <service id=".service_locator.JBAFp66" alias=".service_locator.KfbR3DY"/>
+    <service id=".service_locator.8Bc9omR" alias=".service_locator.B5sbwUI"/>
+    <service id=".service_locator.E8uDDgl" alias=".service_locator.k58hXLZ"/>
+    <service id=".service_locator.qAIOVT8" alias=".service_locator.ninRdod"/>
     <service id=".service_locator.T8.TLJR" alias=".service_locator.T7xmfzk"/>
     <service id=".service_locator.UEcgWrw" alias=".service_locator.4.bt_iB"/>
     <service id=".service_locator.kydi4Ed" alias=".service_locator.5miB8_X"/>

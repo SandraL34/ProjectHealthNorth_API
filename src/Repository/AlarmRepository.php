@@ -14,9 +14,10 @@ class AlarmRepository extends ServiceEntityRepository
     private EntityManagerInterface $em;
 
 
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, EntityManagerInterface $em)
     {
         parent::__construct($registry, Alarm::class);
+        $this->em = $em;
     }
 
 
@@ -72,5 +73,16 @@ class AlarmRepository extends ServiceEntityRepository
     {
         $this->em->remove($alarm);
         $this->em->flush();
+    }
+
+    public function findByPatient($patient)
+    {
+        return $this->createQueryBuilder('a')
+            ->leftJoin('a.appointment', 'ap')
+            ->leftJoin('ap.patient', 'p')
+            ->where('p = :patient')
+            ->setParameter('patient', $patient)
+            ->getQuery()
+            ->getResult();
     }
 }
