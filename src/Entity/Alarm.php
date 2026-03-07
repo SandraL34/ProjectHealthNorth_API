@@ -35,6 +35,10 @@ class Alarm
     #[ORM\JoinColumn(name: "appointment_id", referencedColumnName: "id", nullable: true)]
     private ?Appointment $appointment = null;
 
+    #[ORM\ManyToOne(targetEntity: Patient::class, inversedBy: "alarms")]
+    #[ORM\JoinColumn(name: "patient_id", referencedColumnName: "id", nullable: true)]
+    private ?Patient $patient = null;
+
     #[ORM\ManyToOne(targetEntity: Medicine::class, inversedBy: "alarms")]
     #[ORM\JoinColumn(name: "medicine_id", referencedColumnName: "id", nullable: true)]
     private ?Medicine $medicine = null;
@@ -118,6 +122,17 @@ class Alarm
     public function setMedicine(?Medicine $medicine): static 
     { 
         $this->medicine = $medicine; 
+        return $this; 
+    }
+
+        public function getPatient(): ?Patient
+    {
+        return $this->patient;
+    }
+
+    public function setPatient(?Patient $patient): static 
+    { 
+        $this->patient = $patient; 
         return $this; 
     }
 }

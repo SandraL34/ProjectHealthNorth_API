@@ -78,9 +78,7 @@ class AlarmRepository extends ServiceEntityRepository
     public function findByPatient($patient)
     {
         return $this->createQueryBuilder('a')
-            ->leftJoin('a.appointment', 'ap')
-            ->leftJoin('ap.patient', 'p')
-            ->where('p = :patient')
+            ->where('a.patient = :patient')
             ->setParameter('patient', $patient)
             ->getQuery()
             ->getResult();
