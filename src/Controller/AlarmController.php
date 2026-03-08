@@ -62,6 +62,21 @@ class AlarmController extends AbstractController
     #[Route('/api/alarms/{id}', name: 'api_alarms_change', methods:['PUT'])]
     public function changeAlarm(int $id, Request $request, AlarmRepository $alarmRepository, EntityManagerInterface $em): JsonResponse 
     {
+        $user = $this->getUser();
+        if (!$user) {
+            return $this->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $alarm = $alarmRepository->find($id);
+
+        if (!$alarm) {
+            return $this->json(['error' => 'Alarm not found'], 404);
+        }
+
+        if ($alarm->getPatient() !== $user) {
+            return $this->json(['error' => 'Forbidden'], 403);
+        }
+
         $data = json_decode($request->getContent(), true);
 
         $alarm = $alarmRepository->find($id);
@@ -114,12 +129,17 @@ class AlarmController extends AbstractController
                     'frequency' => $alarm->getMedicine()->getFrequency(),
                     'duration' => $alarm->getMedicine()->getDuration(),
                 ]
-                : null, 
+                : null
         ]);
     }
 
     #[Route ('/api/alarms/add', name: 'api_alarms_add', methods:['POST'])]
-    public function addAlarm(Request $request, AlarmRepository $alarmRepo, EntityManagerInterface $em): JsonResponse {
+    public function addAlarm(Request $request, EntityManagerInterface $em): JsonResponse {
+
+        $user = $this->getUser();
+        if (!$user) {
+            return $this->json(['error' => 'Unauthorized'], 401);
+        }
 
         $data = json_decode($request->getContent(), true);
 
@@ -133,7 +153,8 @@ class AlarmController extends AbstractController
             ->setFrequency($data['frequency'])
             ->setType($data['type'])
             ->setTitle($data['title'])
-            ->setNotification($data['notification']);
+            ->setNotification($data['notification'])
+            ->setPatient($user);
 
         $em->persist($alarm);
         $em->flush();
@@ -143,6 +164,22 @@ class AlarmController extends AbstractController
 
     #[Route('/api/alarms/{id}', name: 'api_alarms_delete', methods: ['DELETE'])] 
     public function deleteAlarm(int $id, AlarmRepository $alarmRepo, EntityManagerInterface $em): JsonResponse {
+        $user = $this->getUser();
+        if (!$user) {
+            return $this->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $alarm = $alarmRepo->find($id);
+
+        if (!$alarm) {
+            return $this->json(['error' => 'Alarm not found'], 404);
+        }
+
+        if ($alarm->getPatient() !== $user) {
+            return $this->json(['error' => 'Forbidden'], 403);
+        }
+    
+        
         $alarm = $alarmRepo->find($id);
 
         if (!$alarm) {

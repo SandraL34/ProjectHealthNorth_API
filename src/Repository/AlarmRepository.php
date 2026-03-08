@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Alarm;
 use App\Entity\Appointment;
 use App\Entity\Medicine;
+use App\Entity\Patient;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -28,7 +29,8 @@ class AlarmRepository extends ServiceEntityRepository
         string $title,
         string $notification,
         ?Appointment $appointment = null,
-        ?Medicine $medicine = null
+        ?Medicine $medicine = null,
+        ?Patient $patient = null
     ): Alarm {
 
         $alarm = new Alarm();
@@ -40,6 +42,7 @@ class AlarmRepository extends ServiceEntityRepository
         $alarm->setNotification($notification);
         $alarm->setAppointment($appointment);
         $alarm->setMedicine($medicine);
+        $alarm->setPatient($patient);
 
         $this->em->persist($alarm);
         $this->em->flush();
@@ -77,10 +80,6 @@ class AlarmRepository extends ServiceEntityRepository
 
     public function findByPatient($patient)
     {
-        return $this->createQueryBuilder('a')
-            ->where('a.patient = :patient')
-            ->setParameter('patient', $patient)
-            ->getQuery()
-            ->getResult();
+        return $this->findBy(['patient' => $patient]);
     }
 }
