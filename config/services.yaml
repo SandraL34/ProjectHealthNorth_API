@@ -15,3 +15,7 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
+            
+    App\Controller\DocumentController:
+        arguments:
+            $projectDir: '%kernel.project_dir%'

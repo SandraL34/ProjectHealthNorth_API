@@ -77,11 +77,15 @@ class Patient implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: "patient", targetEntity: Alarm::class)]
     private Collection $alarms;
 
+    #[ORM\OneToMany(mappedBy: "patient", targetEntity: Document::class)]
+    private Collection $documents;
+
     public function __construct()
     {
         $this->payments = new ArrayCollection();
         $this->appointments = new ArrayCollection();
         $this->alarms = new ArrayCollection();
+        $this->documents = new ArrayCollection();
     }
 
     public function getId(): ?int { 
@@ -305,5 +309,10 @@ class Patient implements UserInterface, PasswordAuthenticatedUserInterface
         public function getAlarms(): Collection
     {
         return $this->alarms;
+    }
+
+    public function getDocuments(): Collection
+    {
+        return $this->documents;
     }
 }

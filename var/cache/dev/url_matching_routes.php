@@ -22,6 +22,8 @@ return [
         '/api/doctors/results' => [[['_route' => 'api_doctors_results', '_controller' => 'App\\Controller\\DoctorController::resultsDoctors'], null, ['GET' => 0], null, false, false, null]],
         '/api/doctors/change' => [[['_route' => 'api_doctors_change', '_controller' => 'App\\Controller\\DoctorController::changeDoctor'], null, ['PUT' => 0], null, false, false, null]],
         '/api/doctors/add' => [[['_route' => 'api_doctors_add', '_controller' => 'App\\Controller\\DoctorController::addDoctor'], null, ['POST' => 0], null, false, false, null]],
+        '/api/documents/upload' => [[['_route' => 'api_document_upload', '_controller' => 'App\\Controller\\DocumentController::upload'], null, ['POST' => 0], null, false, false, null]],
+        '/api/invoices' => [[['_route' => 'api_invoices_list', '_controller' => 'App\\Controller\\InvoiceController::list'], null, ['GET' => 0], null, false, false, null]],
         '/api/login' => [[['_route' => 'api_login', '_controller' => 'App\\Controller\\LoginController::login'], null, ['POST' => 0], null, false, false, null]],
         '/api/patient/medicalRecord' => [[['_route' => 'api_patient_medicalRecord', '_controller' => 'App\\Controller\\PatientController::me'], null, ['GET' => 0], null, false, false, null]],
         '/registration' => [[['_route' => 'registration', '_controller' => 'App\\Controller\\PatientController::registration'], null, ['POST' => 0], null, false, false, null]],
@@ -43,21 +45,34 @@ return [
                             .'|add(*:81)'
                             .'|([^/]++)(*:96)'
                         .')'
-                        .'|ppointment/(?'
-                            .'|([^/]++)(*:126)'
-                            .'|c(?'
-                                .'|hange/([^/]++)(*:152)'
-                                .'|ancel/([^/]++)(*:174)'
+                        .'|ppointment(?'
+                            .'|/(?'
+                                .'|([^/]++)(*:129)'
+                                .'|c(?'
+                                    .'|hange/([^/]++)(*:155)'
+                                    .'|ancel/([^/]++)(*:177)'
+                                .')'
+                                .'|results(*:193)'
                             .')'
-                            .'|results(*:190)'
+                            .'|s/([^/]++)(*:212)'
                         .')'
                     .')'
-                    .'|doctor(?'
-                        .'|/([^/]++)/slots(*:224)'
-                        .'|s/delete/([^/]++)(*:249)'
+                    .'|doc(?'
+                        .'|tor(?'
+                            .'|/([^/]++)/slots(*:249)'
+                            .'|s/delete/([^/]++)(*:274)'
+                        .')'
+                        .'|uments/(?'
+                            .'|patient/([^/]++)(*:309)'
+                            .'|([^/]++)(?'
+                                .'|/download(*:337)'
+                                .'|(*:345)'
+                            .')'
+                        .')'
                     .')'
-                    .'|centers/delete/([^/]++)(*:281)'
-                    .'|treatments/delete/([^/]++)(*:315)'
+                    .'|centers/delete/([^/]++)(*:379)'
+                    .'|invoices/([^/]++)/pay(*:408)'
+                    .'|treatments/delete/([^/]++)(*:442)'
                 .')'
             .')/?$}sDu',
     ],
@@ -66,14 +81,19 @@ return [
         71 => [[['_route' => 'api_alarms_change', '_controller' => 'App\\Controller\\AlarmController::changeAlarm'], ['id'], ['PUT' => 0], null, false, true, null]],
         81 => [[['_route' => 'api_alarms_add', '_controller' => 'App\\Controller\\AlarmController::addAlarm'], [], ['POST' => 0], null, false, false, null]],
         96 => [[['_route' => 'api_alarms_delete', '_controller' => 'App\\Controller\\AlarmController::deleteAlarm'], ['id'], ['DELETE' => 0], null, false, true, null]],
-        126 => [[['_route' => 'api_appointment_update', '_controller' => 'App\\Controller\\AppointmentController::updateAppointment'], ['id'], ['PATCH' => 0], null, false, true, null]],
-        152 => [[['_route' => 'api_appointment_slot_update', '_controller' => 'App\\Controller\\AppointmentSlotController::updateAppointment'], ['id'], ['PATCH' => 0], null, false, true, null]],
-        174 => [[['_route' => 'api_appointment_cancel', '_controller' => 'App\\Controller\\AppointmentSlotController::cancelAppointment'], ['id'], ['DELETE' => 0], null, false, true, null]],
-        190 => [[['_route' => 'api_appointment_results', '_controller' => 'App\\Controller\\AppointmentSlotController::results'], [], ['GET' => 0], null, false, false, null]],
-        224 => [[['_route' => 'doctor_slots', '_controller' => 'App\\Controller\\AppointmentSlotController::slots'], ['id'], null, null, false, false, null]],
-        249 => [[['_route' => 'api_doctor_delete', '_controller' => 'App\\Controller\\DoctorController::deleteDoctor'], ['id'], ['DELETE' => 0], null, false, true, null]],
-        281 => [[['_route' => 'api_centers_delete', '_controller' => 'App\\Controller\\CenterController::deleteDoctor'], ['id'], ['DELETE' => 0], null, false, true, null]],
-        315 => [
+        129 => [[['_route' => 'api_appointment_update', '_controller' => 'App\\Controller\\AppointmentController::updateAppointment'], ['id'], ['PATCH' => 0], null, false, true, null]],
+        155 => [[['_route' => 'api_appointment_slot_update', '_controller' => 'App\\Controller\\AppointmentSlotController::updateAppointment'], ['id'], ['PATCH' => 0], null, false, true, null]],
+        177 => [[['_route' => 'api_appointment_cancel', '_controller' => 'App\\Controller\\AppointmentSlotController::cancelAppointment'], ['id'], ['DELETE' => 0], null, false, true, null]],
+        193 => [[['_route' => 'api_appointment_results', '_controller' => 'App\\Controller\\AppointmentSlotController::results'], [], ['GET' => 0], null, false, false, null]],
+        212 => [[['_route' => 'api_appointment_get', '_controller' => 'App\\Controller\\AppointmentController::getAppointment'], ['id'], ['GET' => 0], null, false, true, null]],
+        249 => [[['_route' => 'doctor_slots', '_controller' => 'App\\Controller\\AppointmentSlotController::slots'], ['id'], null, null, false, false, null]],
+        274 => [[['_route' => 'api_doctor_delete', '_controller' => 'App\\Controller\\DoctorController::deleteDoctor'], ['id'], ['DELETE' => 0], null, false, true, null]],
+        309 => [[['_route' => 'api_document_list', '_controller' => 'App\\Controller\\DocumentController::listForPatient'], ['id'], ['GET' => 0], null, false, true, null]],
+        337 => [[['_route' => 'api_document_download', '_controller' => 'App\\Controller\\DocumentController::download'], ['id'], ['GET' => 0], null, false, false, null]],
+        345 => [[['_route' => 'api_document_delete', '_controller' => 'App\\Controller\\DocumentController::delete'], ['id'], ['DELETE' => 0], null, false, true, null]],
+        379 => [[['_route' => 'api_centers_delete', '_controller' => 'App\\Controller\\CenterController::deleteDoctor'], ['id'], ['DELETE' => 0], null, false, true, null]],
+        408 => [[['_route' => 'api_invoice_pay', '_controller' => 'App\\Controller\\InvoiceController::markAsPaid'], ['id'], ['PATCH' => 0], null, false, false, null]],
+        442 => [
             [['_route' => 'api_treatments_delete', '_controller' => 'App\\Controller\\TreatmentController::deleteDoctor'], ['id'], ['DELETE' => 0], null, false, true, null],
             [null, null, null, null, false, false, 0],
         ],

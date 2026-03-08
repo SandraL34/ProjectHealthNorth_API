@@ -294,11 +294,26 @@
         <argument type="service" id=".service_locator.l1ae.Qz.App\Controller\DoctorController"/>
       </call>
     </service>
+    <service id="App\Controller\DocumentController" class="App\Controller\DocumentController" public="true" autowire="true" autoconfigure="true">
+      <tag name="controller.service_arguments"/>
+      <tag name="container.service_subscriber"/>
+      <argument>D:\Logiciel\XAMPP\htdocs\ProjectHealthNorth_API</argument>
+      <call method="setContainer">
+        <argument type="service" id=".service_locator.l1ae.Qz.App\Controller\DocumentController"/>
+      </call>
+    </service>
     <service id="App\Controller\HealthNorthController" class="App\Controller\HealthNorthController" public="true" autowire="true" autoconfigure="true">
       <tag name="controller.service_arguments"/>
       <tag name="container.service_subscriber"/>
       <call method="setContainer">
         <argument type="service" id=".service_locator.l1ae.Qz.App\Controller\HealthNorthController"/>
+      </call>
+    </service>
+    <service id="App\Controller\InvoiceController" class="App\Controller\InvoiceController" public="true" autowire="true" autoconfigure="true">
+      <tag name="controller.service_arguments"/>
+      <tag name="container.service_subscriber"/>
+      <call method="setContainer">
+        <argument type="service" id=".service_locator.l1ae.Qz.App\Controller\InvoiceController"/>
       </call>
     </service>
     <service id="App\Controller\LoginController" class="App\Controller\LoginController" public="true" autowire="true" autoconfigure="true">
@@ -3892,9 +3907,15 @@
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\DoctorController" class="App\Controller\DoctorController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\DoctorController" class="App\Controller\DoctorController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\DoctorController" class="App\Controller\DoctorController" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\DocumentController" class="App\Controller\DocumentController" autowire="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\DocumentController" class="App\Controller\DocumentController" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Controller\DocumentController" class="App\Controller\DocumentController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\HealthNorthController" class="App\Controller\HealthNorthController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\HealthNorthController" class="App\Controller\HealthNorthController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\HealthNorthController" class="App\Controller\HealthNorthController" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\InvoiceController" class="App\Controller\InvoiceController" autowire="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\InvoiceController" class="App\Controller\InvoiceController" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Controller\InvoiceController" class="App\Controller\InvoiceController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\LoginController" class="App\Controller\LoginController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\LoginController" class="App\Controller\LoginController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\LoginController" class="App\Controller\LoginController" autowire="true" autoconfigure="true" abstract="true"/>
@@ -4312,6 +4333,12 @@
         <argument key="em" type="service_closure" id="doctrine.orm.default_entity_manager"/>
       </argument>
     </service>
+    <service id=".service_locator.5miB8_X" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="em" type="service_closure" id="doctrine.orm.default_entity_manager"/>
+      </argument>
+    </service>
     <service id=".service_locator.ninRdod" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
@@ -4332,12 +4359,6 @@
         <argument key="em" type="service_closure" id="doctrine.orm.default_entity_manager"/>
         <argument key="patientRepo" type="service_closure" id="App\Repository\PatientRepository"/>
         <argument key="treatmentRepo" type="service_closure" id="App\Repository\TreatmentRepository"/>
-      </argument>
-    </service>
-    <service id=".service_locator.5miB8_X" class="Symfony\Component\DependencyInjection\ServiceLocator">
-      <tag name="container.service_locator"/>
-      <argument type="collection">
-        <argument key="em" type="service_closure" id="doctrine.orm.default_entity_manager"/>
       </argument>
     </service>
     <service id=".service_locator.ncuyKjX" class="Symfony\Component\DependencyInjection\ServiceLocator">
@@ -4431,15 +4452,16 @@
         <argument key="treatmentRepo" type="service_closure" id="App\Repository\TreatmentRepository"/>
       </argument>
     </service>
-    <service id=".service_locator.CxssZao" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.1.3UEIW" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
-        <argument key="App\Controller\AlarmController::addAlarm" type="service_closure" id=".service_locator.ninRdod"/>
+        <argument key="App\Controller\AlarmController::addAlarm" type="service_closure" id=".service_locator.5miB8_X"/>
         <argument key="App\Controller\AlarmController::changeAlarm" type="service_closure" id=".service_locator.k58hXLZ"/>
         <argument key="App\Controller\AlarmController::deleteAlarm" type="service_closure" id=".service_locator.ninRdod"/>
         <argument key="App\Controller\AlarmController::getAlarms" type="service_closure" id=".service_locator.B5sbwUI"/>
         <argument key="App\Controller\AppointmentController::bookAppointment" type="service_closure" id=".service_locator.4.bt_iB"/>
         <argument key="App\Controller\AppointmentController::comingAppointment" type="service_closure" id=".service_locator.T7xmfzk"/>
+        <argument key="App\Controller\AppointmentController::getAppointment" type="service_closure" id=".service_locator.5miB8_X"/>
         <argument key="App\Controller\AppointmentController::pastAppointment" type="service_closure" id=".service_locator.T7xmfzk"/>
         <argument key="App\Controller\AppointmentController::updateAppointment" type="service_closure" id=".service_locator.5miB8_X"/>
         <argument key="App\Controller\AppointmentSlotController::allDoctorsSlots" type="service_closure" id=".service_locator.P3xdELH"/>
@@ -4458,6 +4480,12 @@
         <argument key="App\Controller\DoctorController::listDoctors" type="service_closure" id=".service_locator.T7xmfzk"/>
         <argument key="App\Controller\DoctorController::resultsDoctors" type="service_closure" id=".service_locator.T7xmfzk"/>
         <argument key="App\Controller\DoctorController::searchDoctors" type="service_closure" id=".service_locator.T7xmfzk"/>
+        <argument key="App\Controller\DocumentController::delete" type="service_closure" id=".service_locator.5miB8_X"/>
+        <argument key="App\Controller\DocumentController::download" type="service_closure" id=".service_locator.5miB8_X"/>
+        <argument key="App\Controller\DocumentController::listForPatient" type="service_closure" id=".service_locator.5miB8_X"/>
+        <argument key="App\Controller\DocumentController::upload" type="service_closure" id=".service_locator.5miB8_X"/>
+        <argument key="App\Controller\InvoiceController::list" type="service_closure" id=".service_locator.5miB8_X"/>
+        <argument key="App\Controller\InvoiceController::markAsPaid" type="service_closure" id=".service_locator.5miB8_X"/>
         <argument key="App\Controller\PatientController::changeMedicalRecord" type="service_closure" id=".service_locator.jgeIDBu"/>
         <argument key="App\Controller\PatientController::deleteMedicalRecord" type="service_closure" id=".service_locator.5miB8_X"/>
         <argument key="App\Controller\PatientController::me" type="service_closure" id=".service_locator.T7xmfzk"/>
@@ -4472,12 +4500,13 @@
         <argument key="App\Kernel::registerContainerConfiguration" type="service_closure" id=".service_locator.KfbR3DY"/>
         <argument key="kernel::loadRoutes" type="service_closure" id=".service_locator.KfbR3DY"/>
         <argument key="kernel::registerContainerConfiguration" type="service_closure" id=".service_locator.KfbR3DY"/>
-        <argument key="App\Controller\AlarmController:addAlarm" type="service_closure" id=".service_locator.ninRdod"/>
+        <argument key="App\Controller\AlarmController:addAlarm" type="service_closure" id=".service_locator.5miB8_X"/>
         <argument key="App\Controller\AlarmController:changeAlarm" type="service_closure" id=".service_locator.k58hXLZ"/>
         <argument key="App\Controller\AlarmController:deleteAlarm" type="service_closure" id=".service_locator.ninRdod"/>
         <argument key="App\Controller\AlarmController:getAlarms" type="service_closure" id=".service_locator.B5sbwUI"/>
         <argument key="App\Controller\AppointmentController:bookAppointment" type="service_closure" id=".service_locator.4.bt_iB"/>
         <argument key="App\Controller\AppointmentController:comingAppointment" type="service_closure" id=".service_locator.T7xmfzk"/>
+        <argument key="App\Controller\AppointmentController:getAppointment" type="service_closure" id=".service_locator.5miB8_X"/>
         <argument key="App\Controller\AppointmentController:pastAppointment" type="service_closure" id=".service_locator.T7xmfzk"/>
         <argument key="App\Controller\AppointmentController:updateAppointment" type="service_closure" id=".service_locator.5miB8_X"/>
         <argument key="App\Controller\AppointmentSlotController:allDoctorsSlots" type="service_closure" id=".service_locator.P3xdELH"/>
@@ -4496,6 +4525,12 @@
         <argument key="App\Controller\DoctorController:listDoctors" type="service_closure" id=".service_locator.T7xmfzk"/>
         <argument key="App\Controller\DoctorController:resultsDoctors" type="service_closure" id=".service_locator.T7xmfzk"/>
         <argument key="App\Controller\DoctorController:searchDoctors" type="service_closure" id=".service_locator.T7xmfzk"/>
+        <argument key="App\Controller\DocumentController:delete" type="service_closure" id=".service_locator.5miB8_X"/>
+        <argument key="App\Controller\DocumentController:download" type="service_closure" id=".service_locator.5miB8_X"/>
+        <argument key="App\Controller\DocumentController:listForPatient" type="service_closure" id=".service_locator.5miB8_X"/>
+        <argument key="App\Controller\DocumentController:upload" type="service_closure" id=".service_locator.5miB8_X"/>
+        <argument key="App\Controller\InvoiceController:list" type="service_closure" id=".service_locator.5miB8_X"/>
+        <argument key="App\Controller\InvoiceController:markAsPaid" type="service_closure" id=".service_locator.5miB8_X"/>
         <argument key="App\Controller\PatientController:changeMedicalRecord" type="service_closure" id=".service_locator.jgeIDBu"/>
         <argument key="App\Controller\PatientController:deleteMedicalRecord" type="service_closure" id=".service_locator.5miB8_X"/>
         <argument key="App\Controller\PatientController:me" type="service_closure" id=".service_locator.T7xmfzk"/>
@@ -4665,9 +4700,21 @@
       <argument type="service" id="service_container"/>
       <factory service=".service_locator.l1ae.Qz" method="withContext"/>
     </service>
+    <service id=".service_locator.l1ae.Qz.App\Controller\DocumentController" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Controller\DocumentController"/>
+      <argument>App\Controller\DocumentController</argument>
+      <argument type="service" id="service_container"/>
+      <factory service=".service_locator.l1ae.Qz" method="withContext"/>
+    </service>
     <service id=".service_locator.l1ae.Qz.App\Controller\HealthNorthController" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator_context" id="App\Controller\HealthNorthController"/>
       <argument>App\Controller\HealthNorthController</argument>
+      <argument type="service" id="service_container"/>
+      <factory service=".service_locator.l1ae.Qz" method="withContext"/>
+    </service>
+    <service id=".service_locator.l1ae.Qz.App\Controller\InvoiceController" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Controller\InvoiceController"/>
+      <argument>App\Controller\InvoiceController</argument>
       <argument type="service" id="service_container"/>
       <factory service=".service_locator.l1ae.Qz" method="withContext"/>
     </service>
@@ -4816,12 +4863,12 @@
       <argument type="service" id="security.token_storage"/>
     </service>
     <service id="debug.argument_resolver.service.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">
-      <argument type="service" id=".service_locator.CxssZao"/>
+      <argument type="service" id=".service_locator.1.3UEIW"/>
     </service>
     <service id="debug.argument_resolver.default.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver"/>
     <service id="debug.argument_resolver.variadic.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\VariadicValueResolver"/>
     <service id="debug.argument_resolver.not_tagged_controller.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\NotTaggedControllerValueResolver">
-      <argument type="service" id=".service_locator.CxssZao"/>
+      <argument type="service" id=".service_locator.1.3UEIW"/>
     </service>
     <service id=".doctrine.orm.default_metadata_driver.inner" class="Doctrine\Persistence\Mapping\Driver\MappingDriverChain">
       <call method="addDriver">
@@ -5529,7 +5576,7 @@
     <service id="lexik_jwt_authentication.key_loader" alias="lexik_jwt_authentication.key_loader.raw" public="true"/>
     <service id="container.env_var_processors_locator" alias=".service_locator.gSv9zYw" public="true"/>
     <service id="twig.loader.filesystem" alias="twig.loader.native_filesystem"/>
-    <service id="argument_resolver.controller_locator" alias=".service_locator.CxssZao"/>
+    <service id="argument_resolver.controller_locator" alias=".service_locator.1.3UEIW"/>
     <service id="doctrine.id_generator_locator" alias=".service_locator.KLVvNIq"/>
     <service id="twig.loader" alias="twig.loader.native_filesystem"/>
     <service id="Psr\Log\LoggerInterface" alias="logger"/>
@@ -5544,7 +5591,7 @@
     <service id=".service_locator.3pBzuze" alias=".service_locator.jgeIDBu"/>
     <service id=".service_locator.NNE_WhH" alias=".service_locator.wHOAN6u"/>
     <service id=".service_locator.7PfVv6q" alias=".service_locator.y5B2joc"/>
-    <service id=".service_locator.d553.YB" alias=".service_locator.CxssZao"/>
+    <service id=".service_locator._InnjMD" alias=".service_locator.1.3UEIW"/>
     <service id=".service_locator.qBCHs1a" alias=".service_locator.QXcJQkF"/>
     <service id=".service_locator.jkb6XQV" alias=".service_locator.l1ae.Qz"/>
     <service id="event_dispatcher" alias="debug.event_dispatcher" public="true"/>
@@ -5567,10 +5614,10 @@
     <service id=".service_locator.JBAFp66" alias=".service_locator.KfbR3DY"/>
     <service id=".service_locator.8Bc9omR" alias=".service_locator.B5sbwUI"/>
     <service id=".service_locator.E8uDDgl" alias=".service_locator.k58hXLZ"/>
+    <service id=".service_locator.kydi4Ed" alias=".service_locator.5miB8_X"/>
     <service id=".service_locator.qAIOVT8" alias=".service_locator.ninRdod"/>
     <service id=".service_locator.T8.TLJR" alias=".service_locator.T7xmfzk"/>
     <service id=".service_locator.UEcgWrw" alias=".service_locator.4.bt_iB"/>
-    <service id=".service_locator.kydi4Ed" alias=".service_locator.5miB8_X"/>
     <service id=".service_locator.C1H6Cdy" alias=".service_locator.ncuyKjX"/>
     <service id=".service_locator.p1.de05" alias=".service_locator.P3xdELH"/>
     <service id=".service_locator.c3AUiaN" alias=".service_locator.OuSGbL3"/>

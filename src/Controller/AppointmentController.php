@@ -209,4 +209,38 @@ class AppointmentController extends AbstractController
             ]
         ]);
     }
+
+    #[Route('/api/appointments/{id}', name: 'api_appointment_get', methods: ['GET'])]
+    public function getAppointment(int $id, EntityManagerInterface $em): JsonResponse
+    {
+        $user = $this->getUser();
+        if (!$user) {
+            return $this->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $appointment = $em->getRepository(Appointment::class)->find($id);
+        if (!$appointment) {
+            return $this->json(['error' => 'Appointment not found'], 404);
+        }
+
+        $patient = $appointment->getPatient();
+        $treatment = $appointment->getTreatments()->first();
+        $doctor = $appointment->getDoctor();
+
+        return $this->json([
+            'id' => $appointment->getId(),
+            'patient' => $patient ? [
+                'firstname' => $patient->getFirstname(),
+                'lastname'  => $patient->getLastname(),
+            ] : null,
+            'treatment' => $treatment ? [
+                'name'     => $treatment->getName(),
+                'duration' => $treatment->getDuration(),
+            ] : null,
+            'doctor' => $doctor ? [
+                'firstname' => $doctor->getFirstname(),
+                'lastname'  => $doctor->getLastname(),
+            ] : null,
+        ]);
+    }
 }

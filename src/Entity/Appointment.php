@@ -50,6 +50,9 @@ class Appointment
     #[ORM\OneToMany(mappedBy: "appointment", targetEntity: AppointmentSlot::class, cascade: ['remove'], orphanRemoval: true)]
     private Collection $appointmentSlots;
 
+        #[ORM\OneToMany(mappedBy: "appointment", targetEntity: Document::class)]
+    private Collection $documents;
+
     public function __construct()
     {
         $this->invoices = new ArrayCollection();
@@ -57,6 +60,7 @@ class Appointment
         $this->prescriptions = new ArrayCollection();
         $this->alarms = new ArrayCollection();
         $this->appointmentSlots = new ArrayCollection();
+        $this->documents = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -157,5 +161,10 @@ class Appointment
         public function getAppointmentSlots(): Collection
     {
         return $this->appointmentSlots;
+    }
+
+    public function getDocuments(): Collection
+    {
+        return $this->documents;
     }
 }
