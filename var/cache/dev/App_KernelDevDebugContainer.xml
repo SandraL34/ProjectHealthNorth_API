@@ -1661,6 +1661,7 @@
         <argument type="service" id="serializer.normalizer.uid"/>
         <argument type="service" id="serializer.normalizer.datetime"/>
         <argument type="service" id="serializer.normalizer.constraint_violation_list"/>
+        <argument type="service" id="serializer.normalizer.mime_message"/>
         <argument type="service" id="serializer.normalizer.datetimezone"/>
         <argument type="service" id="serializer.normalizer.dateinterval"/>
         <argument type="service" id="serializer.normalizer.form_error"/>
@@ -1684,6 +1685,10 @@
       <argument type="collection"/>
       <argument type="service" id="serializer.name_converter.metadata_aware"/>
     </service>
+    <service id="serializer.normalizer.mime_message" class="Symfony\Component\Serializer\Normalizer\MimeMessageNormalizer">
+      <tag name="serializer.normalizer" priority="-915"/>
+      <argument type="service" id="serializer.normalizer.property"/>
+    </service>
     <service id="serializer.normalizer.datetimezone" class="Symfony\Component\Serializer\Normalizer\DateTimeZoneNormalizer">
       <tag name="serializer.normalizer" priority="-915"/>
     </service>
@@ -1692,7 +1697,7 @@
     </service>
     <service id="serializer.normalizer.data_uri" class="Symfony\Component\Serializer\Normalizer\DataUriNormalizer">
       <tag name="serializer.normalizer" priority="-920"/>
-      <argument>null</argument>
+      <argument type="service" id="mime_types" on-invalid="null"/>
     </service>
     <service id="serializer.normalizer.datetime" class="Symfony\Component\Serializer\Normalizer\DateTimeNormalizer">
       <tag name="serializer.normalizer" priority="-910"/>
@@ -1933,6 +1938,11 @@
     </service>
     <service id="twig.extension.security_csrf" class="Symfony\Bridge\Twig\Extension\CsrfExtension">
       <tag name="twig.extension"/>
+    </service>
+    <service id="mime_types" class="Symfony\Component\Mime\MimeTypes">
+      <call method="setDefault">
+        <argument type="service" id="mime_types"/>
+      </call>
     </service>
     <service id="maker.file_manager" class="Symfony\Bundle\MakerBundle\FileManager">
       <argument type="service" id="filesystem"/>
@@ -4452,7 +4462,7 @@
         <argument key="treatmentRepo" type="service_closure" id="App\Repository\TreatmentRepository"/>
       </argument>
     </service>
-    <service id=".service_locator.1.3UEIW" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.btUA1yE" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="App\Controller\AlarmController::addAlarm" type="service_closure" id=".service_locator.5miB8_X"/>
@@ -4490,6 +4500,7 @@
         <argument key="App\Controller\PatientController::deleteMedicalRecord" type="service_closure" id=".service_locator.5miB8_X"/>
         <argument key="App\Controller\PatientController::me" type="service_closure" id=".service_locator.T7xmfzk"/>
         <argument key="App\Controller\PatientController::registration" type="service_closure" id=".service_locator.HpgKGH5"/>
+        <argument key="App\Controller\PatientController::searchPatients" type="service_closure" id=".service_locator.T7xmfzk"/>
         <argument key="App\Controller\PrescriptionController::getPrescription" type="service_closure" id=".service_locator.T7xmfzk"/>
         <argument key="App\Controller\TreatmentController::addTreatment" type="service_closure" id=".service_locator.wHOAN6u"/>
         <argument key="App\Controller\TreatmentController::changeTreatment" type="service_closure" id=".service_locator.rDrmLqx"/>
@@ -4535,6 +4546,7 @@
         <argument key="App\Controller\PatientController:deleteMedicalRecord" type="service_closure" id=".service_locator.5miB8_X"/>
         <argument key="App\Controller\PatientController:me" type="service_closure" id=".service_locator.T7xmfzk"/>
         <argument key="App\Controller\PatientController:registration" type="service_closure" id=".service_locator.HpgKGH5"/>
+        <argument key="App\Controller\PatientController:searchPatients" type="service_closure" id=".service_locator.T7xmfzk"/>
         <argument key="App\Controller\PrescriptionController:getPrescription" type="service_closure" id=".service_locator.T7xmfzk"/>
         <argument key="App\Controller\TreatmentController:addTreatment" type="service_closure" id=".service_locator.wHOAN6u"/>
         <argument key="App\Controller\TreatmentController:changeTreatment" type="service_closure" id=".service_locator.rDrmLqx"/>
@@ -4863,12 +4875,12 @@
       <argument type="service" id="security.token_storage"/>
     </service>
     <service id="debug.argument_resolver.service.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">
-      <argument type="service" id=".service_locator.1.3UEIW"/>
+      <argument type="service" id=".service_locator.btUA1yE"/>
     </service>
     <service id="debug.argument_resolver.default.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver"/>
     <service id="debug.argument_resolver.variadic.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\VariadicValueResolver"/>
     <service id="debug.argument_resolver.not_tagged_controller.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\NotTaggedControllerValueResolver">
-      <argument type="service" id=".service_locator.1.3UEIW"/>
+      <argument type="service" id=".service_locator.btUA1yE"/>
     </service>
     <service id=".doctrine.orm.default_metadata_driver.inner" class="Doctrine\Persistence\Mapping\Driver\MappingDriverChain">
       <call method="addDriver">
@@ -5524,6 +5536,8 @@
     <service id="Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface" alias="security.csrf.token_generator"/>
     <service id="Symfony\Component\Security\Csrf\TokenStorage\TokenStorageInterface" alias="security.csrf.token_storage"/>
     <service id="Symfony\Component\Security\Csrf\CsrfTokenManagerInterface" alias="security.csrf.token_manager"/>
+    <service id="Symfony\Component\Mime\MimeTypesInterface" alias="mime_types"/>
+    <service id="Symfony\Component\Mime\MimeTypeGuesserInterface" alias="mime_types"/>
     <service id="Doctrine\DBAL\Connection" alias="doctrine.dbal.default_connection"/>
     <service id="Doctrine\Persistence\ManagerRegistry" alias="doctrine"/>
     <service id="Doctrine\Common\Persistence\ManagerRegistry" alias="doctrine"/>
@@ -5576,7 +5590,7 @@
     <service id="lexik_jwt_authentication.key_loader" alias="lexik_jwt_authentication.key_loader.raw" public="true"/>
     <service id="container.env_var_processors_locator" alias=".service_locator.gSv9zYw" public="true"/>
     <service id="twig.loader.filesystem" alias="twig.loader.native_filesystem"/>
-    <service id="argument_resolver.controller_locator" alias=".service_locator.1.3UEIW"/>
+    <service id="argument_resolver.controller_locator" alias=".service_locator.btUA1yE"/>
     <service id="doctrine.id_generator_locator" alias=".service_locator.KLVvNIq"/>
     <service id="twig.loader" alias="twig.loader.native_filesystem"/>
     <service id="Psr\Log\LoggerInterface" alias="logger"/>
@@ -5591,7 +5605,7 @@
     <service id=".service_locator.3pBzuze" alias=".service_locator.jgeIDBu"/>
     <service id=".service_locator.NNE_WhH" alias=".service_locator.wHOAN6u"/>
     <service id=".service_locator.7PfVv6q" alias=".service_locator.y5B2joc"/>
-    <service id=".service_locator._InnjMD" alias=".service_locator.1.3UEIW"/>
+    <service id=".service_locator.pKYfMGG" alias=".service_locator.btUA1yE"/>
     <service id=".service_locator.qBCHs1a" alias=".service_locator.QXcJQkF"/>
     <service id=".service_locator.jkb6XQV" alias=".service_locator.l1ae.Qz"/>
     <service id="event_dispatcher" alias="debug.event_dispatcher" public="true"/>

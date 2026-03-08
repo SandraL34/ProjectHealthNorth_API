@@ -113,12 +113,12 @@ class DocumentController extends AbstractController
 
         $displayName = $request->request->get('displayName', $file->getClientOriginalName());
         $extension    = $file->getClientOriginalExtension();
-        $filename     = uniqid('doc_') . '_' . time() . '.' . $extension;
+        $fileName     = uniqid('doc_') . '_' . time() . '.' . $extension;
 
-        $file->move($this->uploadDir, $filename);
+        $file->move($this->uploadDir, $fileName);
 
         $document = new Document();
-        $document->setFilename($filename)
+        $document->setFileName($fileName)
                 ->setDisplayName($displayName)
                 ->setType($request->request->get('type', 'autre'))
                 ->setDateUpload(new \DateTimeImmutable())
@@ -198,7 +198,7 @@ class DocumentController extends AbstractController
             }
         }
 
-        $filepath = $this->uploadDir . '/' . $document->getFilename();
+        $filepath = $this->uploadDir . '/' . $document->getFileName();
         if (!file_exists($filepath)) {
             return $this->json(['error' => 'Fichier introuvable sur le serveur'], 404);
         }
@@ -232,7 +232,7 @@ class DocumentController extends AbstractController
         }
 
 
-        $filepath = $this->uploadDir . '/' . $document->getFilename();
+        $filepath = $this->uploadDir . '/' . $document->getFileName();
         if (file_exists($filepath)) {
             unlink($filepath);
         }

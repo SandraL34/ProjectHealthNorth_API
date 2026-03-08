@@ -25,6 +25,7 @@ return [
         '/api/documents/upload' => [[['_route' => 'api_document_upload', '_controller' => 'App\\Controller\\DocumentController::upload'], null, ['POST' => 0], null, false, false, null]],
         '/api/invoices' => [[['_route' => 'api_invoices_list', '_controller' => 'App\\Controller\\InvoiceController::list'], null, ['GET' => 0], null, false, false, null]],
         '/api/login' => [[['_route' => 'api_login', '_controller' => 'App\\Controller\\LoginController::login'], null, ['POST' => 0], null, false, false, null]],
+        '/api/patients/search' => [[['_route' => 'api_patients_search', '_controller' => 'App\\Controller\\PatientController::searchPatients'], null, ['GET' => 0], null, false, false, null]],
         '/api/patient/medicalRecord' => [[['_route' => 'api_patient_medicalRecord', '_controller' => 'App\\Controller\\PatientController::me'], null, ['GET' => 0], null, false, false, null]],
         '/registration' => [[['_route' => 'registration', '_controller' => 'App\\Controller\\PatientController::registration'], null, ['POST' => 0], null, false, false, null]],
         '/api/medicalrecord/change' => [[['_route' => 'api_medicalrecord_change', '_controller' => 'App\\Controller\\PatientController::changeMedicalRecord'], null, ['PUT' => 0], null, false, false, null]],

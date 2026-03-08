@@ -19,6 +19,29 @@ use Symfony\Component\HttpFoundation\Response;
 
 class PatientController extends AbstractController
 {
+
+    #[Route('/api/patients/search', name: 'api_patients_search', methods: ['GET'])]
+    public function searchPatients(Request $request, ManagerRegistry $doctrine): JsonResponse
+    {
+        $query = $request->query->get('query', '');
+    /** @var \App\Repository\PatientRepository $repo */
+    $repo = $doctrine->getRepository(Patient::class);
+
+    $centers = $repo->createQueryBuilder('d')
+        ->where('d.firstname LIKE :query OR d.lastname LIKE :query')
+        ->setParameter('query', '%' . $query . '%')
+        ->setMaxResults(10)
+        ->getQuery()
+        ->getResult();
+        
+        $data = array_map(fn($d) => [
+            'id' => $d->getId(),
+            'name' => $d->getFirstname() . ' ' . $d->getLastname(),
+        ], $centers);
+
+        return new JsonResponse($data);
+    }
+
     #[Route('/api/patient/medicalRecord', name: 'api_patient_medicalRecord', methods: ['GET'])]
     public function me(ManagerRegistry $doctrine): JsonResponse
     {
