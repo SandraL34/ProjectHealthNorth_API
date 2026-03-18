@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: Arial; }
+        h1 { text-align: center; }
+        .box { margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+<h1>Facture</h1>
+
+<div class="box">
+    <p><strong>Facture #{{ invoice.id }}</strong></p>
+
+    {% if invoice.appointment %}
+        <p>Date : {{ invoice.appointment.date|date('d/m/Y') }}</p>
+        <p>
+            Patient :
+            {{ invoice.appointment.patient.firstname }}
+            {{ invoice.appointment.patient.lastname }}
+        </p>
+    {% endif %}
+</div>
+
+{% if invoice.appointment and invoice.appointment.treatments|length > 0 %}
+    {% set treatment = invoice.appointment.treatments|first %}
+
+    <div class="box">
+        <p>Acte : {{ treatment.name }}</p>
+        <p>Prix : {{ treatment.price }} €</p>
+    </div>
+{% endif %}
+
+<p style="margin-top: 30px;">Statut : Payée</p>
+
+</body>
+</html>

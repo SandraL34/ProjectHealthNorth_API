@@ -7,7 +7,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Invoice;
+use App\Entity\Document;
 use Symfony\Component\HttpFoundation\Request;
+use Dompdf\Dompdf;
 
 class InvoiceController extends AbstractController
 {
@@ -71,8 +73,50 @@ class InvoiceController extends AbstractController
         if (!$invoice) {
             return $this->json(['error' => 'Invoice not found'], 404);
         }
+        if ($invoice->getIsPaid()) {
+            return $this->json(['error' => 'Already paid'], 400);
+        }
 
         $invoice->setIsPaid(true);
+
+        $appointment = $invoice->getAppointment();
+        $patient = $appointment?->getPatient();
+
+        if ($patient) {
+            $displayName = 'Facture_' . $invoice->getId() . '.pdf';
+
+            $fileName = 'invoice_' . $invoice->getId() . '.pdf';
+
+            $uploadDir = $this->getParameter('kernel.project_dir') . '/var/uploads/documents';
+
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0775, true);
+            }
+
+            $dompdf = new Dompdf();
+
+            $html = $this->renderView('invoice/pdf.html.twig', [
+                'invoice' => $invoice
+            ]);
+
+            $dompdf->loadHtml($html);
+            $dompdf->render();
+
+            $output = $dompdf->output();
+
+            file_put_contents($uploadDir . '/' . $fileName, $output);
+
+            $document = new Document();
+            $document->setFileName($fileName)
+                    ->setDisplayName($displayName)
+                    ->setType('facture')
+                    ->setDateUpload(new \DateTimeImmutable())
+                    ->setPatient($patient)
+                    ->setAppointment($appointment);
+
+            $em->persist($document);
+        }
+
         $em->flush();
 
         return $this->json(['success' => true, 'id' => $invoice->getId(), 'isPaid' => true]);

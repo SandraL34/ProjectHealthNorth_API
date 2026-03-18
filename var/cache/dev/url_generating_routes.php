@@ -31,6 +31,7 @@ return [
     'api_doctor_delete' => [['id'], ['_controller' => 'App\\Controller\\DoctorController::deleteDoctor'], [], [['variable', '/', '[^/]++', 'id', true], ['text', '/api/doctors/delete']], [], [], []],
     'api_document_upload' => [[], ['_controller' => 'App\\Controller\\DocumentController::upload'], [], [['text', '/api/documents/upload']], [], [], []],
     'api_document_list' => [['id'], ['_controller' => 'App\\Controller\\DocumentController::listForPatient'], [], [['variable', '/', '[^/]++', 'id', true], ['text', '/api/documents/patient']], [], [], []],
+    'api_document_list_me' => [[], ['_controller' => 'App\\Controller\\DocumentController::listMyDocuments'], [], [['text', '/api/documents']], [], [], []],
     'api_document_download' => [['id'], ['_controller' => 'App\\Controller\\DocumentController::download'], [], [['text', '/download'], ['variable', '/', '[^/]++', 'id', true], ['text', '/api/documents']], [], [], []],
     'api_document_delete' => [['id'], ['_controller' => 'App\\Controller\\DocumentController::delete'], [], [['variable', '/', '[^/]++', 'id', true], ['text', '/api/documents']], [], [], []],
     'api_invoices_list' => [[], ['_controller' => 'App\\Controller\\InvoiceController::list'], [], [['text', '/api/invoices']], [], [], []],
