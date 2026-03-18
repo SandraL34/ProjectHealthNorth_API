@@ -177,6 +177,30 @@ class DocumentController extends AbstractController
         return $this->json($result);
     }
 
+    #[Route('/api/documents', name: 'api_document_list_me', methods: ['GET'])]
+    public function listMyDocuments(EntityManagerInterface $em): JsonResponse
+    {
+        $user = $this->getUser();
+
+        if (!$user instanceof Patient) {
+            return $this->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $documents = $em->getRepository(Document::class)->findBy(
+            ['patient' => $user],
+            ['dateUpload' => 'DESC']
+        );
+
+        return $this->json(array_map(fn(Document $doc) => [
+            'id' => $doc->getId(),
+            'displayName' => $doc->getDisplayName(),
+            'type' => $doc->getType(),
+            'dateUpload' => $doc->getDateUpload()?->format('Y-m-d H:i'),
+            'appointmentId' => $doc->getAppointment()?->getId(),
+            'appointmentDate' => $doc->getAppointment()?->getDate()?->format('Y-m-d'),
+        ], $documents));
+    }
+
 
     #[Route('/api/documents/{id}/download', name: 'api_document_download', methods: ['GET'])]
     public function download(int $id, EntityManagerInterface $em): Response

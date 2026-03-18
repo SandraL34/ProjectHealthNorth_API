@@ -27,6 +27,7 @@ class JwtCreatedSubscriber implements EventSubscriberInterface
 
     public function onJWTCreated(JWTCreatedEvent $event): void
     {
+        dd('SUBSCRIBER TRIGGERED');
         $user = $event->getUser();
         $payload = $event->getData();
 
