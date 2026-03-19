@@ -99,7 +99,9 @@ class SlotGeneratorService
                 if ($slot['doctorId'] !== $b['doctorId']) continue;
 
                 $bookedStart = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $b['startDate'] . ' ' . $b['startTime']);
-                $bookedEnd = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $b['endDate'] . ' ' . $b['endTime']);
+                $bookedEnd = !empty($b['endDate']) && !empty($b['endTime'])
+                    ? \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $b['endDate'] . ' ' . $b['endTime'])
+                    : $bookedStart->modify('+60 minutes'); // fallback
 
                 if (!$slotStart || !$slotEnd || !$bookedStart || !$bookedEnd) continue;
 

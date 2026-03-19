@@ -125,21 +125,31 @@ class AppointmentSlotController extends AbstractController
     {
         $weekStart = $request->query->get('week');
         $appointmentId = $request->query->get('appointmentId');
-    
-        if ($weekStart) {
-            $startDate = new \DateTimeImmutable($weekStart);
-        } else {
-            $today = new \DateTimeImmutable();
-            $startDate = $today->modify('monday this week');
-        }
-        
-        $endDate = $startDate->modify('+6 days');
 
+        $appointment = null;
         if ($appointmentId) {
             $appointment = $em->getRepository(Appointment::class)->find($appointmentId);
-            if (!$appointment || !$appointment->getDoctor()) {
-                return new Response(json_encode([]), 200, ['Content-Type' => 'application/json']);
+        }
+
+        if ($weekStart) {
+            $startDate = new \DateTimeImmutable($weekStart);
+        } elseif ($appointment?->getDate()) {
+            $startDate = \DateTimeImmutable::createFromMutable($appointment->getDate())->modify('monday this week');
+        } else {
+            $startDate = (new \DateTimeImmutable())->modify('monday this week');
+        }
+
+        $daysAhead = 7;
+        if ($appointment?->getDate()) {
+            $diffDays = (int)$startDate->diff($appointment->getDate())->format('%r%a') + 1;
+            if ($diffDays > $daysAhead) {
+                $daysAhead = $diffDays;
             }
+        }
+
+        $endDate = $startDate->modify("+".($daysAhead-1)." days");
+
+        if ($appointment && $appointment->getDoctor()) {
             $doctors = [$appointment->getDoctor()];
         } else {
             $doctors = $em->getRepository(Doctor::class)->findAll();
@@ -148,87 +158,50 @@ class AppointmentSlotController extends AbstractController
         $results = [];
 
         foreach ($doctors as $doctor) {
-            $generatedSlots = $slotGenerator->generateSlotsForDoctor($doctor, 60, 7, $startDate);
+            $generatedSlots = $slotGenerator->generateSlotsForDoctor($doctor, 60, $daysAhead, $startDate);
 
-            $bookedSlots = $doctor->getAppointmentSlots()->toArray();
+            $bookedSlots = array_filter(
+                $doctor->getAppointmentSlots()->toArray(),
+                fn($s) => $s->isBooked() === true
+            );
 
-            $finalSlots = $slotGenerator->markBookedSlots($generatedSlots, $bookedSlots);
+            $finalSlots = $slotGenerator->markBookedSlots($generatedSlots, array_values($bookedSlots));
 
             foreach ($finalSlots as $slot) {
-                $appointmentId = null;
+                $appointmentIdSlot = $slot['appointment']['id'] ?? null;
 
-                if (!empty($slot['isBooked'])) {
-                    $appointmentSlot = $em->getRepository(AppointmentSlot::class)->findOneBy([
-                        'doctor' => $doctor,
-                        'startDate' => new \DateTimeImmutable($slot['startDate']),
-                        'startTime' => new \DateTimeImmutable($slot['startTime']),
-                        'isBooked' => true
-                    ]);
-
-                    if ($appointmentSlot && $appointmentSlot->getAppointment()) {
-                        $appointmentId = $appointmentSlot->getAppointment()->getId();
-                    }
-                }
-
-            $results[] = [
-                'doctorId' => $doctor->getId(),
-                'doctor' => [
-                    'firstname' => $doctor->getFirstname(),
-                    'lastname' => $doctor->getLastname(),
-                    'center' => $doctor->getCenter() ? [
-                        'id' => $doctor->getCenter()->getId(),
-                        'name' => $doctor->getCenter()->getName(),
-                        'address' => $doctor->getCenter()->getAddress(),
-                    ] : null,
-                    'treatments' => array_map(fn($t) => [
-                        'id' => $t->getId(),
-                        'name' => $t->getName(),
-                        'duration' => $t->getDuration(),
-                    ], $doctor->getTreatments()->toArray()),
-                ],
-                'slot' => [
-                    'startDate' => $slot['startDate'] ?? null,
-                    'startTime' => $slot['startTime'] ?? null,
-                    'endDate' => $slot['endDate'] ?? null,
-                    'endTime' => $slot['endTime'] ?? null,
-                    'isBooked' => $slot['isBooked'] ?? false,
-                    'appointmentId' => $appointmentId
-                ]
-            ];
-        }
-    }
-
-    try {
-        foreach ($results as $item) {
-            $test = json_encode($item);
-            if ($test === false) {
-                error_log("JSON encode failed for doctorId: " . ($item['doctorId'] ?? 'unknown'));
-                error_log("Error: " . json_last_error_msg());
-                error_log("Item: " . print_r($item, true));
+                $results[] = [
+                    'doctorId' => $doctor->getId(),
+                    'doctor' => [
+                        'firstname' => $doctor->getFirstname(),
+                        'lastname' => $doctor->getLastname(),
+                        'center' => $doctor->getCenter() ? [
+                            'id' => $doctor->getCenter()->getId(),
+                            'name' => $doctor->getCenter()->getName(),
+                            'address' => $doctor->getCenter()->getAddress(),
+                        ] : null,
+                        'treatments' => array_map(fn($t) => [
+                            'id' => $t->getId(),
+                            'name' => $t->getName(),
+                            'duration' => $t->getDuration(),
+                        ], $doctor->getTreatments()->toArray()),
+                    ],
+                    'slot' => [
+                        'startDate' => $slot['startDate'] ?? null,
+                        'startTime' => $slot['startTime'] ?? null,
+                        'endDate' => $slot['endDate'] ?? null,
+                        'endTime' => $slot['endTime'] ?? null,
+                        'isBooked' => $slot['isBooked'] ?? false,
+                        'appointmentId' => $appointmentIdSlot
+                    ]
+                ];
             }
         }
-        array_walk_recursive($results, function (&$value) {
-            if (is_string($value)) {
-                $value = iconv('UTF-8', 'UTF-8//IGNORE', $value);
-            }
-        });
 
-        $json = json_encode($results, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-
-        if ($json === false) {
-            return new Response(
-                json_encode(['error' => json_last_error_msg()]),
-                500,
-                ['Content-Type' => 'application/json']
-            );
-        }
-
-        return new Response($json, 200, ['Content-Type' => 'application/json; charset=UTF-8']);
-
-    } catch (\Throwable $e) {
-        return new JsonResponse(['error' => $e->getMessage()], 500);
+        return new Response(json_encode($results, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES), 200, [
+            'Content-Type' => 'application/json; charset=UTF-8',
+        ]);
     }
-}
 
     #[Route('/api/appointment/cancel/{id}', name: 'api_appointment_cancel', methods: ['DELETE'])]
     public function cancelAppointment(int $id, EntityManagerInterface $em): JsonResponse {
