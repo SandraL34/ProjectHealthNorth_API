@@ -12,7 +12,7 @@ class LoginFailureHandler implements AuthenticationFailureHandlerInterface
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): JsonResponse
     {
         return new JsonResponse([
-            'error' => 'Mauvais identifiants'
+            'error' => 'Mauvais identifiants et/ou trop d\'essais. Si vous avez fait plus de trois essais infructueux, patientez une minute avant de réessayer.'
         ], 401);
     }
 }

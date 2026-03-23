@@ -5,8 +5,8 @@
     <parameter key="kernel.environment">dev</parameter>
     <parameter key="kernel.runtime_environment">%env(default:kernel.environment:APP_RUNTIME_ENV)%</parameter>
     <parameter key="kernel.debug">true</parameter>
-    <parameter key="kernel.build_dir">D:/Logiciel/XAMPP/htdocs/ProjectHealthNorth_API/var/cache/dev</parameter>
-    <parameter key="kernel.cache_dir">D:/Logiciel/XAMPP/htdocs/ProjectHealthNorth_API/var/cache/dev</parameter>
+    <parameter key="kernel.build_dir">D:\Logiciel\XAMPP\htdocs\ProjectHealthNorth_API\var\cache\dev</parameter>
+    <parameter key="kernel.cache_dir">D:\Logiciel\XAMPP\htdocs\ProjectHealthNorth_API\var\cache\dev</parameter>
     <parameter key="kernel.logs_dir">D:\Logiciel\XAMPP\htdocs\ProjectHealthNorth_API\var\log</parameter>
     <parameter key="kernel.bundles" type="collection">
       <parameter key="FrameworkBundle">Symfony\Bundle\FrameworkBundle\FrameworkBundle</parameter>
@@ -81,14 +81,14 @@
     <parameter key="kernel.error_controller">error_controller</parameter>
     <parameter key="debug.file_link_format">null</parameter>
     <parameter key="debug.error_handler.throw_at">0</parameter>
-    <parameter key="debug.container.dump">D:/Logiciel/XAMPP/htdocs/ProjectHealthNorth_API/var/cache/dev/App_KernelDevDebugContainer.xml</parameter>
+    <parameter key="debug.container.dump">D:\Logiciel\XAMPP\htdocs\ProjectHealthNorth_API\var\cache\dev/App_KernelDevDebugContainer.xml</parameter>
     <parameter key="router.request_context.host">localhost</parameter>
     <parameter key="router.request_context.scheme">http</parameter>
     <parameter key="router.request_context.base_url"></parameter>
     <parameter key="router.resource">kernel::loadRoutes</parameter>
     <parameter key="request_listener.http_port">80</parameter>
     <parameter key="request_listener.https_port">443</parameter>
-    <parameter key="serializer.mapping.cache.file">D:/Logiciel/XAMPP/htdocs/ProjectHealthNorth_API/var/cache/dev/serialization.php</parameter>
+    <parameter key="serializer.mapping.cache.file">D:\Logiciel\XAMPP\htdocs\ProjectHealthNorth_API\var\cache\dev/serialization.php</parameter>
     <parameter key="cache.prefix.seed">_D:\Logiciel\XAMPP\htdocs\ProjectHealthNorth_API.App_KernelDevDebugContainer</parameter>
     <parameter key="session.metadata.storage_key">_sf2_meta</parameter>
     <parameter key="session.storage.options" type="collection">
@@ -98,7 +98,7 @@
       <parameter key="cookie_samesite">lax</parameter>
       <parameter key="gc_probability">1</parameter>
     </parameter>
-    <parameter key="session.save_path">D:/Logiciel/XAMPP/htdocs/ProjectHealthNorth_API/var/cache/dev/sessions</parameter>
+    <parameter key="session.save_path">D:\Logiciel\XAMPP\htdocs\ProjectHealthNorth_API\var\cache\dev/sessions</parameter>
     <parameter key="session.metadata.update_threshold">0</parameter>
     <parameter key="data_collector.templates" type="collection"/>
     <parameter key="doctrine.dbal.configuration.class">Doctrine\DBAL\Configuration</parameter>
@@ -166,7 +166,7 @@
     <parameter key="doctrine.orm.second_level_cache.regions_configuration.class">Doctrine\ORM\Cache\RegionsConfiguration</parameter>
     <parameter key="doctrine.orm.auto_generate_proxy_classes">true</parameter>
     <parameter key="doctrine.orm.enable_lazy_ghost_objects">false</parameter>
-    <parameter key="doctrine.orm.proxy_dir">D:/Logiciel/XAMPP/htdocs/ProjectHealthNorth_API/var/cache/dev/doctrine/orm/Proxies</parameter>
+    <parameter key="doctrine.orm.proxy_dir">D:\Logiciel\XAMPP\htdocs\ProjectHealthNorth_API\var\cache\dev/doctrine/orm/Proxies</parameter>
     <parameter key="doctrine.orm.proxy_namespace">Proxies</parameter>
     <parameter key="doctrine.migrations.preferred_em">null</parameter>
     <parameter key="doctrine.migrations.preferred_connection">null</parameter>
@@ -458,7 +458,7 @@
       </argument>
     </service>
     <service id="http_cache.store" class="Symfony\Component\HttpKernel\HttpCache\Store">
-      <argument>D:/Logiciel/XAMPP/htdocs/ProjectHealthNorth_API/var/cache/dev/http_cache</argument>
+      <argument>D:\Logiciel\XAMPP\htdocs\ProjectHealthNorth_API\var\cache\dev/http_cache</argument>
     </service>
     <service id="url_helper" class="Symfony\Component\HttpFoundation\UrlHelper">
       <argument type="service" id="request_stack"/>
@@ -468,7 +468,7 @@
       <tag name="container.no_preload"/>
       <argument type="tagged_iterator" tag="kernel.cache_warmer"/>
       <argument>true</argument>
-      <argument>D:/Logiciel/XAMPP/htdocs/ProjectHealthNorth_API/var/cache/dev/App_KernelDevDebugContainerDeprecations.log</argument>
+      <argument>D:\Logiciel\XAMPP\htdocs\ProjectHealthNorth_API\var\cache\dev/App_KernelDevDebugContainerDeprecations.log</argument>
     </service>
     <service id="cache_clearer" class="Symfony\Component\HttpKernel\CacheClearer\ChainCacheClearer">
       <argument type="tagged_iterator" tag="kernel.cache_clearer"/>
@@ -500,6 +500,7 @@
         <argument key="cache.property_info" type="service" id="cache.property_info" on-invalid="ignore_uninitialized"/>
         <argument key="debug.stopwatch" type="service" id="debug.stopwatch" on-invalid="ignore_uninitialized"/>
         <argument key="debug.event_dispatcher" type="service" id="debug.event_dispatcher" on-invalid="ignore_uninitialized"/>
+        <argument key="cache.rate_limiter" type="service" id="cache.rate_limiter" on-invalid="ignore_uninitialized"/>
         <argument key="session_listener" type="service" id="session_listener" on-invalid="ignore_uninitialized"/>
         <argument key="doctrine" type="service" id="doctrine" on-invalid="ignore_uninitialized"/>
         <argument key="doctrine.debug_data_holder" type="service" id="doctrine.debug_data_holder" on-invalid="ignore_uninitialized"/>
@@ -529,6 +530,9 @@
           <argument>reset</argument>
         </argument>
         <argument key="debug.event_dispatcher" type="collection">
+          <argument>reset</argument>
+        </argument>
+        <argument key="cache.rate_limiter" type="collection">
           <argument>reset</argument>
         </argument>
         <argument key="session_listener" type="collection">
@@ -680,6 +684,7 @@
         <argument>cache.serializer</argument>
         <argument>cache.annotations</argument>
         <argument>cache.property_info</argument>
+        <argument>cache.rate_limiter</argument>
         <argument>cache.doctrine.orm.default.result</argument>
         <argument>cache.doctrine.orm.default.query</argument>
         <argument>cache.security_expression_language</argument>
@@ -713,6 +718,7 @@
         <argument>cache.serializer</argument>
         <argument>cache.annotations</argument>
         <argument>cache.property_info</argument>
+        <argument>cache.rate_limiter</argument>
         <argument>cache.doctrine.orm.default.result</argument>
         <argument>cache.doctrine.orm.default.query</argument>
         <argument>cache.security_expression_language</argument>
@@ -734,6 +740,7 @@
         <argument>cache.serializer</argument>
         <argument>cache.annotations</argument>
         <argument>cache.property_info</argument>
+        <argument>cache.rate_limiter</argument>
         <argument>cache.doctrine.orm.default.result</argument>
         <argument>cache.doctrine.orm.default.query</argument>
         <argument>cache.security_expression_language</argument>
@@ -942,7 +949,7 @@
       <tag name="kernel.reset" method="reset"/>
       <argument>WHvceeGAgP</argument>
       <argument>0</argument>
-      <argument>D:/Logiciel/XAMPP/htdocs/ProjectHealthNorth_API/var/cache/dev/pools/app</argument>
+      <argument>D:\Logiciel\XAMPP\htdocs\ProjectHealthNorth_API\var\cache\dev/pools/app</argument>
       <argument type="service" id="cache.default_marshaller" on-invalid="ignore"/>
       <call method="setLogger">
         <argument type="service" id="logger" on-invalid="ignore"/>
@@ -957,7 +964,7 @@
       <argument>A84UTrVG5C</argument>
       <argument>0</argument>
       <argument>%container.build_id%</argument>
-      <argument>D:/Logiciel/XAMPP/htdocs/ProjectHealthNorth_API/var/cache/dev/pools/system</argument>
+      <argument>D:\Logiciel\XAMPP\htdocs\ProjectHealthNorth_API\var\cache\dev/pools/system</argument>
       <argument type="service" id="logger" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
     </service>
@@ -967,7 +974,7 @@
       <argument>OGuTIaTuRj</argument>
       <argument>0</argument>
       <argument>%container.build_id%</argument>
-      <argument>D:/Logiciel/XAMPP/htdocs/ProjectHealthNorth_API/var/cache/dev/pools/system</argument>
+      <argument>D:\Logiciel\XAMPP\htdocs\ProjectHealthNorth_API\var\cache\dev/pools/system</argument>
       <argument type="service" id="logger" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
     </service>
@@ -977,7 +984,7 @@
       <argument>8AB0meBg4s</argument>
       <argument>0</argument>
       <argument>%container.build_id%</argument>
-      <argument>D:/Logiciel/XAMPP/htdocs/ProjectHealthNorth_API/var/cache/dev/pools/system</argument>
+      <argument>D:\Logiciel\XAMPP\htdocs\ProjectHealthNorth_API\var\cache\dev/pools/system</argument>
       <argument type="service" id="logger" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
     </service>
@@ -987,7 +994,7 @@
       <argument>rpV3nTiUlk</argument>
       <argument>0</argument>
       <argument>%container.build_id%</argument>
-      <argument>D:/Logiciel/XAMPP/htdocs/ProjectHealthNorth_API/var/cache/dev/pools/system</argument>
+      <argument>D:\Logiciel\XAMPP\htdocs\ProjectHealthNorth_API\var\cache\dev/pools/system</argument>
       <argument type="service" id="logger" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
     </service>
@@ -997,7 +1004,7 @@
       <argument>E8V3vMT-u+</argument>
       <argument>0</argument>
       <argument>%container.build_id%</argument>
-      <argument>D:/Logiciel/XAMPP/htdocs/ProjectHealthNorth_API/var/cache/dev/pools/system</argument>
+      <argument>D:\Logiciel\XAMPP\htdocs\ProjectHealthNorth_API\var\cache\dev/pools/system</argument>
       <argument type="service" id="logger" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
     </service>
@@ -1007,7 +1014,7 @@
       <argument></argument>
       <argument>0</argument>
       <argument>%container.build_id%</argument>
-      <argument>D:/Logiciel/XAMPP/htdocs/ProjectHealthNorth_API/var/cache/dev/pools/system</argument>
+      <argument>D:\Logiciel\XAMPP\htdocs\ProjectHealthNorth_API\var\cache\dev/pools/system</argument>
       <argument type="service" id="logger" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
     </service>
@@ -1026,7 +1033,7 @@
       <tag name="monolog.logger" channel="cache"/>
       <argument></argument>
       <argument>0</argument>
-      <argument>D:/Logiciel/XAMPP/htdocs/ProjectHealthNorth_API/var/cache/dev/pools/app</argument>
+      <argument>D:\Logiciel\XAMPP\htdocs\ProjectHealthNorth_API\var\cache\dev/pools/app</argument>
       <argument type="service" id="cache.default_marshaller" on-invalid="ignore"/>
       <call method="setLogger">
         <argument type="service" id="logger" on-invalid="ignore"/>
@@ -1111,6 +1118,7 @@
       <tag name="cache.pool.clearer"/>
       <argument type="collection">
         <argument key="cache.app" type="service" id="cache.app" on-invalid="ignore_uninitialized"/>
+        <argument key="cache.rate_limiter" type="service" id="cache.rate_limiter" on-invalid="ignore_uninitialized"/>
       </argument>
     </service>
     <service id="cache.system_clearer" class="Symfony\Component\HttpKernel\CacheClearer\Psr6CacheClearer" public="true">
@@ -1134,6 +1142,7 @@
         <argument key="cache.serializer" type="service" id="cache.serializer" on-invalid="ignore_uninitialized"/>
         <argument key="cache.annotations" type="service" id="cache.annotations" on-invalid="ignore_uninitialized"/>
         <argument key="cache.property_info" type="service" id="cache.property_info" on-invalid="ignore_uninitialized"/>
+        <argument key="cache.rate_limiter" type="service" id="cache.rate_limiter" on-invalid="ignore_uninitialized"/>
         <argument key="cache.doctrine.orm.default.result" type="service" id="cache.doctrine.orm.default.result" on-invalid="ignore_uninitialized"/>
         <argument key="cache.doctrine.orm.default.query" type="service" id="cache.doctrine.orm.default.query" on-invalid="ignore_uninitialized"/>
         <argument key="cache.security_expression_language" type="service" id="cache.security_expression_language" on-invalid="ignore_uninitialized"/>
@@ -1561,7 +1570,7 @@
       <argument type="service" id=".service_locator.WOytlHA.router.default"/>
       <argument>kernel::loadRoutes</argument>
       <argument type="collection">
-        <argument key="cache_dir">D:/Logiciel/XAMPP/htdocs/ProjectHealthNorth_API/var/cache/dev</argument>
+        <argument key="cache_dir">D:\Logiciel\XAMPP\htdocs\ProjectHealthNorth_API\var\cache\dev</argument>
         <argument key="debug">true</argument>
         <argument key="generator_class">Symfony\Component\Routing\Generator\CompiledUrlGenerator</argument>
         <argument key="generator_dumper_class">Symfony\Component\Routing\Generator\Dumper\CompiledUrlGeneratorDumper</argument>
@@ -1761,10 +1770,10 @@
           </service>
         </argument>
       </argument>
-      <argument>D:/Logiciel/XAMPP/htdocs/ProjectHealthNorth_API/var/cache/dev/serialization.php</argument>
+      <argument>D:\Logiciel\XAMPP\htdocs\ProjectHealthNorth_API\var\cache\dev/serialization.php</argument>
     </service>
     <service id="serializer.mapping.cache.symfony" class="Psr\Cache\CacheItemPoolInterface">
-      <argument>D:/Logiciel/XAMPP/htdocs/ProjectHealthNorth_API/var/cache/dev/serialization.php</argument>
+      <argument>D:\Logiciel\XAMPP\htdocs\ProjectHealthNorth_API\var\cache\dev/serialization.php</argument>
       <argument type="service" id="cache.serializer"/>
       <factory class="Symfony\Component\Cache\Adapter\PhpArrayAdapter" method="create"/>
     </service>
@@ -1845,6 +1854,44 @@
       <tag name="property_info.description_extractor" priority="-1000"/>
       <tag name="property_info.type_extractor" priority="-1001"/>
     </service>
+    <service id="lock.store.combined.abstract" class="Symfony\Component\Lock\Store\CombinedStore" abstract="true">
+      <argument type="abstract">List of stores</argument>
+      <argument type="service" id="lock.strategy.majority"/>
+    </service>
+    <service id="lock.strategy.majority" class="Symfony\Component\Lock\Strategy\ConsensusStrategy"/>
+    <service id="lock.factory.abstract" class="Symfony\Component\Lock\LockFactory" abstract="true">
+      <tag name="monolog.logger" channel="lock"/>
+      <argument type="abstract">Store</argument>
+      <call method="setLogger">
+        <argument type="service" id="logger" on-invalid="ignore"/>
+      </call>
+    </service>
+    <service id=".lock.default.store.TTEh_gT" class="Symfony\Component\Lock\PersistingStoreInterface">
+      <argument>%env(LOCK_DSN)%</argument>
+      <factory class="Symfony\Component\Lock\Store\StoreFactory" method="createStore"/>
+    </service>
+    <service id="lock.default.factory" class="Symfony\Component\Lock\LockFactory">
+      <argument type="service" id=".lock.default.store.TTEh_gT"/>
+      <call method="setLogger">
+        <argument type="service" id="logger" on-invalid="ignore"/>
+      </call>
+    </service>
+    <service id="cache.rate_limiter" class="Symfony\Component\Cache\Adapter\FilesystemAdapter" public="true">
+      <tag name="cache.pool"/>
+      <tag name="kernel.reset" method="reset"/>
+      <argument>8y+qij6m4i</argument>
+      <argument>0</argument>
+      <argument>D:\Logiciel\XAMPP\htdocs\ProjectHealthNorth_API\var\cache\dev/pools/app</argument>
+      <argument type="service" id="cache.default_marshaller" on-invalid="ignore"/>
+      <call method="setLogger">
+        <argument type="service" id="logger" on-invalid="ignore"/>
+      </call>
+    </service>
+    <service id="limiter" class="Symfony\Component\RateLimiter\RateLimiterFactory" abstract="true">
+      <argument type="abstract">config</argument>
+      <argument type="abstract">storage</argument>
+      <argument>null</argument>
+    </service>
     <service id=".cache_connection.GD_MSZC" class="Symfony\Component\Cache\Adapter\AbstractAdapter">
       <argument>redis://localhost</argument>
       <argument type="collection">
@@ -1893,7 +1940,7 @@
       <argument>true</argument>
     </service>
     <service id="session.storage.factory.mock_file" class="Symfony\Component\HttpFoundation\Session\Storage\MockFileSessionStorageFactory">
-      <argument>D:/Logiciel/XAMPP/htdocs/ProjectHealthNorth_API/var/cache/dev/sessions</argument>
+      <argument>D:\Logiciel\XAMPP\htdocs\ProjectHealthNorth_API\var\cache\dev/sessions</argument>
       <argument>MOCKSESSID</argument>
       <argument type="service">
         <service class="Symfony\Component\HttpFoundation\Session\Storage\MetadataBag">
@@ -1905,7 +1952,7 @@
     <service id="session.handler.native_file" class="Symfony\Component\HttpFoundation\Session\Storage\Handler\StrictSessionHandler">
       <argument type="service">
         <service class="Symfony\Component\HttpFoundation\Session\Storage\Handler\NativeFileSessionHandler">
-          <argument>D:/Logiciel/XAMPP/htdocs/ProjectHealthNorth_API/var/cache/dev/sessions</argument>
+          <argument>D:\Logiciel\XAMPP\htdocs\ProjectHealthNorth_API\var\cache\dev/sessions</argument>
         </service>
       </argument>
     </service>
@@ -2479,7 +2526,7 @@
         <argument type="service" id=".doctrine.orm.default_metadata_driver"/>
       </call>
       <call method="setProxyDir">
-        <argument>D:/Logiciel/XAMPP/htdocs/ProjectHealthNorth_API/var/cache/dev/doctrine/orm/Proxies</argument>
+        <argument>D:\Logiciel\XAMPP\htdocs\ProjectHealthNorth_API\var\cache\dev/doctrine/orm/Proxies</argument>
       </call>
       <call method="setProxyNamespace">
         <argument>Proxies</argument>
@@ -2735,7 +2782,7 @@
       <argument type="service" id="twig.loader.native_filesystem"/>
       <argument type="collection">
         <argument key="autoescape">name</argument>
-        <argument key="cache">D:/Logiciel/XAMPP/htdocs/ProjectHealthNorth_API/var/cache/dev/twig</argument>
+        <argument key="cache">D:\Logiciel\XAMPP\htdocs\ProjectHealthNorth_API\var\cache\dev/twig</argument>
         <argument key="charset">UTF-8</argument>
         <argument key="debug">true</argument>
         <argument key="strict_variables">true</argument>
@@ -3070,7 +3117,7 @@
       <argument>LStIKS3YRC</argument>
       <argument>0</argument>
       <argument>%container.build_id%</argument>
-      <argument>D:/Logiciel/XAMPP/htdocs/ProjectHealthNorth_API/var/cache/dev/pools/system</argument>
+      <argument>D:\Logiciel\XAMPP\htdocs\ProjectHealthNorth_API\var\cache\dev/pools/system</argument>
       <argument type="service" id="logger" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
     </service>
@@ -3407,6 +3454,7 @@
       <argument>null</argument>
       <argument>null</argument>
       <argument type="collection">
+        <argument>login_throttling</argument>
         <argument>json_login</argument>
       </argument>
       <argument>null</argument>
@@ -3416,6 +3464,22 @@
     </service>
     <service id="security.event_dispatcher.login" class="Symfony\Component\EventDispatcher\EventDispatcher">
       <tag name="security.event_dispatcher.login">event_dispatcher.dispatcher</tag>
+      <call method="addListener">
+        <argument>Symfony\Component\Security\Http\Event\CheckPassportEvent</argument>
+        <argument type="collection">
+          <argument type="service_closure" id="security.listener.login_throttling.login"/>
+          <argument>checkPassport</argument>
+        </argument>
+        <argument>2080</argument>
+      </call>
+      <call method="addListener">
+        <argument>Symfony\Component\Security\Http\Event\LoginSuccessEvent</argument>
+        <argument type="collection">
+          <argument type="service_closure" id="security.listener.login_throttling.login"/>
+          <argument>onSuccessfulLogin</argument>
+        </argument>
+        <argument>0</argument>
+      </call>
       <call method="addListener">
         <argument>Symfony\Component\Security\Http\Event\CheckPassportEvent</argument>
         <argument type="collection">
@@ -3472,6 +3536,41 @@
         </argument>
         <argument>0</argument>
       </call>
+    </service>
+    <service id="limiter._login_local_login" class="Symfony\Component\RateLimiter\RateLimiterFactory">
+      <argument type="collection">
+        <argument key="policy">fixed_window</argument>
+        <argument key="limit">3</argument>
+        <argument key="interval">1 minute</argument>
+        <argument key="id">_login_local_login</argument>
+      </argument>
+      <argument type="service" id="limiter.storage._login_local_login"/>
+      <argument>null</argument>
+    </service>
+    <service id="limiter.storage._login_local_login" class="Symfony\Component\RateLimiter\Storage\CacheStorage">
+      <argument type="service" id="cache.rate_limiter"/>
+    </service>
+    <service id="limiter._login_global_login" class="Symfony\Component\RateLimiter\RateLimiterFactory">
+      <argument type="collection">
+        <argument key="policy">fixed_window</argument>
+        <argument key="limit">15</argument>
+        <argument key="interval">1 minute</argument>
+        <argument key="id">_login_global_login</argument>
+      </argument>
+      <argument type="service" id="limiter.storage._login_global_login"/>
+      <argument>null</argument>
+    </service>
+    <service id="limiter.storage._login_global_login" class="Symfony\Component\RateLimiter\Storage\CacheStorage">
+      <argument type="service" id="cache.rate_limiter"/>
+    </service>
+    <service id="security.login_throttling.login.limiter" class="Symfony\Component\Security\Http\RateLimiter\DefaultLoginRateLimiter">
+      <argument type="service" id="limiter._login_global_login"/>
+      <argument type="service" id="limiter._login_local_login"/>
+    </service>
+    <service id="security.listener.login_throttling.login" class="Symfony\Component\Security\Http\EventListener\LoginThrottlingListener">
+      <tag name="kernel.event_subscriber" dispatcher="security.event_dispatcher.login"/>
+      <argument type="service" id="request_stack"/>
+      <argument type="service" id="security.login_throttling.login.limiter"/>
     </service>
     <service id="security.authenticator.json_login.login" class="Symfony\Component\Security\Http\Authenticator\JsonLoginAuthenticator">
       <argument type="service" id="security.http_utils"/>
@@ -5529,6 +5628,8 @@
     <service id="Symfony\Component\PropertyInfo\PropertyInitializableExtractorInterface" alias="property_info"/>
     <service id="Symfony\Component\PropertyInfo\PropertyReadInfoExtractorInterface" alias="property_info.reflection_extractor"/>
     <service id="Symfony\Component\PropertyInfo\PropertyWriteInfoExtractorInterface" alias="property_info.reflection_extractor"/>
+    <service id="lock.factory" alias="lock.default.factory"/>
+    <service id="Symfony\Component\Lock\LockFactory" alias="lock.default.factory"/>
     <service id="cache.default_redis_provider" alias=".cache_connection.GD_MSZC"/>
     <service id="cache.default_memcached_provider" alias=".cache_connection.JKE6keX"/>
     <service id="cache.default_doctrine_dbal_provider" alias="doctrine.dbal.default_connection"/>
@@ -5575,6 +5676,8 @@
     <service id="security.user_providers" alias="App\Security\UserProvider"/>
     <service id="Symfony\Component\Security\Core\User\UserProviderInterface" alias="App\Security\UserProvider"/>
     <service id="security.authentication.session_strategy.login" alias="security.authentication.session_strategy_noop"/>
+    <service id="Symfony\Component\RateLimiter\RateLimiterFactory $loginLocalLoginLimiter" alias="limiter._login_local_login"/>
+    <service id="Symfony\Component\RateLimiter\RateLimiterFactory $loginGlobalLoginLimiter" alias="limiter._login_global_login"/>
     <service id="security.user_checker.login" alias="security.user_checker"/>
     <service id="security.authentication.session_strategy.api" alias="security.authentication.session_strategy_noop"/>
     <service id="security.user_checker.api" alias="security.user_checker"/>
